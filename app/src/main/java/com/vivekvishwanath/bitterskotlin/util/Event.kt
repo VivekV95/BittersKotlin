@@ -1,4 +1,4 @@
-package com.vivekvishwanath.bitterskotlin.ui
+package com.vivekvishwanath.bitterskotlin.util
 
 class Event<T>(private val content: T) {
 

@@ -1,4 +1,4 @@
-package com.vivekvishwanath.bitterskotlin
+package com.vivekvishwanath.bitterskotlin.util
 
 sealed class AuthState<T>(
     val data: T? = null,

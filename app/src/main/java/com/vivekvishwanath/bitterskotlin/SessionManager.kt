@@ -1,10 +1,10 @@
 package com.vivekvishwanath.bitterskotlin
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
+import com.vivekvishwanath.bitterskotlin.ui.auth.state.AuthViewState
+import com.vivekvishwanath.bitterskotlin.util.AuthState
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -13,9 +13,9 @@ class SessionManager @Inject constructor(
     private val mAuth: FirebaseAuth
 ){
 
-    private val currentUser = MutableLiveData<AuthState<FirebaseUser>>()
+    private val currentUser = MutableLiveData<AuthState<AuthViewState>>()
 
-    fun setCurrentUser(state: AuthState<FirebaseUser>) {
+    fun setCurrentUser(state: AuthState<AuthViewState>) {
         currentUser.value = state
     }
 
@@ -24,6 +24,6 @@ class SessionManager @Inject constructor(
         currentUser.value = AuthState.NotAuthenticated()
     }
 
-    fun getCurrentUser(): LiveData<AuthState<FirebaseUser>> = currentUser
+    fun getCurrentUser(): LiveData<AuthState<AuthViewState>> = currentUser
 
 }
