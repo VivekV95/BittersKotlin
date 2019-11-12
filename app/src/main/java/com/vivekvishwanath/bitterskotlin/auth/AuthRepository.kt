@@ -1,8 +1,10 @@
 package com.vivekvishwanath.bitterskotlin.auth
 
+import androidx.lifecycle.LiveData
 import com.google.firebase.auth.FirebaseAuth
-import com.vivekvishwanath.bitterskotlin.AuthState
+import com.vivekvishwanath.bitterskotlin.util.AuthState
 import com.vivekvishwanath.bitterskotlin.SessionManager
+import com.vivekvishwanath.bitterskotlin.ui.auth.state.AuthViewState
 import javax.inject.Inject
 
 
@@ -11,7 +13,7 @@ class AuthRepository @Inject constructor(
     private val mAuth: FirebaseAuth
 ) {
 
-    fun registerAccount(email: String, password: String) {
+    fun registerAccount(email: String, password: String): LiveData<AuthState<AuthViewState>> {
         sessionManager.setCurrentUser(AuthState.Loading())
         mAuth
             .createUserWithEmailAndPassword(email, password)
@@ -24,19 +26,20 @@ class AuthRepository @Inject constructor(
                     }
                 }
             }
-
+        return sessionManager.getCurrentUser()
     }
 
-    fun signIn(email: String, password: String) {
+    fun signIn(email: String, password: String): LiveData<AuthState<AuthViewState>> {
         sessionManager.setCurrentUser(AuthState.Loading())
         mAuth
         .signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     mAuth.currentUser?.let { firebaseUser ->
-                        sessionManager.setCurrentUser(AuthState.Authenticated(firebaseUser))
+                        sessionManager.setCurrentUser(AuthState.Authenticated(AuthViewState(user = firebaseUser)))
                     }
                 }
             }
+        return sessionManager.getCurrentUser()
     }
 }

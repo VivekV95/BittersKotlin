@@ -1,4 +1,4 @@
-package com.vivekvishwanath.bitterskotlin.ui
+package com.vivekvishwanath.bitterskotlin.util
 
 data class DataState <T>(
     var message: Event<String>? = null,
@@ -11,7 +11,8 @@ data class DataState <T>(
             DataState(
                 message = Event(message),
                 loading = false,
-                data = null)
+                data = null
+            )
 
         fun <T> loading(isLoading: Boolean): DataState<T> =
             DataState(
