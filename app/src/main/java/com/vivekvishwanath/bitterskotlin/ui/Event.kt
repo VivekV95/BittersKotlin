@@ -17,7 +17,7 @@ class Event<T>(private val content: T) {
 
     companion object {
 
-        fun <T> dataEvent(data: T): Event<T>? =
+        fun <T> dataEvent(data: T?): Event<T>? =
             data?.let {
                 Event(data)
             }
