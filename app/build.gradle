@@ -70,4 +70,7 @@ dependencies {
     implementation "androidx.navigation:navigation-ui:2.1.0"
 
     implementation "androidx.lifecycle:lifecycle-reactivestreams:2.1.0"
+
+    implementation 'com.google.firebase:firebase-core:17.2.1'
+    implementation 'com.google.firebase:firebase-auth:19.1.0'
 }
