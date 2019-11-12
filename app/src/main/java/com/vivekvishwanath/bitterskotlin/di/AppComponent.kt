@@ -2,6 +2,7 @@ package com.vivekvishwanath.bitterskotlin.di
 
 import android.app.Application
 import com.vivekvishwanath.bitterskotlin.BaseApplication
+import com.vivekvishwanath.bitterskotlin.di.auth.AuthComponent
 import dagger.BindsInstance
 import dagger.Component
 
@@ -16,4 +17,6 @@ interface AppComponent {
 
         fun build(): AppComponent
     }
+
+    fun authComponent(authComponent: AuthComponent)
 }
