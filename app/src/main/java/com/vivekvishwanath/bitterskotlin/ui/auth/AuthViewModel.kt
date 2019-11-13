@@ -31,7 +31,7 @@ class AuthViewModel @Inject constructor(
         _stateEvent.value = event
     }
 
-    fun handleStateEvent(stateEvent: AuthStateEvent): LiveData<AuthState<AuthViewState>> =
+    private fun handleStateEvent(stateEvent: AuthStateEvent): LiveData<AuthState<AuthViewState>> =
         when (stateEvent) {
             is AuthStateEvent.RegistrationEvent -> {
                 authRepository.registerAccount(stateEvent.email, stateEvent.password)

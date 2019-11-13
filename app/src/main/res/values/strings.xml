@@ -5,4 +5,5 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="enter_your_email">Enter Your Email</string>
     <string name="enter_your_password">Enter Your Password</string>
+    <string name="login">Login</string>
 </resources>

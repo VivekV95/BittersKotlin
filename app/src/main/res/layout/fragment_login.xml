@@ -39,6 +39,14 @@
                 android:hint="@string/enter_your_password"/>
         </com.google.android.material.textfield.TextInputLayout>
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/login_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginHorizontal="16dp"
+            android:text="@string/login"/>
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
