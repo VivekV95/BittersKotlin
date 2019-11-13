@@ -43,6 +43,10 @@ class AuthRepository @Inject constructor(
                     mAuth.currentUser?.let { firebaseUser ->
                         sessionManager.setCurrentUser(AuthState.Authenticated(AuthViewState(user = firebaseUser)))
                     }
+                } else {
+                    task.exception?.message?.let { message ->
+                        sessionManager.setCurrentUser(AuthState.Error(message))
+                    }
                 }
             }
         return sessionManager.getCurrentUser()
