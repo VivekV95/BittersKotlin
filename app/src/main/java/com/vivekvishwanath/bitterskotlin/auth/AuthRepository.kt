@@ -4,14 +4,19 @@ import androidx.lifecycle.LiveData
 import com.google.firebase.auth.FirebaseAuth
 import com.vivekvishwanath.bitterskotlin.util.AuthState
 import com.vivekvishwanath.bitterskotlin.SessionManager
+import com.vivekvishwanath.bitterskotlin.di.scope.AuthScope
 import com.vivekvishwanath.bitterskotlin.ui.auth.state.AuthViewState
 import javax.inject.Inject
 
-
+@AuthScope
 class AuthRepository @Inject constructor(
     private val sessionManager: SessionManager,
     private val mAuth: FirebaseAuth
 ) {
+
+    init {
+        val i = 0
+    }
 
     fun registerAccount(email: String, password: String): LiveData<AuthState<AuthViewState>> {
         sessionManager.setCurrentUser(AuthState.Loading())

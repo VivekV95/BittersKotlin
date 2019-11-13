@@ -3,24 +3,23 @@ package com.vivekvishwanath.bitterskotlin.ui.auth
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
+import androidx.lifecycle.ViewModel
 import com.vivekvishwanath.bitterskotlin.util.AuthState
 import com.vivekvishwanath.bitterskotlin.auth.AuthRepository
+import com.vivekvishwanath.bitterskotlin.di.scope.AuthScope
 import com.vivekvishwanath.bitterskotlin.ui.auth.state.AuthStateEvent
 import com.vivekvishwanath.bitterskotlin.ui.auth.state.AuthViewState
 import com.vivekvishwanath.bitterskotlin.util.AbsentLiveData
 import javax.inject.Inject
 
+@AuthScope
 class AuthViewModel @Inject constructor(
     private val authRepository: AuthRepository
-) {
+): ViewModel() {
 
     private val _stateEvent: MutableLiveData<AuthStateEvent> = MutableLiveData()
-    private val _viewState: MutableLiveData<AuthViewState> = MutableLiveData()
 
-    val viewState: LiveData<AuthViewState>
-        get() = _viewState
-
-    val dataState: LiveData<AuthState<AuthViewState>> =
+    val authState: LiveData<AuthState<AuthViewState>> =
         Transformations
             .switchMap(_stateEvent) { stateEvent ->
                 stateEvent?.let {

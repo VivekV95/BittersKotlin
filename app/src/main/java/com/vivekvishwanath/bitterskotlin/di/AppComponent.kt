@@ -8,7 +8,10 @@ import dagger.Component
 import javax.inject.Singleton
 
 @Singleton
-@Component
+@Component(
+    modules = [
+        AppModule::class]
+)
 interface AppComponent {
 
     @Component.Builder
@@ -20,5 +23,5 @@ interface AppComponent {
         fun build(): AppComponent
     }
 
-    fun authComponent(authComponent: AuthComponent)
+    fun authComponent(): AuthComponent
 }
