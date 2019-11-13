@@ -9,7 +9,7 @@ class Event<T>(private val content: T) {
         if (hasBeenHandled) {
             null
         } else {
-            hasBeenHandled = false
+            hasBeenHandled = true
             content
         }
 

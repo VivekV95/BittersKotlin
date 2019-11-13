@@ -24,6 +24,8 @@ class SessionManager @Inject constructor(
         currentUser.value = AuthState.NotAuthenticated()
     }
 
-    fun getCurrentUser(): LiveData<AuthState<AuthViewState>> = currentUser
+    fun getCurrentUser(): LiveData<AuthState<AuthViewState>> {
+        return currentUser
+    }
 
 }

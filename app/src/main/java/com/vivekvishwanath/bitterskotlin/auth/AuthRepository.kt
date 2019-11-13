@@ -14,10 +14,6 @@ class AuthRepository @Inject constructor(
     private val mAuth: FirebaseAuth
 ) {
 
-    init {
-        val i = 0
-    }
-
     fun registerAccount(email: String, password: String): LiveData<AuthState<AuthViewState>> {
         sessionManager.setCurrentUser(AuthState.Loading())
         mAuth

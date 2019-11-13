@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
@@ -64,16 +65,17 @@ class LoginFragment : Fragment() {
         viewModel.authState.observe(viewLifecycleOwner, Observer {authState ->
             when (authState) {
                 is AuthState.Loading -> {
-                    val i = 0
+                    Toast.makeText(activity, "Loading", Toast.LENGTH_SHORT).show()
                 }
                 is AuthState.Authenticated -> {
-                    val i = 0
+                    authState.data?.getContentIfNotHandled()?.let {
+                        Toast.makeText(activity, "You're logged in!", Toast.LENGTH_SHORT).show()
+                    }
                 }
                 is AuthState.Error -> {
-                    val i = 0
-                }
-                is AuthState.NotAuthenticated -> {
-                    val i = 0
+                    authState.message?.getContentIfNotHandled()?.let { message ->
+                        Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         })

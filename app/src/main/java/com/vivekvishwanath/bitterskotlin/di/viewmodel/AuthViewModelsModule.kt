@@ -23,6 +23,4 @@ abstract class AuthViewModelsModule {
     @Binds
     abstract fun bindViewModelProviderFactory
                 (viewModelProviderFactory: ViewModelProviderFactory): ViewModelProvider.Factory
-
-
 }
