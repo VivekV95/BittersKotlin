@@ -12,5 +12,7 @@ sealed class AuthStateEvent {
         val password: String
     ): AuthStateEvent()
 
-    class None: AuthStateEvent()
+    object None: AuthStateEvent()
+    object LoginOnReturnEvent: AuthStateEvent()
+
 }

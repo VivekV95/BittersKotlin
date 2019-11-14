@@ -42,7 +42,11 @@ class AuthViewModel @Inject constructor(
             is AuthStateEvent.None -> {
                 AbsentLiveData.create()
             }
+            is AuthStateEvent.LoginOnReturnEvent -> {
+                authRepository.setSignedInUser()
+            }
         }
 
     fun initNewViewState(): AuthViewState = AuthViewState()
+
 }

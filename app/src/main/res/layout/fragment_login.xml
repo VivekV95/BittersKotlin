@@ -17,7 +17,8 @@
             android:id="@+id/login_email_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp">
+            android:layout_marginHorizontal="16dp"
+         >
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/login_email_edit_text"
@@ -30,7 +31,8 @@
             android:id="@+id/login_password_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp">
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginVertical="8dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/login_password_edit_text"
@@ -62,6 +64,16 @@
                 android:layout_gravity="end"
                 android:text="@string/login"/>
         </RelativeLayout>
+
+        <TextView
+            android:id="@+id/register_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/don_t_have_an_account_register_in_seconds"
+            android:layout_marginHorizontal="16dp"
+            android:textSize="16sp"
+            android:gravity="center_horizontal"
+            />
 
     </LinearLayout>
 

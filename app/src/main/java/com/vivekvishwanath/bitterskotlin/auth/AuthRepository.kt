@@ -33,18 +33,23 @@ class AuthRepository @Inject constructor(
     fun signIn(email: String, password: String): LiveData<AuthState<AuthViewState>> {
         sessionManager.setCurrentUser(AuthState.Loading())
         mAuth
-        .signInWithEmailAndPassword(email, password)
+            .signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    mAuth.currentUser?.let { firebaseUser ->
-                        sessionManager.setCurrentUser(AuthState.Authenticated(AuthViewState(user = firebaseUser)))
-                    }
-                } else {
+                if (task.isSuccessful)
+                    setSignedInUser()
+                else
                     task.exception?.message?.let { message ->
                         sessionManager.setCurrentUser(AuthState.Error(message))
+
                     }
-                }
             }
+        return sessionManager.getCurrentUser()
+    }
+
+    fun setSignedInUser(): LiveData<AuthState<AuthViewState>> {
+        mAuth.currentUser?.let { firebaseUser ->
+            sessionManager.setCurrentUser(AuthState.Authenticated(AuthViewState(user = firebaseUser)))
+        } ?: sessionManager.setCurrentUser(AuthState.NotAuthenticated())
         return sessionManager.getCurrentUser()
     }
 }
