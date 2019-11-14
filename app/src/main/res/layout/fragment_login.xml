@@ -39,13 +39,29 @@
                 android:hint="@string/enter_your_password"/>
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/login_button"
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:layout_marginHorizontal="16dp"
-            android:text="@string/login"/>
+            android:layout_marginHorizontal="16dp">
+
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_alignTop="@id/login_button"
+                android:layout_alignBottom="@id/login_button"
+                android:layout_alignStart="@id/login_button"
+                android:layout_alignEnd="@id/login_button"
+                android:visibility="gone"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/login_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:text="@string/login"/>
+        </RelativeLayout>
 
     </LinearLayout>
 

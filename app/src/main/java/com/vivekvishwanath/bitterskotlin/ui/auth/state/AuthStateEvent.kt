@@ -2,12 +2,12 @@ package com.vivekvishwanath.bitterskotlin.ui.auth.state
 
 sealed class AuthStateEvent {
 
-    class RegistrationEvent(
+    data class RegistrationEvent(
         val email: String,
         val password: String
     ): AuthStateEvent()
 
-    class LoginEvent(
+    data class LoginEvent(
         val email: String,
         val password: String
     ): AuthStateEvent()
