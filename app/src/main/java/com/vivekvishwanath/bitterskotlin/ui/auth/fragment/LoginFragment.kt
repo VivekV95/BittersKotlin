@@ -24,6 +24,7 @@ import com.vivekvishwanath.bitterskotlin.ui.auth.AuthActivity
 import com.vivekvishwanath.bitterskotlin.ui.auth.AuthViewModel
 import com.vivekvishwanath.bitterskotlin.ui.auth.state.AuthStateEvent
 import com.vivekvishwanath.bitterskotlin.util.AuthState
+import com.vivekvishwanath.bitterskotlin.util.performCrossFade
 import com.vivekvishwanath.bitterskotlin.viewmodel.ViewModelProviderFactory
 import kotlinx.android.synthetic.main.fragment_login.*
 import javax.inject.Inject
@@ -107,9 +108,11 @@ class LoginFragment : Fragment() {
 
         viewModel.authState.observe(viewLifecycleOwner, Observer { authState ->
             if (authState is AuthState.Loading) {
-                performCrossFade(true)
+                login_button.performCrossFade(true)
+                progress_bar.performCrossFade(true)
             } else {
-                performCrossFade(false)
+                login_button.performCrossFade(false)
+                progress_bar.performCrossFade(false)
             }
         })
     }
@@ -117,49 +120,6 @@ class LoginFragment : Fragment() {
     fun performLogin(email: String, password: String) {
         if (email.isNotEmpty() && password.isNotEmpty())
             viewModel.setStateEvent(AuthStateEvent.LoginEvent(email, password))
-    }
-
-    fun performCrossFade(isLoading: Boolean) {
-        shortAnimationDuration = resources.getInteger(android.R.integer.config_shortAnimTime)
-
-        if (isLoading) {
-            progress_bar.apply {
-                alpha = 0f
-                visibility = View.VISIBLE
-                animate()
-                    .alpha(1f)
-                    .setDuration(shortAnimationDuration.toLong())
-                    .setListener(null)
-            }
-
-            login_button.animate()
-                .alpha(0f)
-                .setDuration(shortAnimationDuration.toLong())
-                .setListener(object : AnimatorListenerAdapter() {
-                    override fun onAnimationEnd(animation: Animator?) {
-
-                    }
-                })
-
-        } else {
-            login_button.apply {
-                alpha = 0f
-                visibility = View.VISIBLE
-                animate()
-                    .alpha(1f)
-                    .setDuration(shortAnimationDuration.toLong())
-                    .setListener(null)
-            }
-
-            progress_bar.animate()
-                .alpha(0f)
-                .setDuration(shortAnimationDuration.toLong())
-                .setListener(object : AnimatorListenerAdapter() {
-                    override fun onAnimationEnd(animation: Animator?) {
-                        progress_bar.visibility = View.GONE
-                    }
-                })
-        }
     }
 
 }
