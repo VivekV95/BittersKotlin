@@ -47,7 +47,6 @@ class AuthRepository @Inject constructor(
     }
 
     fun setSignedInUser(): LiveData<AuthState<AuthViewState>> {
-        sessionManager.setCurrentUser(AuthState.Loading())
         mAuth.currentUser?.let { firebaseUser ->
             sessionManager.setCurrentUser(AuthState.Authenticated(AuthViewState(user = firebaseUser)))
         } ?: sessionManager.setCurrentUser(AuthState.NotAuthenticated())

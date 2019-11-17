@@ -7,4 +7,6 @@
     <string name="enter_your_password">Enter Your Password</string>
     <string name="login">Login</string>
     <string name="don_t_have_an_account_register_in_seconds">Don\'t have an account? Register in seconds!</string>
+    <string name="confirm_your_password">Confirm your password</string>
+    <string name="register">Register</string>
 </resources>

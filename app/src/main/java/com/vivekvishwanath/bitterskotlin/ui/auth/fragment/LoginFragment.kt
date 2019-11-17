@@ -1,8 +1,6 @@
 package com.vivekvishwanath.bitterskotlin.ui.auth.fragment
 
 
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.Spanned
@@ -15,7 +13,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 
@@ -29,15 +26,23 @@ import com.vivekvishwanath.bitterskotlin.viewmodel.ViewModelProviderFactory
 import kotlinx.android.synthetic.main.fragment_login.*
 import javax.inject.Inject
 
-class LoginFragment : Fragment() {
+class LoginFragment : Fragment(), View.OnClickListener {
 
-    lateinit var navController: NavController
-    var shortAnimationDuration: Int = 0
+    override fun onClick(v: View?) {
+        when (v) {
+            login_button -> performLogin(
+                login_email_edit_text.text.toString(),
+                login_password_edit_text.text.toString()
+            )
+        }
+    }
+
+    private lateinit var navController: NavController
 
     @Inject
     lateinit var viewModelProviderFactory: ViewModelProviderFactory
 
-    lateinit var viewModel: AuthViewModel
+    private lateinit var viewModel: AuthViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         (activity as AuthActivity).authComponent.inject(this)
@@ -48,7 +53,6 @@ class LoginFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_login, container, false)
     }
 
@@ -62,15 +66,13 @@ class LoginFragment : Fragment() {
                 .get(AuthViewModel::class.java)
         }
 
-        login_button.setOnClickListener {
-            performLogin(
-                login_email_edit_text.text.toString(),
-                login_password_edit_text.text.toString()
-            )
-        }
-
         subscribeObservers()
+        setupOnClickListeners()
+    }
+
+    private fun setupOnClickListeners() {
         setupRegistrationClick()
+        login_button.setOnClickListener(this)
     }
 
     override fun onStart() {
@@ -79,10 +81,11 @@ class LoginFragment : Fragment() {
     }
 
     private fun setupRegistrationClick() {
-        val spannableString = SpannableString(resources.getString(R.string.don_t_have_an_account_register_in_seconds))
+        val spannableString =
+            SpannableString(resources.getString(R.string.don_t_have_an_account_register_in_seconds))
         val clickableSpan = object : ClickableSpan() {
             override fun onClick(widget: View) {
-                Toast.makeText(activity, "Registration clicked", Toast.LENGTH_SHORT).show()
+                navController.navigate(R.id.action_loginFragment_to_registerFragment)
             }
         }
         spannableString.setSpan(clickableSpan, 23, 43, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -109,17 +112,16 @@ class LoginFragment : Fragment() {
         viewModel.authState.observe(viewLifecycleOwner, Observer { authState ->
             if (authState is AuthState.Loading) {
                 login_button.performCrossFade(true)
-                progress_bar.performCrossFade(true)
+                login_progress_bar.performCrossFade(true)
             } else {
                 login_button.performCrossFade(false)
-                progress_bar.performCrossFade(false)
+                login_progress_bar.performCrossFade(false)
             }
         })
     }
 
-    fun performLogin(email: String, password: String) {
+    private fun performLogin(email: String, password: String) {
         if (email.isNotEmpty() && password.isNotEmpty())
             viewModel.setStateEvent(AuthStateEvent.LoginEvent(email, password))
     }
-
 }
