@@ -22,18 +22,18 @@ import com.vivekvishwanath.bitterskotlin.ui.auth.AuthViewModel
 import com.vivekvishwanath.bitterskotlin.ui.auth.state.AuthStateEvent
 import com.vivekvishwanath.bitterskotlin.util.AuthState
 import com.vivekvishwanath.bitterskotlin.util.performCrossFade
+import com.vivekvishwanath.bitterskotlin.util.validateEmail
+import com.vivekvishwanath.bitterskotlin.util.validatePassword
 import com.vivekvishwanath.bitterskotlin.viewmodel.ViewModelProviderFactory
 import kotlinx.android.synthetic.main.fragment_login.*
+import kotlinx.android.synthetic.main.fragment_register.*
 import javax.inject.Inject
 
 class LoginFragment : Fragment(), View.OnClickListener {
 
     override fun onClick(v: View?) {
         when (v) {
-            login_button -> performLogin(
-                login_email_edit_text.text.toString(),
-                login_password_edit_text.text.toString()
-            )
+            login_button -> performLogin()
         }
     }
 
@@ -120,8 +120,14 @@ class LoginFragment : Fragment(), View.OnClickListener {
         })
     }
 
-    private fun performLogin(email: String, password: String) {
-        if (email.isNotEmpty() && password.isNotEmpty())
-            viewModel.setStateEvent(AuthStateEvent.LoginEvent(email, password))
+    private fun performLogin() {
+        when {
+            !login_email_edit_text.validateEmail() ||
+                    !login_password_edit_text.validatePassword() -> return
+            else -> viewModel.setStateEvent(AuthStateEvent.LoginEvent(
+                login_email_edit_text.text.toString(),
+                login_password_edit_text.text.toString()
+            ))
+        }
     }
 }

@@ -73,17 +73,3 @@ fun TextInputEditText.validatePassword(): Boolean {
     }
     return true
 }
-
-fun TextInputLayout.validateEmail(email: String): Pair<Boolean, String?> {
-    if (email.isBlank()) return Pair(false, "Email cannot be blank")
-    else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches())
-        return Pair(false, "Email must have valid format")
-    return Pair(true, null)
-}
-
-fun TextInputLayout.validatePassword(password: String): Pair<Boolean, String?> {
-    if (password.isBlank()) return Pair(false, "Password cannot be blank")
-    else if (password.length < 8 || password.length > 64)
-        return Pair(false, "Password must be between 8 and 64 characters")
-    return Pair(true, null)
-}

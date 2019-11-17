@@ -28,15 +28,7 @@ class RegisterFragment : Fragment(), View.OnClickListener {
 
     override fun onClick(v: View?) {
         when (v) {
-            register_button -> {
-                if (validateUserCredentials())
-                    viewModel.setStateEvent(
-                        AuthStateEvent.RegistrationEvent(
-                            register_email_edit_text.text.toString(),
-                            register_password_edit_text.text.toString()
-                        )
-                    )
-            }
+            register_button -> performRegistration()
         }
     }
 
@@ -104,17 +96,22 @@ class RegisterFragment : Fragment(), View.OnClickListener {
         })
     }
 
-    private fun validateUserCredentials(): Boolean {
-        return when {
-            !register_email_edit_text.validateEmail() -> false
-            !register_password_edit_text.validatePassword() -> false
+    private fun performRegistration() {
+        when {
+            !register_email_edit_text.validateEmail()
+                    || !register_password_edit_text.validatePassword() -> return
+
             register_password_edit_text.text.toString()
                     != register_password_confirm_edit_text.text.toString() -> {
                 register_password_edit_text.error = "Passwords must match"
                 register_password_confirm_edit_text.error = "Passwords must match"
-                false
             }
-            else -> true
+            else -> viewModel.setStateEvent(
+                AuthStateEvent.RegistrationEvent(
+                    register_email_edit_text.text.toString(),
+                    register_password_edit_text.text.toString()
+                )
+            )
         }
     }
 }
