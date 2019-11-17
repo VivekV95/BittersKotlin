@@ -67,25 +67,6 @@ class RegisterFragment : Fragment(), View.OnClickListener {
 
     private fun subscribeObservers() {
         viewModel.authState.observe(viewLifecycleOwner, Observer { authState ->
-            when (authState) {
-                is AuthState.Authenticated -> {
-                    authState.data?.getContentIfNotHandled()?.let {
-                        Toast.makeText(
-                            activity,
-                            "You're registered and logged in!",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
-                is AuthState.Error -> {
-                    authState.message?.getContentIfNotHandled()?.let { message ->
-                        Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
-        })
-
-        viewModel.authState.observe(viewLifecycleOwner, Observer { authState ->
             if (authState is AuthState.Loading) {
                 register_button.performCrossFade(true)
                 register_progress_bar.performCrossFade(true)

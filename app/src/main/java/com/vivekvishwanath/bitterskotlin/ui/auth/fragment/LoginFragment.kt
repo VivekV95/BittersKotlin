@@ -75,11 +75,6 @@ class LoginFragment : Fragment(), View.OnClickListener {
         login_button.setOnClickListener(this)
     }
 
-    override fun onStart() {
-        super.onStart()
-        viewModel.setStateEvent(AuthStateEvent.LoginOnReturnEvent)
-    }
-
     private fun setupRegistrationClick() {
         val spannableString =
             SpannableString(resources.getString(R.string.don_t_have_an_account_register_in_seconds))
@@ -94,21 +89,6 @@ class LoginFragment : Fragment(), View.OnClickListener {
     }
 
     private fun subscribeObservers() {
-        viewModel.authState.observe(viewLifecycleOwner, Observer { authState ->
-            when (authState) {
-                is AuthState.Authenticated -> {
-                    authState.data?.getContentIfNotHandled()?.let {
-                        Toast.makeText(activity, "You're logged in!", Toast.LENGTH_SHORT).show()
-                    }
-                }
-                is AuthState.Error -> {
-                    authState.message?.getContentIfNotHandled()?.let { message ->
-                        Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
-        })
-
         viewModel.authState.observe(viewLifecycleOwner, Observer { authState ->
             if (authState is AuthState.Loading) {
                 login_button.performCrossFade(true)
