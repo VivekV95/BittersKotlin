@@ -6,3 +6,8 @@ import javax.inject.Scope
 @MustBeDocumented
 @Retention(AnnotationRetention.RUNTIME)
 annotation class AuthScope
+
+@Scope
+@MustBeDocumented
+@Retention(AnnotationRetention.RUNTIME)
+annotation class MainScope

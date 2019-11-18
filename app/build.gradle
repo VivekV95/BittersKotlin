@@ -9,9 +9,14 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'com.google.gms.google-services'
 
 android {
+
+    def Properties properties = new Properties()
+    properties.load(project.rootProject.file("local.properties").newDataInputStream())
+
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
     defaultConfig {
+        resValue("string", "cocktailDbApiKey", properties.getProperty("cocktailDbApiKey", ""))
         applicationId "com.vivekvishwanath.bitterskotlin"
         minSdkVersion 21
         targetSdkVersion 29
@@ -71,10 +76,20 @@ dependencies {
 
     implementation "androidx.navigation:navigation-fragment:2.1.0"
     implementation "androidx.navigation:navigation-ui:2.1.0"
+    implementation "androidx.navigation:navigation-runtime:2.1.0"
 
     implementation "androidx.lifecycle:lifecycle-reactivestreams:2.1.0"
 
     implementation 'com.google.firebase:firebase-core:17.2.1'
     implementation 'com.google.firebase:firebase-auth:19.1.0'
     implementation 'com.google.firebase:firebase-analytics:17.2.0'
+
+    implementation 'com.jakewharton.rxbinding3:rxbinding:3.0.0'
+    implementation("io.reactivex.rxjava2:rxkotlin:2.4.0")
+
+    def room_version = "2.2.1"
+    implementation "androidx.room:room-runtime:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+    // Kotlin Extensions and Coroutines support for Room
+    implementation "androidx.room:room-ktx:$room_version"
 }

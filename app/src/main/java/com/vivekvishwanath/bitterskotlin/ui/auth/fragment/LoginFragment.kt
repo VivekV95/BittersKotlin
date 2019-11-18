@@ -2,6 +2,10 @@ package com.vivekvishwanath.bitterskotlin.ui.auth.fragment
 
 
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -9,23 +13,36 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
 
 import com.vivekvishwanath.bitterskotlin.R
 import com.vivekvishwanath.bitterskotlin.ui.auth.AuthActivity
 import com.vivekvishwanath.bitterskotlin.ui.auth.AuthViewModel
 import com.vivekvishwanath.bitterskotlin.ui.auth.state.AuthStateEvent
 import com.vivekvishwanath.bitterskotlin.util.AuthState
+import com.vivekvishwanath.bitterskotlin.util.performCrossFade
+import com.vivekvishwanath.bitterskotlin.util.validateEmail
+import com.vivekvishwanath.bitterskotlin.util.validatePassword
 import com.vivekvishwanath.bitterskotlin.viewmodel.ViewModelProviderFactory
 import kotlinx.android.synthetic.main.fragment_login.*
+import kotlinx.android.synthetic.main.fragment_register.*
 import javax.inject.Inject
 
-class LoginFragment : Fragment() {
+class LoginFragment : Fragment(), View.OnClickListener {
+
+    override fun onClick(v: View?) {
+        when (v) {
+            login_button -> performLogin()
+        }
+    }
+
+    private lateinit var navController: NavController
 
     @Inject
     lateinit var viewModelProviderFactory: ViewModelProviderFactory
 
-    lateinit var viewModel: AuthViewModel
+    private lateinit var viewModel: AuthViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         (activity as AuthActivity).authComponent.inject(this)
@@ -36,49 +53,61 @@ class LoginFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_login, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        navController = Navigation.findNavController(view)
+
         activity?.let {
             viewModel = ViewModelProvider(it, viewModelProviderFactory)
                 .get(AuthViewModel::class.java)
         }
 
-        login_button.setOnClickListener {
-            performLogin(
-                login_email_edit_text.text.toString(),
-                login_password_edit_text.text.toString())
-        }
-
         subscribeObservers()
+        setupOnClickListeners()
     }
 
-    fun performLogin(email: String, password: String) {
-        viewModel.setStateEvent(AuthStateEvent.LoginEvent(email, password))
+    private fun setupOnClickListeners() {
+        setupRegistrationClick()
+        login_button.setOnClickListener(this)
+    }
+
+    private fun setupRegistrationClick() {
+        val spannableString =
+            SpannableString(resources.getString(R.string.don_t_have_an_account_register_in_seconds))
+        val clickableSpan = object : ClickableSpan() {
+            override fun onClick(widget: View) {
+                navController.navigate(R.id.action_loginFragment_to_registerFragment)
+            }
+        }
+        spannableString.setSpan(clickableSpan, 23, 43, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        register_text.text = spannableString
+        register_text.movementMethod = LinkMovementMethod.getInstance()
     }
 
     private fun subscribeObservers() {
-        viewModel.authState.observe(viewLifecycleOwner, Observer {authState ->
-            when (authState) {
-                is AuthState.Loading -> {
-                    Toast.makeText(activity, "Loading", Toast.LENGTH_SHORT).show()
-                }
-                is AuthState.Authenticated -> {
-                    authState.data?.getContentIfNotHandled()?.let {
-                        Toast.makeText(activity, "You're logged in!", Toast.LENGTH_SHORT).show()
-                    }
-                }
-                is AuthState.Error -> {
-                    authState.message?.getContentIfNotHandled()?.let { message ->
-                        Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
-                    }
-                }
+        viewModel.authState.observe(viewLifecycleOwner, Observer { authState ->
+            if (authState is AuthState.Loading) {
+                login_button.performCrossFade(true)
+                login_progress_bar.performCrossFade(true)
+            } else {
+                login_button.performCrossFade(false)
+                login_progress_bar.performCrossFade(false)
             }
         })
     }
 
+    private fun performLogin() {
+        when {
+            !login_email_edit_text.validateEmail() ||
+                    !login_password_edit_text.validatePassword() -> return
+            else -> viewModel.setStateEvent(AuthStateEvent.LoginEvent(
+                login_email_edit_text.text.toString(),
+                login_password_edit_text.text.toString()
+            ))
+        }
+    }
 }

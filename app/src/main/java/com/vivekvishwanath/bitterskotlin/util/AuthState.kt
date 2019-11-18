@@ -6,10 +6,10 @@ sealed class AuthState<T>(
 ) {
     class Authenticated<T>(data: T) : AuthState<T>(Event.dataEvent(data))
 
-    class Loading<T>(data: T? = null) : AuthState<T>()
+    class Loading<T> : AuthState<T>()
 
     class Error<T>(message: String, data: T? = null) :
         AuthState<T>(message = Event.messageEvent(message))
 
-    class NotAuthenticated<T>(data: T? = null) : AuthState<T>()
+    class NotAuthenticated<T>: AuthState<T>()
 }
