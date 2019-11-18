@@ -46,7 +46,6 @@ class AuthViewModel @Inject constructor(
                 authRepository.setSignedInUser()
             }
         }
-
+  
     fun initNewViewState(): AuthViewState = AuthViewState()
-
 }
