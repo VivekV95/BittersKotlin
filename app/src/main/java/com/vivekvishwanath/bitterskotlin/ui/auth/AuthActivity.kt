@@ -49,11 +49,11 @@ class AuthActivity : AppCompatActivity() {
                 is AuthState.Authenticated -> {
                     authState.data?.getContentIfNotHandled()?.let {
                         Toast.makeText(this, "You're logged in!", Toast.LENGTH_SHORT).show()
-//                        Intent(this, MainActivity::class.java)
-//                            .apply {
-//                                startActivity(this)
-//                            }
-//                        finish()
+                        Intent(this, MainActivity::class.java)
+                            .apply {
+                                startActivity(this)
+                            }
+                        finish()
                     }
                 }
                 is AuthState.Error -> {
