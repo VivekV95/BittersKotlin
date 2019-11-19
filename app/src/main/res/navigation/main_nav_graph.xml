@@ -1,5 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/main_nav_graph">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_nav_graph"
+    app:startDestination="@id/popularFragment">
 
+    <fragment
+        android:id="@+id/popularFragment"
+        android:name="com.vivekvishwanath.bitterskotlin.ui.main.fragment.PopularFragment"
+        android:label="Popular"
+        tools:layout="@layout/fragment_popular" />
+    <fragment
+        android:id="@+id/filterFragment"
+        android:name="com.vivekvishwanath.bitterskotlin.ui.main.fragment.FilterFragment"
+        android:label="Filter"
+        tools:layout="@layout/fragment_filter" />
+    <fragment
+        android:id="@+id/favoritesFragment"
+        android:name="com.vivekvishwanath.bitterskotlin.ui.main.fragment.FavoritesFragment"
+        android:label="Favorites"
+        tools:layout="@layout/fragment_favorites" />
 </navigation>
