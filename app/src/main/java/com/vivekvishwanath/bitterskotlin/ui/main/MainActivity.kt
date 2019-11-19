@@ -19,6 +19,15 @@ import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
+    val mainComponent by lazy {
+        (application as BaseApplication)
+            .appComponent
+            .mainComponent()
+    }
+
+    @Inject
+    lateinit var cocktailService: CocktailDbServiceWrapper
+
     override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
         when (menuItem.itemId) {
             R.id.nav_popular -> {
@@ -53,15 +62,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             .findNavController(this, R.id.main_nav_host_fragment)
             .currentDestination
             ?.id
-
-    private val mainComponent by lazy {
-        (application as BaseApplication)
-            .appComponent
-            .mainComponent()
-    }
-
-    @Inject
-    lateinit var cocktailService: CocktailDbServiceWrapper
 
     @SuppressLint("CheckResult")
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -1,4 +1,4 @@
-package com.vivekvishwanath.bitterskotlin.auth
+package com.vivekvishwanath.bitterskotlin.repository
 
 import androidx.lifecycle.LiveData
 import com.google.firebase.auth.FirebaseAuth

@@ -22,6 +22,7 @@ import com.vivekvishwanath.bitterskotlin.viewmodel.ViewModelProviderFactory
 import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.android.synthetic.main.fragment_login.login_progress_bar
 import kotlinx.android.synthetic.main.fragment_register.*
+import java.lang.Exception
 import javax.inject.Inject
 
 class RegisterFragment : Fragment(), View.OnClickListener {
@@ -52,10 +53,9 @@ class RegisterFragment : Fragment(), View.OnClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        activity?.let {
-            viewModel =
-                ViewModelProvider(it, viewModelProviderFactory).get(AuthViewModel::class.java)
-        }
+        viewModel = activity?.run {
+            ViewModelProvider(this, viewModelProviderFactory)[AuthViewModel::class.java]
+        } ?: throw Exception("Invalid Activity")
 
         subscribeObservers()
         setupClickListeners()

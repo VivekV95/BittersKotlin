@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    app:cardCornerRadius="2dp"
+    android:elevation="2dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -46,7 +49,8 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:text="@string/cocktail_name"
-                android:gravity="center"
+                android:gravity="center_vertical"
+                android:layout_marginStart="8dp"
                 android:textColor="@android:color/white"
                 android:textSize="18dp"
                 app:layout_constraintStart_toStartOf="parent"
