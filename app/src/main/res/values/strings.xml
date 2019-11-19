@@ -9,4 +9,10 @@
     <string name="don_t_have_an_account_register_in_seconds">Don\'t have an account? Register in seconds!</string>
     <string name="confirm_your_password">Confirm your password</string>
     <string name="register">Register</string>
+    <string name="popular">Popular</string>
+    <string name="filter">Filter</string>
+    <string name="favorites">Favorites</string>
+    <string name="cocktail_name">Cocktail Name</string>
+    <string name="cocktail_image">Cocktail Image</string>
+    <string name="cocktail_name">Cocktail Name</string>
 </resources>
