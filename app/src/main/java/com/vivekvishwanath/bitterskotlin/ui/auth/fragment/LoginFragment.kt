@@ -27,6 +27,7 @@ import com.vivekvishwanath.bitterskotlin.util.validatePassword
 import com.vivekvishwanath.bitterskotlin.viewmodel.ViewModelProviderFactory
 import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.android.synthetic.main.fragment_register.*
+import java.lang.Exception
 import javax.inject.Inject
 
 class LoginFragment : Fragment(), View.OnClickListener {
@@ -61,10 +62,9 @@ class LoginFragment : Fragment(), View.OnClickListener {
 
         navController = Navigation.findNavController(view)
 
-        activity?.let {
-            viewModel = ViewModelProvider(it, viewModelProviderFactory)
-                .get(AuthViewModel::class.java)
-        }
+        viewModel = activity?.run {
+            ViewModelProvider(this, viewModelProviderFactory)[AuthViewModel::class.java]
+        } ?: throw Exception("Invalid Activity")
 
         subscribeObservers()
         setupOnClickListeners()
@@ -104,10 +104,12 @@ class LoginFragment : Fragment(), View.OnClickListener {
         when {
             !login_email_edit_text.validateEmail() ||
                     !login_password_edit_text.validatePassword() -> return
-            else -> viewModel.setStateEvent(AuthStateEvent.LoginEvent(
-                login_email_edit_text.text.toString(),
-                login_password_edit_text.text.toString()
-            ))
+            else -> viewModel.setStateEvent(
+                AuthStateEvent.LoginEvent(
+                    login_email_edit_text.text.toString(),
+                    login_password_edit_text.text.toString()
+                )
+            )
         }
     }
 }

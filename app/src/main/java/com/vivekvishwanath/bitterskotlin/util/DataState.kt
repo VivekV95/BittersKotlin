@@ -19,7 +19,7 @@ data class DataState <T>(
                 loading = isLoading
             )
 
-        fun <T> data(message: String?, data: T? = null): DataState<T> =
+        fun <T> data(message: String? = null, data: T? = null): DataState<T> =
             DataState(
                 message = Event.messageEvent(message),
                 loading = false,
