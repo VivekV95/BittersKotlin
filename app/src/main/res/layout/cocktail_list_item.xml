@@ -5,10 +5,11 @@
     android:layout_height="wrap_content"
     app:cardElevation="6dp"
     android:outlineAmbientShadowColor="@color/colorBlack"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cocktail_card">
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cocktail_card_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
