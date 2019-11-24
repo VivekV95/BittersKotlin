@@ -72,7 +72,6 @@ class PopularFragment : Fragment(), CocktailListAdapter.CocktailClickListener {
         subscribeObservers()
         initRecyclerView()
         triggerGetPopularCocktailsEvent()
-
     }
 
     private fun triggerGetPopularCocktailsEvent() {

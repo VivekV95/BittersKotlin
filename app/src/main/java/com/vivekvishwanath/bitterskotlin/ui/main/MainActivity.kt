@@ -81,7 +81,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         mainComponent.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+      
         viewModel = ViewModelProvider(this, viewModelProviderFactory)[MainViewModel::class.java]
         initNav()
     }

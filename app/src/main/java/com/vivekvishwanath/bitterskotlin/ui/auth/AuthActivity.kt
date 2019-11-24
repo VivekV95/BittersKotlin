@@ -34,6 +34,7 @@ class AuthActivity : AppCompatActivity() {
         authComponent.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_auth)
+      
         viewModel = ViewModelProvider(this, viewModelProviderFactory)[AuthViewModel::class.java]
         subscribeObservers()
     }

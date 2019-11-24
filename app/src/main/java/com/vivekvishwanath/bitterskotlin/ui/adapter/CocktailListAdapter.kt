@@ -65,6 +65,7 @@ class CocktailListAdapter(private val requestManager: RequestManager,
             itemView.setOnClickListener {
                 cocktailClickListener?.onCocktailClicked(adapterPosition, item)
             }
+          
             itemView.cocktail_card_name.text = item.drinkName
 
             requestManager
