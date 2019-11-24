@@ -9,6 +9,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.vivekvishwanath.bitterskotlin.util.AuthState
 import com.vivekvishwanath.bitterskotlin.session.SessionManager
 import com.vivekvishwanath.bitterskotlin.di.scope.AuthScope
+import com.vivekvishwanath.bitterskotlin.repository.JobManager
 import com.vivekvishwanath.bitterskotlin.ui.auth.state.AuthViewState
 import com.vivekvishwanath.bitterskotlin.util.CANCELLATION_DELAY
 import com.vivekvishwanath.bitterskotlin.util.TAG
@@ -20,7 +21,7 @@ import javax.inject.Inject
 class AuthRepository @Inject constructor(
     private val sessionManager: SessionManager,
     private val mAuth: FirebaseAuth
-) {
+): JobManager("AuthRepository") {
 
     private lateinit var coroutineScope: CoroutineScope
     private lateinit var job: Job
