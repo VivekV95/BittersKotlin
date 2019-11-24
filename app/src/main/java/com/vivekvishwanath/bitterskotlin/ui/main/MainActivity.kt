@@ -1,10 +1,12 @@
 package com.vivekvishwanath.bitterskotlin.ui.main
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.core.view.GravityCompat
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
@@ -12,12 +14,15 @@ import com.google.android.material.navigation.NavigationView
 import com.vivekvishwanath.bitterskotlin.BaseApplication
 import com.vivekvishwanath.bitterskotlin.R
 import com.vivekvishwanath.bitterskotlin.network.CocktailDbServiceWrapper
+import com.vivekvishwanath.bitterskotlin.ui.BaseActivity
+import com.vivekvishwanath.bitterskotlin.ui.auth.AuthActivity
+import com.vivekvishwanath.bitterskotlin.viewmodel.ViewModelProviderFactory
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     val mainComponent by lazy {
         (application as BaseApplication)
@@ -27,6 +32,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     @Inject
     lateinit var cocktailService: CocktailDbServiceWrapper
+
+    @Inject
+    lateinit var viewModelProviderFactory: ViewModelProviderFactory
+
+    lateinit var viewModel: MainViewModel
 
     override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
         when (menuItem.itemId) {
@@ -50,6 +60,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         .findNavController(this, R.id.main_nav_host_fragment)
                         .navigate(R.id.favoritesFragment)
             }
+            R.id.nav_logout -> {
+                viewModel.logOut()
+            }
         }
 
         menuItem.isChecked = true
@@ -68,7 +81,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         mainComponent.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+      
+        viewModel = ViewModelProvider(this, viewModelProviderFactory)[MainViewModel::class.java]
         initNav()
     }
 

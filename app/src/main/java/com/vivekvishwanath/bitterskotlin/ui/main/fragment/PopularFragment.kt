@@ -6,12 +6,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.RequestManager
+import com.google.gson.JsonElement
 
 import com.vivekvishwanath.bitterskotlin.R
+import com.vivekvishwanath.bitterskotlin.model.Cocktail
 import com.vivekvishwanath.bitterskotlin.ui.adapter.CocktailListAdapter
 import com.vivekvishwanath.bitterskotlin.ui.main.MainActivity
 import com.vivekvishwanath.bitterskotlin.ui.main.MainViewModel
@@ -19,10 +23,13 @@ import com.vivekvishwanath.bitterskotlin.ui.main.state.MainStateEvent
 import com.vivekvishwanath.bitterskotlin.util.SpacingItemDecoration
 import com.vivekvishwanath.bitterskotlin.viewmodel.ViewModelProviderFactory
 import kotlinx.android.synthetic.main.fragment_popular.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.lang.Exception
 import javax.inject.Inject
 
-class PopularFragment : Fragment() {
+class PopularFragment : Fragment(), CocktailListAdapter.CocktailClickListener {
 
     @Inject
     lateinit var viewModelProviderFactory: ViewModelProviderFactory
@@ -33,6 +40,15 @@ class PopularFragment : Fragment() {
     lateinit var viewModel: MainViewModel
 
     private lateinit var cocktailListAdapter: CocktailListAdapter
+
+    override fun onCocktailClicked(position: Int, item: Cocktail) {
+        activity?.let {
+            val bundle = bundleOf("cocktail" to item)
+            Navigation
+                .findNavController(it, R.id.main_nav_host_fragment)
+                .navigate(R.id.action_popularFragment_to_viewCocktailFragment, bundle)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         (activity as MainActivity).mainComponent.inject(this)
@@ -51,7 +67,7 @@ class PopularFragment : Fragment() {
 
         viewModel = activity?.run {
             ViewModelProvider(this, viewModelProviderFactory)[MainViewModel::class.java]
-        }?: throw Exception("Invalid Activity")
+        } ?: throw Exception("Invalid Activity")
 
         subscribeObservers()
         initRecyclerView()
@@ -66,7 +82,7 @@ class PopularFragment : Fragment() {
         popular_recycler_view.apply {
             layoutManager = GridLayoutManager(activity, 2)
             addItemDecoration(SpacingItemDecoration(8))
-            cocktailListAdapter = CocktailListAdapter(requestManager)
+            cocktailListAdapter = CocktailListAdapter(requestManager, this@PopularFragment)
             adapter = cocktailListAdapter
         }
     }

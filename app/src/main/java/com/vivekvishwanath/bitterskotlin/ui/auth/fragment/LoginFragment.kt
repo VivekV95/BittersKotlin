@@ -6,6 +6,7 @@ import android.text.SpannableString
 import android.text.Spanned
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -20,10 +21,8 @@ import com.vivekvishwanath.bitterskotlin.R
 import com.vivekvishwanath.bitterskotlin.ui.auth.AuthActivity
 import com.vivekvishwanath.bitterskotlin.ui.auth.AuthViewModel
 import com.vivekvishwanath.bitterskotlin.ui.auth.state.AuthStateEvent
-import com.vivekvishwanath.bitterskotlin.util.AuthState
-import com.vivekvishwanath.bitterskotlin.util.performCrossFade
-import com.vivekvishwanath.bitterskotlin.util.validateEmail
-import com.vivekvishwanath.bitterskotlin.util.validatePassword
+import com.vivekvishwanath.bitterskotlin.ui.auth.state.LoginFields
+import com.vivekvishwanath.bitterskotlin.util.*
 import com.vivekvishwanath.bitterskotlin.viewmodel.ViewModelProviderFactory
 import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.android.synthetic.main.fragment_register.*
@@ -98,6 +97,11 @@ class LoginFragment : Fragment(), View.OnClickListener {
                 login_progress_bar.performCrossFade(false)
             }
         })
+
+        viewModel.viewState.observe(viewLifecycleOwner, Observer { viewState ->
+            login_email_edit_text.setText(viewState.loginFields?.email)
+            login_password_edit_text.setText(viewState.loginFields?.password)
+        })
     }
 
     private fun performLogin() {
@@ -111,5 +115,20 @@ class LoginFragment : Fragment(), View.OnClickListener {
                 )
             )
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewModel.setLoginFields(
+            LoginFields(
+                login_email_edit_text.text.toString(),
+                login_password_edit_text.text.toString()
+            )
+        )
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        viewModel.cancelJob()
     }
 }

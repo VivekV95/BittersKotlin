@@ -1,9 +1,12 @@
 package com.vivekvishwanath.bitterskotlin.model
 
+import android.os.Parcelable
 import androidx.room.Entity
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
 @Entity
+@Parcelize
 data class Cocktail(
 
     @SerializedName("idDrink")
@@ -68,9 +71,8 @@ data class Cocktail(
     val strMeasure14: String,
     val strMeasure15: String,
 
-
     val dateModified: String
-)
+): Parcelable
 
 data class CocktailDbResponse(
     val drinks: List<Cocktail>

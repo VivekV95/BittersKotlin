@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView
+    style="@style/Widget.MaterialComponents.CardView"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardElevation="6dp"
-    android:outlineAmbientShadowColor="@color/colorBlack"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:background="@color/colorBlack"
+    android:elevation="2dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cocktail_card">
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cocktail_card_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 

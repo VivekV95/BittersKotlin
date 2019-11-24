@@ -4,6 +4,7 @@ import com.vivekvishwanath.bitterskotlin.di.scope.MainScope
 import com.vivekvishwanath.bitterskotlin.di.viewmodel.MainViewModelsModule
 import com.vivekvishwanath.bitterskotlin.ui.main.MainActivity
 import com.vivekvishwanath.bitterskotlin.ui.main.fragment.PopularFragment
+import com.vivekvishwanath.bitterskotlin.ui.main.fragment.ViewCocktailFragment
 import dagger.Component
 import dagger.Subcomponent
 
@@ -18,4 +19,6 @@ interface MainComponent {
     fun inject(mainActivity: MainActivity)
 
     fun inject(popularFragment: PopularFragment)
+
+    fun inject (viewCocktailFragment: ViewCocktailFragment)
 }
