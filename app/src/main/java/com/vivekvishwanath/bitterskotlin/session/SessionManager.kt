@@ -9,6 +9,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.vivekvishwanath.bitterskotlin.ui.auth.state.AuthViewState
 import com.vivekvishwanath.bitterskotlin.util.AuthState
 import com.vivekvishwanath.bitterskotlin.util.TAG
@@ -22,9 +23,9 @@ class SessionManager @Inject constructor(
     private val mAuth: FirebaseAuth
 ){
 
-    private val currentUser = MutableLiveData<AuthState<AuthViewState>>()
+    private val currentUser = MutableLiveData<AuthState<FirebaseUser>>()
 
-    fun setCurrentUser(state: AuthState<AuthViewState>) {
+    fun setCurrentUser(state: AuthState<FirebaseUser>) {
         currentUser.value = state
     }
 
@@ -33,12 +34,12 @@ class SessionManager @Inject constructor(
         currentUser.value = AuthState.NotAuthenticated()
     }
 
-    fun getCurrentUser(): LiveData<AuthState<AuthViewState>> {
+    fun getCurrentUser(): LiveData<AuthState<FirebaseUser>> {
         return currentUser
     }
 
     fun deleteCurrentUser() {
-        currentUser.value?.data?.peekContent()?.user?.delete()
+        currentUser.value?.data?.peekContent()?.delete()
     }
 
     fun isConnectedToTheInternet(): Boolean {

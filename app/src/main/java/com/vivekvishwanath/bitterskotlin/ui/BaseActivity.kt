@@ -33,5 +33,9 @@ abstract class BaseActivity : AppCompatActivity() {
         })
     }
 
-    abstract fun navToAuth()
+    fun navToAuth() {
+        Intent(this, AuthActivity::class.java)
+            .apply { startActivity(this) }
+        finish()
+    }
 }

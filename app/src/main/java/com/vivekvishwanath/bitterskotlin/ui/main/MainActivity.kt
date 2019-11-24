@@ -100,9 +100,4 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                 drawer_layout
             )
     }
-
-    override fun navToAuth() {
-        Intent(this, AuthActivity::class.java)
-            .apply { startActivity(this) }
-    }
 }

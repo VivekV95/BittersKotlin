@@ -6,15 +6,13 @@ import android.view.View
 import android.widget.ProgressBar
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
-import kotlinx.android.synthetic.main.fragment_login.*
 
 
 fun MaterialButton.performCrossFade(isLoading: Boolean) {
     if (isLoading)
         this.animate()
             .alpha(0f)
-            .setDuration(crossFadeDuration)
+            .setDuration(CROSS_FADE_DURATION)
             .setListener(null)
     else
         this.apply {
@@ -22,7 +20,7 @@ fun MaterialButton.performCrossFade(isLoading: Boolean) {
             visibility = View.VISIBLE
             animate()
                 .alpha(1f)
-                .setDuration(crossFadeDuration)
+                .setDuration(CROSS_FADE_DURATION)
                 .setListener(null)
         }
 }
@@ -34,14 +32,14 @@ fun ProgressBar.performCrossFade(isLoading: Boolean) {
             visibility = View.VISIBLE
             animate()
                 .alpha(1f)
-                .setDuration(crossFadeDuration)
+                .setDuration(CROSS_FADE_DURATION)
                 .setListener(null)
         }
     else {
         val progressBar = this
         this.animate()
             .alpha(0f)
-            .setDuration(crossFadeDuration)
+            .setDuration(CROSS_FADE_DURATION)
             .setListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator?) {
                     progressBar.visibility = View.GONE

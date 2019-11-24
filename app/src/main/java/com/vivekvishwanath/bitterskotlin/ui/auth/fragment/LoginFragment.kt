@@ -21,6 +21,7 @@ import com.vivekvishwanath.bitterskotlin.R
 import com.vivekvishwanath.bitterskotlin.ui.auth.AuthActivity
 import com.vivekvishwanath.bitterskotlin.ui.auth.AuthViewModel
 import com.vivekvishwanath.bitterskotlin.ui.auth.state.AuthStateEvent
+import com.vivekvishwanath.bitterskotlin.ui.auth.state.LoginFields
 import com.vivekvishwanath.bitterskotlin.util.*
 import com.vivekvishwanath.bitterskotlin.viewmodel.ViewModelProviderFactory
 import kotlinx.android.synthetic.main.fragment_login.*
@@ -96,6 +97,11 @@ class LoginFragment : Fragment(), View.OnClickListener {
                 login_progress_bar.performCrossFade(false)
             }
         })
+
+        viewModel.viewState.observe(viewLifecycleOwner, Observer { viewState ->
+            login_email_edit_text.setText(viewState.loginFields?.email)
+            login_password_edit_text.setText(viewState.loginFields?.password)
+        })
     }
 
     private fun performLogin() {
@@ -109,6 +115,16 @@ class LoginFragment : Fragment(), View.OnClickListener {
                 )
             )
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewModel.setLoginFields(
+            LoginFields(
+                login_email_edit_text.text.toString(),
+                login_password_edit_text.text.toString()
+            )
+        )
     }
 
     override fun onDestroy() {
