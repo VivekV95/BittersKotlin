@@ -1,11 +1,12 @@
-package com.vivekvishwanath.bitterskotlin.repository
+package com.vivekvishwanath.bitterskotlin.repository.main
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.LiveDataReactiveStreams
 import com.vivekvishwanath.bitterskotlin.di.scope.MainScope
-import com.vivekvishwanath.bitterskotlin.model.Cocktail
 import com.vivekvishwanath.bitterskotlin.model.CocktailDbResponse
 import com.vivekvishwanath.bitterskotlin.network.CocktailDbServiceWrapper
+import com.vivekvishwanath.bitterskotlin.repository.NetworkBoundResource
+import com.vivekvishwanath.bitterskotlin.session.SessionManager
 import com.vivekvishwanath.bitterskotlin.ui.main.state.MainViewState
 import com.vivekvishwanath.bitterskotlin.util.ApiSuccessResponse
 import com.vivekvishwanath.bitterskotlin.util.DataState
@@ -14,7 +15,9 @@ import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 @MainScope
-class MainRepository @Inject constructor(private val cocktailDbServiceWrapper: CocktailDbServiceWrapper) {
+class MainRepository @Inject constructor(
+    private val cocktailDbServiceWrapper: CocktailDbServiceWrapper,
+    private val sessionManager: SessionManager) {
 
     fun getPopularCocktails(): LiveData<DataState<MainViewState>> =
 
@@ -37,4 +40,9 @@ class MainRepository @Inject constructor(private val cocktailDbServiceWrapper: C
                         .subscribeOn(Schedulers.io()))
 
         }.asLiveData()
+
+    fun logOut() {
+        sessionManager.logOut()
+    }
+
 }

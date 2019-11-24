@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.vivekvishwanath.bitterskotlin.util.AuthState
-import com.vivekvishwanath.bitterskotlin.repository.AuthRepository
+import com.vivekvishwanath.bitterskotlin.repository.auth.AuthRepository
 import com.vivekvishwanath.bitterskotlin.di.scope.AuthScope
 import com.vivekvishwanath.bitterskotlin.ui.auth.state.AuthStateEvent
 import com.vivekvishwanath.bitterskotlin.ui.auth.state.AuthViewState
@@ -37,7 +37,7 @@ class AuthViewModel @Inject constructor(
                 authRepository.registerAccount(stateEvent.email, stateEvent.password)
             }
             is AuthStateEvent.LoginEvent -> {
-                authRepository.signIn(stateEvent.email, stateEvent.password)
+                authRepository.signIn(stateEvent.email, stateEvent.password, false)
             }
             is AuthStateEvent.None -> {
                 AbsentLiveData.create()
@@ -48,4 +48,8 @@ class AuthViewModel @Inject constructor(
         }
   
     fun initNewViewState(): AuthViewState = AuthViewState()
+
+    fun cancelJob() {
+        authRepository.cancelJob()
+    }
 }

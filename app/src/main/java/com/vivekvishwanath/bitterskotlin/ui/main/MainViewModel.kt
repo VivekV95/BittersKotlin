@@ -3,8 +3,7 @@ package com.vivekvishwanath.bitterskotlin.ui.main
 import androidx.lifecycle.LiveData
 import com.vivekvishwanath.bitterskotlin.di.scope.MainScope
 import com.vivekvishwanath.bitterskotlin.model.Cocktail
-import com.vivekvishwanath.bitterskotlin.repository.AuthRepository
-import com.vivekvishwanath.bitterskotlin.repository.MainRepository
+import com.vivekvishwanath.bitterskotlin.repository.main.MainRepository
 import com.vivekvishwanath.bitterskotlin.ui.BaseViewModel
 import com.vivekvishwanath.bitterskotlin.ui.main.state.MainStateEvent
 import com.vivekvishwanath.bitterskotlin.ui.main.state.MainViewState
@@ -29,5 +28,9 @@ class MainViewModel @Inject constructor
     fun setPopularCocktailsData(cocktails: List<Cocktail>) {
         val update = getCurrentViewStateOrNew().copy(popularCocktails = cocktails)
         _viewState.value = update
+    }
+
+    fun logOut() {
+        repository.logOut()
     }
 }

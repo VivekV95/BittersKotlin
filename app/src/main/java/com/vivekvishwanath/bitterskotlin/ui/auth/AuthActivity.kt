@@ -3,11 +3,13 @@ package com.vivekvishwanath.bitterskotlin.ui.auth
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.vivekvishwanath.bitterskotlin.BaseApplication
 import com.vivekvishwanath.bitterskotlin.R
+import com.vivekvishwanath.bitterskotlin.util.*
 import com.vivekvishwanath.bitterskotlin.ui.auth.fragment.LoginFragment
 import com.vivekvishwanath.bitterskotlin.ui.auth.state.AuthStateEvent
 import com.vivekvishwanath.bitterskotlin.ui.main.MainActivity
@@ -32,7 +34,6 @@ class AuthActivity : AppCompatActivity() {
         authComponent.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_auth)
-
         viewModel = ViewModelProvider(this, viewModelProviderFactory)[AuthViewModel::class.java]
         subscribeObservers()
     }
@@ -63,5 +64,10 @@ class AuthActivity : AppCompatActivity() {
                 }
             }
         })
+    }
+
+    override fun onStop() {
+        super.onStop()
+        viewModel.cancelJob()
     }
 }
