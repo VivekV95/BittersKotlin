@@ -34,8 +34,8 @@ abstract class BaseActivity : AppCompatActivity(), DataStateChangedListener {
     }
 
     override fun onDataStateChanged(dataState: DataState<*>) {
-        dataState.message?.getContentIfNotHandled()?.let { message ->
-            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+        dataState.error?.getContentIfNotHandled()?.let { stateError ->
+        //TODO: Display error messages in toasts or dialogs
         }
     }
 

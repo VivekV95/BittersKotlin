@@ -1,29 +1,32 @@
 package com.vivekvishwanath.bitterskotlin.util
 
 data class DataState <T>(
-    var message: Event<String>? = null,
-    var loading: Boolean = false,
-    var data: Event<T>? = null
+    var error: Event<StateError>? = null,
+    var loading: Loading = Loading(false),
+    var data: Data<T>? = null
 ) {
     companion object {
 
-        fun <T> error(message: String): DataState<T> =
+        fun <T> error(responseMessage: ResponseMessage): DataState<T> =
             DataState(
-                message = Event(message),
-                loading = false,
+                error = Event(StateError(responseMessage)),
+                loading = Loading(false),
                 data = null
             )
 
-        fun <T> loading(isLoading: Boolean): DataState<T> =
+        fun <T> loading(isLoading: Boolean, cachedData: T? = null): DataState<T> =
             DataState(
-                loading = isLoading
+                loading = Loading(isLoading)
             )
 
-        fun <T> data(message: String? = null, data: T? = null): DataState<T> =
+        fun <T> data(data: T? = null, responseMessage: ResponseMessage? = null): DataState<T> =
             DataState(
-                message = Event.messageEvent(message),
-                loading = false,
-                data = Event.dataEvent(data)
+                error = null,
+                loading = Loading(false),
+                data = Data(
+                    Event.dataEvent(data),
+                    Event.messageEvent(responseMessage)
+                )
             )
     }
 }

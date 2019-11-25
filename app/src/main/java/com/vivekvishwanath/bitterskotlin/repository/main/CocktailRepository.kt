@@ -35,7 +35,7 @@ class CocktailRepository @Inject constructor(
 
             override suspend fun handleApiSuccessResponse(response: ApiSuccessResponse<CocktailDbResponse>) {
                 onCompleteJob(
-                    DataState.data(message = null, data = MainViewState(response.body.drinks))
+                    DataState.data(responseMessage = null, data = MainViewState(response.body.drinks))
                 )
             }
 

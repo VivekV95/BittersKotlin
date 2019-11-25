@@ -102,7 +102,7 @@ abstract class NetworkBoundResource<ResponseObject, ViewStateType>(
             msg = ERROR_UNKNOWN
         else if (isNetworkError(msg))
             msg = ERROR_CHECK_NETWORK_CONNECTION
-        onCompleteJob(DataState.error(msg))
+        onCompleteJob(DataState.error(ResponseMessage(msg, ResponseType.Dialog)))
     }
 
     @UseExperimental(InternalCoroutinesApi::class)
