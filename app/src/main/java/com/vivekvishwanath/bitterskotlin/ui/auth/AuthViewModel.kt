@@ -77,7 +77,8 @@ class AuthViewModel @Inject constructor(
         update.registrationFields = registrationFields
         _viewState.value = update
     }
-    fun cancelJob() {
-        authRepository.cancelJob()
+
+    fun cancelJobs() {
+        authRepository.cancelActiveJobs()
     }
 }

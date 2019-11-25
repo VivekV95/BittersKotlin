@@ -112,6 +112,6 @@ class RegisterFragment : Fragment(), View.OnClickListener {
     }
     override fun onDestroy() {
         super.onDestroy()
-        viewModel.cancelJob()
+        viewModel.cancelJobs()
     }
 }

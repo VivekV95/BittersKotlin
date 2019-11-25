@@ -21,14 +21,14 @@ import javax.inject.Inject
 class AuthRepository @Inject constructor(
     private val sessionManager: SessionManager,
     private val mAuth: FirebaseAuth
-): JobManager("AuthRepository") {
+) : JobManager("AuthRepository") {
 
     private lateinit var coroutineScope: CoroutineScope
-    private lateinit var job: Job
+    private lateinit var job: CompletableJob
 
     fun registerAccount(email: String, password: String): LiveData<AuthState<FirebaseUser>> {
         sessionManager.setCurrentUser(AuthState.Loading())
-        initNewJob()
+        addJob("registerAccount", initNewJob())
         coroutineScope.launch {
             delay(CANCELLATION_DELAY)
             mAuth
@@ -53,8 +53,7 @@ class AuthRepository @Inject constructor(
         email: String, password: String, isRegistration: Boolean
     ): LiveData<AuthState<FirebaseUser>> {
         sessionManager.setCurrentUser(AuthState.Loading())
-        if (!isRegistration)
-            initNewJob()
+        addJob("signIn", initNewJob())
         coroutineScope.launch {
             delay(CANCELLATION_DELAY)
             mAuth
@@ -83,16 +82,12 @@ class AuthRepository @Inject constructor(
 
     @UseExperimental(InternalCoroutinesApi::class)
     private fun initNewJob(): Job {
-        job = if (::job.isInitialized && job.isActive) {
-            job.cancel()
-            Job()
-        } else {
-            Job()
-        }
+        if (::job.isInitialized) job.cancel()
+        job = Job()
         job.invokeOnCompletion(
             onCancelling = true,
             invokeImmediately = true,
-            handler = object: CompletionHandler {
+            handler = object : CompletionHandler {
                 override fun invoke(cause: Throwable?) {
                     Log.d(TAG, "${this.javaClass.simpleName}: job cancelled")
                     sessionManager.setCurrentUser(AuthState.Error("Something went wrong, try again"))
@@ -100,11 +95,5 @@ class AuthRepository @Inject constructor(
             })
         coroutineScope = CoroutineScope(IO + job)
         return job
-    }
-
-    fun cancelJob() {
-        if (::job.isInitialized) {
-            job.cancel()
-        }
     }
 }

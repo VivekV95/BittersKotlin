@@ -69,6 +69,6 @@ class AuthActivity : AppCompatActivity() {
 
     override fun onStop() {
         super.onStop()
-        viewModel.cancelJob()
+        viewModel.cancelJobs()
     }
 }
