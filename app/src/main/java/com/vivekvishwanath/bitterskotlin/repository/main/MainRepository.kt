@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveDataReactiveStreams
 import com.vivekvishwanath.bitterskotlin.di.scope.MainScope
 import com.vivekvishwanath.bitterskotlin.model.CocktailDbResponse
 import com.vivekvishwanath.bitterskotlin.network.CocktailDbServiceWrapper
+import com.vivekvishwanath.bitterskotlin.repository.JobManager
 import com.vivekvishwanath.bitterskotlin.repository.NetworkBoundResource
 import com.vivekvishwanath.bitterskotlin.session.SessionManager
 import com.vivekvishwanath.bitterskotlin.ui.main.state.MainViewState
@@ -12,32 +13,34 @@ import com.vivekvishwanath.bitterskotlin.util.ApiSuccessResponse
 import com.vivekvishwanath.bitterskotlin.util.DataState
 import com.vivekvishwanath.bitterskotlin.util.GenericApiResponse
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.Job
 import javax.inject.Inject
 
 @MainScope
 class MainRepository @Inject constructor(
     private val cocktailDbServiceWrapper: CocktailDbServiceWrapper,
-    private val sessionManager: SessionManager) {
+    private val sessionManager: SessionManager): JobManager("MainRepository") {
 
     fun getPopularCocktails(): LiveData<DataState<MainViewState>> =
 
-        object : NetworkBoundResource<CocktailDbResponse, MainViewState>() {
+        object : NetworkBoundResource<CocktailDbResponse, MainViewState>(
+            sessionManager.isConnectedToTheInternet(),
+            true,
+            false,
+            false
+        ) {
+            override fun setJob(job: Job) {
+                addJob("getPopularCocktails", job)
+            }
 
-            override fun handleApiSuccessResponse(response: ApiSuccessResponse<CocktailDbResponse>) {
-                result.value = DataState.data(data = MainViewState(popularCocktails = response.body.drinks))
+            override suspend fun handleApiSuccessResponse(response: ApiSuccessResponse<CocktailDbResponse>) {
+                onCompleteJob(
+                    DataState.data(message = null, data = MainViewState(response.body.drinks))
+                )
             }
 
             override fun createCall(): LiveData<GenericApiResponse<CocktailDbResponse>> =
-                LiveDataReactiveStreams
-                    .fromPublisher(
-                    cocktailDbServiceWrapper.cocktailDbService.getPopularCocktails()
-                        .map { response ->
-                            GenericApiResponse.create(response)
-                        }
-                        .onErrorReturn { throwable ->
-                            GenericApiResponse.create(throwable)
-                        }
-                        .subscribeOn(Schedulers.io()))
+                cocktailDbServiceWrapper.cocktailDbService.getPopularCocktails()
 
         }.asLiveData()
 
