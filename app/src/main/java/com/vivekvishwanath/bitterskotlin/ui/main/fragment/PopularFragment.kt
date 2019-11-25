@@ -76,7 +76,7 @@ class PopularFragment : BaseCocktailFragment(), CocktailListAdapter.CocktailClic
     private fun subscribeObservers() {
         viewModel.dataState.observe(this, Observer { dataState ->
             stateChangeListener.onDataStateChanged(dataState)
-            dataState.data?.let { event ->
+            dataState.data?.data?.let { event ->
                 event.getContentIfNotHandled()?.let { mainViewState ->
                     mainViewState.popularCocktails?.let { cocktails ->
                         viewModel.setPopularCocktailsData(cocktails)

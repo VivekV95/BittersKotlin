@@ -55,8 +55,8 @@ class AuthActivity : BaseActivity() {
                     }
                 }
                 is AuthState.Error -> {
-                    authState.message?.getContentIfNotHandled()?.let { message ->
-                        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+                    authState.message?.getContentIfNotHandled()?.let { responseMessage ->
+                        Toast.makeText(this, responseMessage.message, Toast.LENGTH_SHORT).show()
                     }
                 }
             }
