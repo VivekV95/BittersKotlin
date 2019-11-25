@@ -3,7 +3,7 @@ package com.vivekvishwanath.bitterskotlin.ui.main
 import androidx.lifecycle.LiveData
 import com.vivekvishwanath.bitterskotlin.di.scope.MainScope
 import com.vivekvishwanath.bitterskotlin.model.Cocktail
-import com.vivekvishwanath.bitterskotlin.repository.main.MainRepository
+import com.vivekvishwanath.bitterskotlin.repository.main.CocktailRepository
 import com.vivekvishwanath.bitterskotlin.ui.BaseViewModel
 import com.vivekvishwanath.bitterskotlin.ui.main.state.MainStateEvent
 import com.vivekvishwanath.bitterskotlin.ui.main.state.MainViewState
@@ -11,8 +11,8 @@ import com.vivekvishwanath.bitterskotlin.util.DataState
 import javax.inject.Inject
 
 @MainScope
-class MainViewModel @Inject constructor
-    (private val repository: MainRepository) : BaseViewModel<MainStateEvent, MainViewState>() {
+class CocktailViewModel @Inject constructor
+    (private val repository: CocktailRepository) : BaseViewModel<MainStateEvent, MainViewState>() {
 
     override fun initNewViewState(): MainViewState {
         return MainViewState()
@@ -32,5 +32,9 @@ class MainViewModel @Inject constructor
 
     fun logOut() {
         repository.logOut()
+    }
+
+    fun cancelActiveJobs() {
+        repository.cancelActiveJobs()
     }
 }

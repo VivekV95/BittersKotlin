@@ -3,39 +3,43 @@ package com.vivekvishwanath.bitterskotlin.ui
 import android.content.Intent
 import android.os.Bundle
 import android.os.PersistableBundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.vivekvishwanath.bitterskotlin.session.SessionManager
 import com.vivekvishwanath.bitterskotlin.ui.auth.AuthActivity
+import com.vivekvishwanath.bitterskotlin.ui.main.MainActivity
 import com.vivekvishwanath.bitterskotlin.util.AuthState
+import com.vivekvishwanath.bitterskotlin.util.DataState
 import javax.inject.Inject
 
-abstract class BaseActivity : AppCompatActivity() {
+abstract class BaseActivity : AppCompatActivity(), DataStateChangedListener {
 
     @Inject
     lateinit var sessionManager: SessionManager
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        subscribeObservers()
-    }
-
-    private fun subscribeObservers() {
-        sessionManager.getCurrentUser().observe(this, Observer { authState ->
-            when (authState) {
-                is AuthState.NotAuthenticated -> {
-                   navToAuth()
-                }
-                is AuthState.Error -> {
-                    navToAuth()
-                }
-            }
-        })
-    }
 
     fun navToAuth() {
         Intent(this, AuthActivity::class.java)
             .apply { startActivity(this) }
         finish()
+    }
+
+    fun navToMain() {
+        Intent(this, MainActivity::class.java)
+            .apply {
+                startActivity(this)
+            }
+        finish()
+    }
+
+    override fun onDataStateChanged(dataState: DataState<*>) {
+        dataState.message?.getContentIfNotHandled()?.let { message ->
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    override fun hideSoftKeyboard() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

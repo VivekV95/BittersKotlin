@@ -5,4 +5,6 @@ import com.vivekvishwanath.bitterskotlin.util.DataState
 interface DataStateChangedListener {
 
     fun onDataStateChanged(dataState: DataState<*>)
+
+    fun hideSoftKeyboard()
 }

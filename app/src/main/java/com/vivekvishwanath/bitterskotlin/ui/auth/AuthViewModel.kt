@@ -45,7 +45,7 @@ class AuthViewModel @Inject constructor(
                 authRepository.registerAccount(stateEvent.email, stateEvent.password)
             }
             is AuthStateEvent.LoginEvent -> {
-                authRepository.signIn(stateEvent.email, stateEvent.password, false)
+                authRepository.signIn(stateEvent.email, stateEvent.password)
             }
             is AuthStateEvent.None -> {
                 AbsentLiveData.create()
@@ -56,10 +56,9 @@ class AuthViewModel @Inject constructor(
         }
 
     private fun getCurrentViewStateOrNew(): AuthViewState {
-        val value = viewState.value?.let {
+        return viewState.value?.let {
             it
         }?: initNewViewState()
-        return value
     }
 
     private fun initNewViewState(): AuthViewState = AuthViewState()
