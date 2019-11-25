@@ -9,6 +9,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.vivekvishwanath.bitterskotlin.BaseApplication
 import com.vivekvishwanath.bitterskotlin.R
+import com.vivekvishwanath.bitterskotlin.ui.BaseActivity
 import com.vivekvishwanath.bitterskotlin.util.*
 import com.vivekvishwanath.bitterskotlin.ui.auth.fragment.LoginFragment
 import com.vivekvishwanath.bitterskotlin.ui.auth.state.AuthStateEvent
@@ -17,7 +18,7 @@ import com.vivekvishwanath.bitterskotlin.util.AuthState
 import com.vivekvishwanath.bitterskotlin.viewmodel.ViewModelProviderFactory
 import javax.inject.Inject
 
-class AuthActivity : AppCompatActivity() {
+class AuthActivity : BaseActivity() {
 
     @Inject
     lateinit var viewModelProviderFactory: ViewModelProviderFactory
@@ -46,16 +47,11 @@ class AuthActivity : AppCompatActivity() {
     }
 
     private fun subscribeObservers() {
-        viewModel.authState.observe(this, Observer { authState ->
+        sessionManager.getCurrentUser().observe(this, Observer { authState ->
             when (authState) {
                 is AuthState.Authenticated -> {
                     authState.data?.getContentIfNotHandled()?.let {
-                        Toast.makeText(this, "You're logged in!", Toast.LENGTH_SHORT).show()
-                        Intent(this, MainActivity::class.java)
-                            .apply {
-                                startActivity(this)
-                            }
-                        finish()
+                        navToMain()
                     }
                 }
                 is AuthState.Error -> {

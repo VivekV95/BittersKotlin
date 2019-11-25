@@ -17,16 +17,16 @@ import kotlinx.coroutines.Job
 import javax.inject.Inject
 
 @MainScope
-class MainRepository @Inject constructor(
+class CocktailRepository @Inject constructor(
     private val cocktailDbServiceWrapper: CocktailDbServiceWrapper,
-    private val sessionManager: SessionManager): JobManager("MainRepository") {
+    private val sessionManager: SessionManager): JobManager("CocktailRepository") {
 
     fun getPopularCocktails(): LiveData<DataState<MainViewState>> =
 
         object : NetworkBoundResource<CocktailDbResponse, MainViewState>(
             sessionManager.isConnectedToTheInternet(),
             true,
-            false,
+            true,
             false
         ) {
             override fun setJob(job: Job) {

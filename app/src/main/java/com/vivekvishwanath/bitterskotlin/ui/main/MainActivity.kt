@@ -1,11 +1,10 @@
 package com.vivekvishwanath.bitterskotlin.ui.main
 
 import android.annotation.SuppressLint
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.core.view.GravityCompat
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
@@ -15,10 +14,8 @@ import com.vivekvishwanath.bitterskotlin.BaseApplication
 import com.vivekvishwanath.bitterskotlin.R
 import com.vivekvishwanath.bitterskotlin.network.CocktailDbServiceWrapper
 import com.vivekvishwanath.bitterskotlin.ui.BaseActivity
-import com.vivekvishwanath.bitterskotlin.ui.auth.AuthActivity
+import com.vivekvishwanath.bitterskotlin.util.AuthState
 import com.vivekvishwanath.bitterskotlin.viewmodel.ViewModelProviderFactory
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
@@ -36,7 +33,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     @Inject
     lateinit var viewModelProviderFactory: ViewModelProviderFactory
 
-    lateinit var viewModel: MainViewModel
+    lateinit var viewModel: CocktailViewModel
 
     override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
         when (menuItem.itemId) {
@@ -82,8 +79,23 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
       
-        viewModel = ViewModelProvider(this, viewModelProviderFactory)[MainViewModel::class.java]
+        viewModel = ViewModelProvider(this, viewModelProviderFactory)[CocktailViewModel::class.java]
         initNav()
+
+        subscribeObservers()
+    }
+
+    private fun subscribeObservers() {
+        sessionManager.getCurrentUser().observe(this, Observer { authState ->
+            when (authState) {
+                is AuthState.NotAuthenticated -> {
+                    navToAuth()
+                }
+                is AuthState.Error -> {
+                    navToAuth()
+                }
+            }
+        })
     }
 
     private fun initNav() {

@@ -43,7 +43,7 @@ abstract class NetworkBoundResource<ResponseObject, ViewStateType>(
 
     private fun doNetworkRequest() {
         coroutineScope.launch {
-            delay(TESTING_NETWORK_DELAY)
+            // delay(TESTING_NETWORK_DELAY)
 
             withContext(Main) {
                 val apiResponse = createCall()
@@ -62,7 +62,7 @@ abstract class NetworkBoundResource<ResponseObject, ViewStateType>(
 
             if (!job.isCompleted) {
                 Log.d(TAG, "${this.javaClass.simpleName}: Job network timeout")
-                job.cancel()
+                job.cancel(CancellationException(NETWORK_TIMEOUT_MESSAGE))
             }
         }
     }

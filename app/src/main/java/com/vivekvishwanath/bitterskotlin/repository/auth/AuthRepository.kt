@@ -13,6 +13,7 @@ import com.vivekvishwanath.bitterskotlin.repository.JobManager
 import com.vivekvishwanath.bitterskotlin.ui.auth.state.AuthViewState
 import com.vivekvishwanath.bitterskotlin.util.CANCELLATION_DELAY
 import com.vivekvishwanath.bitterskotlin.util.TAG
+import com.vivekvishwanath.bitterskotlin.util.UNABLE_TODO_OPERATION_WO_INTERNET
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import javax.inject.Inject
@@ -28,48 +29,51 @@ class AuthRepository @Inject constructor(
 
     fun registerAccount(email: String, password: String): LiveData<AuthState<FirebaseUser>> {
         sessionManager.setCurrentUser(AuthState.Loading())
-        addJob("registerAccount", initNewJob())
-        coroutineScope.launch {
-            delay(CANCELLATION_DELAY)
-            mAuth
-                .createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        signIn(email, password, true)
-                    } else {
-                        task.exception?.message?.let { message ->
-                            sessionManager.setCurrentUser(AuthState.Error(message))
+        if (isNetworkAvailable()) {
+            addJob("registerAccount", initNewJob())
+            coroutineScope.launch {
+                delay(CANCELLATION_DELAY)
+                mAuth
+                    .createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            signIn(email, password)
+                        } else {
+                            task.exception?.message?.let { message ->
+                                sessionManager.setCurrentUser(AuthState.Error(message))
+                            }
                         }
                     }
-                }
-                .addOnCanceledListener {
-                    sessionManager.setCurrentUser(AuthState.Error("Something went wrong during registration"))
-                }
-        }
+                    .addOnCanceledListener {
+                        sessionManager.setCurrentUser(AuthState.Error("Something went wrong during registration"))
+                    }
+            }
+        } else sessionManager.setCurrentUser(AuthState.Error(UNABLE_TODO_OPERATION_WO_INTERNET))
         return sessionManager.getCurrentUser()
     }
 
     fun signIn(
-        email: String, password: String, isRegistration: Boolean
-    ): LiveData<AuthState<FirebaseUser>> {
+        email: String, password: String): LiveData<AuthState<FirebaseUser>> {
         sessionManager.setCurrentUser(AuthState.Loading())
-        addJob("signIn", initNewJob())
-        coroutineScope.launch {
-            delay(CANCELLATION_DELAY)
-            mAuth
-                .signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        setSignedInUser()
-                    } else
-                        task.exception?.message?.let { message ->
-                            sessionManager.setCurrentUser(AuthState.Error(message))
-                        }
-                }
-                .addOnCanceledListener {
-                    sessionManager.setCurrentUser(AuthState.Error("Something went wrong while signing in"))
-                }
-        }
+        if (isNetworkAvailable()) {
+            addJob("signIn", initNewJob())
+            coroutineScope.launch {
+                delay(CANCELLATION_DELAY)
+                mAuth
+                    .signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            setSignedInUser()
+                        } else
+                            task.exception?.message?.let { message ->
+                                sessionManager.setCurrentUser(AuthState.Error(message))
+                            }
+                    }
+                    .addOnCanceledListener {
+                        sessionManager.setCurrentUser(AuthState.Error("Something went wrong while signing in"))
+                    }
+            }
+        } else sessionManager.setCurrentUser(AuthState.Error(UNABLE_TODO_OPERATION_WO_INTERNET))
         return sessionManager.getCurrentUser()
     }
 
@@ -89,11 +93,21 @@ class AuthRepository @Inject constructor(
             invokeImmediately = true,
             handler = object : CompletionHandler {
                 override fun invoke(cause: Throwable?) {
-                    Log.d(TAG, "${this.javaClass.simpleName}: job cancelled")
-                    sessionManager.setCurrentUser(AuthState.Error("Something went wrong, try again"))
+                    if (job.isCancelled) {
+                        Log.d(TAG, "${this.javaClass.simpleName}: job cancelled")
+//                        cause?.let {  throwable ->
+//                            throwable.message?.let {  sessionManager.setCurrentUser(AuthState.Error(it)) }
+//                        }
+//                        // sessionManager.setCurrentUser(AuthState.Error("Something went wrong, try again"))
+                    }
                 }
             })
         coroutineScope = CoroutineScope(IO + job)
         return job
     }
+
+    fun isNetworkAvailable(): Boolean =
+        sessionManager.isConnectedToTheInternet()
+
+
 }
