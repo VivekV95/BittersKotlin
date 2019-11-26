@@ -1,7 +1,7 @@
-package com.vivekvishwanath.bitterskotlin.util
+package com.vivekvishwanath.bitterskotlin.ui
 
 data class Loading(val isLoading: Boolean)
-data class Data<T>(val data: Event<T>?, val response: Event<ResponseMessage>?)
+data class Data<T>(val data: Event<T>?, val responseMessage: Event<ResponseMessage>?)
 data class StateError(val responseMessage: ResponseMessage)
 
 data class ResponseMessage(val message: String?, val responseType: ResponseType)

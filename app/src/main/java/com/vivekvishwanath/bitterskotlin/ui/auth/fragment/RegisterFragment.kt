@@ -14,27 +14,23 @@ import com.vivekvishwanath.bitterskotlin.ui.auth.AuthActivity
 import com.vivekvishwanath.bitterskotlin.ui.auth.AuthViewModel
 import com.vivekvishwanath.bitterskotlin.ui.auth.state.AuthStateEvent
 import com.vivekvishwanath.bitterskotlin.ui.auth.state.RegistrationFields
-import com.vivekvishwanath.bitterskotlin.util.AuthState
-import com.vivekvishwanath.bitterskotlin.util.performCrossFade
-import com.vivekvishwanath.bitterskotlin.util.validateEmail
-import com.vivekvishwanath.bitterskotlin.util.validatePassword
+import com.vivekvishwanath.bitterskotlin.ui.auth.AuthState
+import com.vivekvishwanath.bitterskotlin.ui.auth.BaseAuthFragment
+import com.vivekvishwanath.bitterskotlin.ui.performCrossFade
+import com.vivekvishwanath.bitterskotlin.ui.validateEmail
+import com.vivekvishwanath.bitterskotlin.ui.validatePassword
 import com.vivekvishwanath.bitterskotlin.viewmodel.ViewModelProviderFactory
 import kotlinx.android.synthetic.main.fragment_register.*
 import java.lang.Exception
 import javax.inject.Inject
 
-class RegisterFragment : Fragment(), View.OnClickListener {
+class RegisterFragment : BaseAuthFragment(), View.OnClickListener {
 
     override fun onClick(v: View?) {
         when (v) {
             register_button -> performRegistration()
         }
     }
-
-    @Inject
-    lateinit var viewModelProviderFactory: ViewModelProviderFactory
-
-    lateinit var viewModel: AuthViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         (activity as AuthActivity).authComponent.inject(this)
@@ -51,10 +47,6 @@ class RegisterFragment : Fragment(), View.OnClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = activity?.run {
-            ViewModelProvider(this, viewModelProviderFactory)[AuthViewModel::class.java]
-        } ?: throw Exception("Invalid Activity")
-
         subscribeObservers()
         setupClickListeners()
     }
@@ -66,6 +58,7 @@ class RegisterFragment : Fragment(), View.OnClickListener {
     private fun subscribeObservers() {
         viewModel.authState.observe(viewLifecycleOwner, Observer { authState ->
             if (authState is AuthState.Loading) {
+                stateChangeListener.onAuthStateChanged(authState)
                 register_button.performCrossFade(true)
                 register_progress_bar.performCrossFade(true)
             } else {

@@ -1,7 +1,7 @@
 package com.vivekvishwanath.bitterskotlin.repository
 
 import android.util.Log
-import com.vivekvishwanath.bitterskotlin.util.TAG
+import com.vivekvishwanath.bitterskotlin.util.LOG_TAG
 import kotlinx.coroutines.Job
 
 open class JobManager(private val className: String) {
@@ -29,7 +29,7 @@ open class JobManager(private val className: String) {
     fun cancelActiveJobs() {
         for ((functionName, job) in jobs) {
             if (job.isActive) {
-                Log.d(TAG, "${this.javaClass.simpleName}: Cancelling job in $functionName")
+                Log.d(LOG_TAG, "${this.javaClass.simpleName}: Cancelling job in $functionName")
             }
         }
     }

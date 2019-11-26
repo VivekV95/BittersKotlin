@@ -14,4 +14,7 @@
     <string name="favorites">Favorites</string>
     <string name="cocktail_name">Cocktail Name</string>
     <string name="cocktail_image">Cocktail Image</string>
+    <string name="text_error">Error</string>
+    <string name="text_success">Success</string>
+    <string name="text_ok">OK</string>
 </resources>

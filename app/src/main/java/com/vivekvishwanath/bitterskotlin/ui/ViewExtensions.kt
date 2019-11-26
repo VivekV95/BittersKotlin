@@ -1,11 +1,16 @@
-package com.vivekvishwanath.bitterskotlin.util
+package com.vivekvishwanath.bitterskotlin.ui
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
+import android.app.Activity
 import android.view.View
 import android.widget.ProgressBar
+import android.widget.Toast
+import com.afollestad.materialdialogs.MaterialDialog
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
+import com.vivekvishwanath.bitterskotlin.R
+import com.vivekvishwanath.bitterskotlin.util.CROSS_FADE_DURATION
 
 
 fun MaterialButton.performCrossFade(isLoading: Boolean) {
@@ -71,3 +76,26 @@ fun TextInputEditText.validatePassword(): Boolean {
     }
     return true
 }
+
+fun Activity.displayToast(messge: String) {
+    Toast.makeText(this, messge, Toast.LENGTH_SHORT).show()
+}
+
+fun Activity.displayErrorDialog(errorMessage: String) {
+    MaterialDialog(this)
+        .show {
+            title(R.string.text_error)
+            message(text = errorMessage)
+            positiveButton(R.string.text_ok)
+        }
+}
+
+fun Activity.displaySuccessDialog(successMessage: String) {
+    MaterialDialog(this)
+        .show {
+            title(R.string.text_success)
+            message(text = successMessage)
+            positiveButton(R.string.text_ok)
+        }
+}
+

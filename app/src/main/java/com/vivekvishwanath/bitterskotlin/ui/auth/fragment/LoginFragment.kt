@@ -6,12 +6,10 @@ import android.text.SpannableString
 import android.text.Spanned
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
@@ -19,30 +17,26 @@ import androidx.navigation.Navigation
 
 import com.vivekvishwanath.bitterskotlin.R
 import com.vivekvishwanath.bitterskotlin.ui.auth.AuthActivity
+import com.vivekvishwanath.bitterskotlin.ui.auth.AuthState
 import com.vivekvishwanath.bitterskotlin.ui.auth.AuthViewModel
+import com.vivekvishwanath.bitterskotlin.ui.auth.BaseAuthFragment
 import com.vivekvishwanath.bitterskotlin.ui.auth.state.AuthStateEvent
 import com.vivekvishwanath.bitterskotlin.ui.auth.state.LoginFields
-import com.vivekvishwanath.bitterskotlin.util.*
+import com.vivekvishwanath.bitterskotlin.ui.performCrossFade
+import com.vivekvishwanath.bitterskotlin.ui.validateEmail
+import com.vivekvishwanath.bitterskotlin.ui.validatePassword
 import com.vivekvishwanath.bitterskotlin.viewmodel.ViewModelProviderFactory
 import kotlinx.android.synthetic.main.fragment_login.*
-import kotlinx.android.synthetic.main.fragment_register.*
 import java.lang.Exception
 import javax.inject.Inject
 
-class LoginFragment : Fragment(), View.OnClickListener {
+class LoginFragment : BaseAuthFragment(), View.OnClickListener {
 
     override fun onClick(v: View?) {
         when (v) {
             login_button -> performLogin()
         }
     }
-
-    private lateinit var navController: NavController
-
-    @Inject
-    lateinit var viewModelProviderFactory: ViewModelProviderFactory
-
-    private lateinit var viewModel: AuthViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         (activity as AuthActivity).authComponent.inject(this)
@@ -58,12 +52,6 @@ class LoginFragment : Fragment(), View.OnClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        navController = Navigation.findNavController(view)
-
-        viewModel = activity?.run {
-            ViewModelProvider(this, viewModelProviderFactory)[AuthViewModel::class.java]
-        } ?: throw Exception("Invalid Activity")
 
         subscribeObservers()
         setupOnClickListeners()
@@ -90,6 +78,7 @@ class LoginFragment : Fragment(), View.OnClickListener {
     private fun subscribeObservers() {
         viewModel.authState.observe(viewLifecycleOwner, Observer { authState ->
             if (authState is AuthState.Loading) {
+                stateChangeListener.onAuthStateChanged(authState)
                 login_button.performCrossFade(true)
                 login_progress_bar.performCrossFade(true)
             } else {

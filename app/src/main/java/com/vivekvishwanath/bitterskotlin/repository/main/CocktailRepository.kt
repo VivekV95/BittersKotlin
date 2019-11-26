@@ -1,7 +1,6 @@
 package com.vivekvishwanath.bitterskotlin.repository.main
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.LiveDataReactiveStreams
 import com.vivekvishwanath.bitterskotlin.di.scope.MainScope
 import com.vivekvishwanath.bitterskotlin.model.CocktailDbResponse
 import com.vivekvishwanath.bitterskotlin.network.CocktailDbServiceWrapper
@@ -10,9 +9,8 @@ import com.vivekvishwanath.bitterskotlin.repository.NetworkBoundResource
 import com.vivekvishwanath.bitterskotlin.session.SessionManager
 import com.vivekvishwanath.bitterskotlin.ui.main.state.MainViewState
 import com.vivekvishwanath.bitterskotlin.util.ApiSuccessResponse
-import com.vivekvishwanath.bitterskotlin.util.DataState
+import com.vivekvishwanath.bitterskotlin.ui.main.DataState
 import com.vivekvishwanath.bitterskotlin.util.GenericApiResponse
-import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Job
 import javax.inject.Inject
 

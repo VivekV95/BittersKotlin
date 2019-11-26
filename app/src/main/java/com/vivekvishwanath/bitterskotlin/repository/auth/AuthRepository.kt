@@ -2,18 +2,15 @@ package com.vivekvishwanath.bitterskotlin.repository.auth
 
 import android.util.Log
 import androidx.lifecycle.LiveData
-import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.vivekvishwanath.bitterskotlin.util.AuthState
+import com.vivekvishwanath.bitterskotlin.ui.auth.AuthState
 import com.vivekvishwanath.bitterskotlin.session.SessionManager
 import com.vivekvishwanath.bitterskotlin.di.scope.AuthScope
 import com.vivekvishwanath.bitterskotlin.repository.JobManager
-import com.vivekvishwanath.bitterskotlin.ui.auth.state.AuthViewState
-import com.vivekvishwanath.bitterskotlin.util.CANCELLATION_DELAY
-import com.vivekvishwanath.bitterskotlin.util.TAG
-import com.vivekvishwanath.bitterskotlin.util.UNABLE_TODO_OPERATION_WO_INTERNET
+import com.vivekvishwanath.bitterskotlin.ui.ResponseMessage
+import com.vivekvishwanath.bitterskotlin.ui.ResponseType
+import com.vivekvishwanath.bitterskotlin.util.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import javax.inject.Inject
@@ -32,33 +29,43 @@ class AuthRepository @Inject constructor(
         if (isNetworkAvailable()) {
             addJob("registerAccount", initNewJob())
             coroutineScope.launch {
-                delay(CANCELLATION_DELAY)
                 mAuth
                     .createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
-                            signIn(email, password)
+                            signIn(email, password, true)
                         } else {
                             task.exception?.message?.let { message ->
-                                sessionManager.setCurrentUser(AuthState.Error(message))
+                                sessionManager.setCurrentUser(
+                                    AuthState.Error(
+                                        ResponseMessage(message, ResponseType.Dialog)
+                                    )
+                                )
                             }
                         }
                     }
-                    .addOnCanceledListener {
-                        sessionManager.setCurrentUser(AuthState.Error("Something went wrong during registration"))
-                    }
             }
-        } else sessionManager.setCurrentUser(AuthState.Error(UNABLE_TODO_OPERATION_WO_INTERNET))
+            setTimeoutMessage()
+        } else sessionManager.setCurrentUser(
+            AuthState.Error(
+                ResponseMessage(
+                    UNABLE_TODO_OPERATION_WO_INTERNET, ResponseType.Dialog
+                )
+            )
+        )
         return sessionManager.getCurrentUser()
     }
 
     fun signIn(
-        email: String, password: String): LiveData<AuthState<FirebaseUser>> {
+        email: String, password: String, isRegistration: Boolean
+    ): LiveData<AuthState<FirebaseUser>> {
         sessionManager.setCurrentUser(AuthState.Loading())
         if (isNetworkAvailable()) {
-            addJob("signIn", initNewJob())
+            if (!isRegistration) {
+                addJob("signIn", initNewJob())
+                setTimeoutMessage()
+            }
             coroutineScope.launch {
-                delay(CANCELLATION_DELAY)
                 mAuth
                     .signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener { task ->
@@ -66,14 +73,24 @@ class AuthRepository @Inject constructor(
                             setSignedInUser()
                         } else
                             task.exception?.message?.let { message ->
-                                sessionManager.setCurrentUser(AuthState.Error(message))
+                                sessionManager.setCurrentUser(
+                                    AuthState.Error(
+                                        ResponseMessage(
+                                            message,
+                                            ResponseType.Dialog
+                                        )
+                                    )
+                                )
                             }
                     }
-                    .addOnCanceledListener {
-                        sessionManager.setCurrentUser(AuthState.Error("Something went wrong while signing in"))
-                    }
             }
-        } else sessionManager.setCurrentUser(AuthState.Error(UNABLE_TODO_OPERATION_WO_INTERNET))
+        } else sessionManager.setCurrentUser(
+            AuthState.Error(
+                ResponseMessage(
+                    UNABLE_TODO_OPERATION_WO_INTERNET, ResponseType.Dialog
+                )
+            )
+        )
         return sessionManager.getCurrentUser()
     }
 
@@ -82,6 +99,19 @@ class AuthRepository @Inject constructor(
             sessionManager.setCurrentUser(AuthState.Authenticated(firebaseUser))
         }
         return sessionManager.getCurrentUser()
+    }
+
+    private fun setTimeoutMessage() {
+        GlobalScope.launch(IO) {
+            delay(AUTH_TIMEOUT)
+
+            if (!job.isCompleted) {
+                sessionManager.setCurrentUser(AuthState.Loading(
+                    ResponseMessage(
+                        ERROR_LOGIN_TIMEOUT, ResponseType.Toast)
+                ))
+            }
+        }
     }
 
     @UseExperimental(InternalCoroutinesApi::class)
@@ -94,11 +124,7 @@ class AuthRepository @Inject constructor(
             handler = object : CompletionHandler {
                 override fun invoke(cause: Throwable?) {
                     if (job.isCancelled) {
-                        Log.d(TAG, "${this.javaClass.simpleName}: job cancelled")
-//                        cause?.let {  throwable ->
-//                            throwable.message?.let {  sessionManager.setCurrentUser(AuthState.Error(it)) }
-//                        }
-//                        // sessionManager.setCurrentUser(AuthState.Error("Something went wrong, try again"))
+                        Log.d(LOG_TAG, "${this.javaClass.simpleName}: job cancelled")
                     }
                 }
             })
@@ -106,7 +132,7 @@ class AuthRepository @Inject constructor(
         return job
     }
 
-    fun isNetworkAvailable(): Boolean =
+    private fun isNetworkAvailable(): Boolean =
         sessionManager.isConnectedToTheInternet()
 
 

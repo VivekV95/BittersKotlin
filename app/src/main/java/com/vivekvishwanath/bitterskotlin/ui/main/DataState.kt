@@ -1,15 +1,23 @@
-package com.vivekvishwanath.bitterskotlin.util
+package com.vivekvishwanath.bitterskotlin.ui.main
+
+import com.vivekvishwanath.bitterskotlin.ui.*
 
 data class DataState <T>(
     var error: Event<StateError>? = null,
-    var loading: Loading = Loading(false),
+    var loading: Loading = Loading(
+        false
+    ),
     var data: Data<T>? = null
 ) {
     companion object {
 
         fun <T> error(responseMessage: ResponseMessage): DataState<T> =
             DataState(
-                error = Event(StateError(responseMessage)),
+                error = Event(
+                    StateError(
+                        responseMessage
+                    )
+                ),
                 loading = Loading(false),
                 data = null
             )
@@ -25,7 +33,9 @@ data class DataState <T>(
                 loading = Loading(false),
                 data = Data(
                     Event.dataEvent(data),
-                    Event.messageEvent(responseMessage)
+                    Event.messageEvent(
+                        responseMessage
+                    )
                 )
             )
     }

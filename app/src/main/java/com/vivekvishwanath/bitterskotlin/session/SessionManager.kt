@@ -10,9 +10,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.vivekvishwanath.bitterskotlin.ui.auth.state.AuthViewState
-import com.vivekvishwanath.bitterskotlin.util.AuthState
-import com.vivekvishwanath.bitterskotlin.util.TAG
+import com.vivekvishwanath.bitterskotlin.ui.auth.AuthState
+import com.vivekvishwanath.bitterskotlin.util.LOG_TAG
+import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.lang.Exception
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -26,7 +28,9 @@ class SessionManager @Inject constructor(
     private val currentUser = MutableLiveData<AuthState<FirebaseUser>>()
 
     fun setCurrentUser(state: AuthState<FirebaseUser>) {
-        currentUser.value = state
+        GlobalScope.launch(Main) {
+            currentUser.value = state
+        }
     }
 
     fun logOut() {
@@ -65,7 +69,7 @@ class SessionManager @Inject constructor(
                 }
             }
         } catch (e: Exception) {
-            Log.e(TAG, "is not connected to internet: ${e.message}")
+            Log.e(LOG_TAG, "is not connected to internet: ${e.message}")
         }
         return false
     }
