@@ -73,7 +73,7 @@ abstract class NetworkBoundResource<ResponseObject, ViewStateType>(
         //TODO: Perform cache request when network fails
     }
 
-    private suspend fun handleNetworkCall(response: GenericApiResponse<ResponseObject>?) {
+    private fun handleNetworkCall(response: GenericApiResponse<ResponseObject>?) {
         when (response) {
             is ApiSuccessResponse -> {
                 handleApiSuccessResponse(response)
@@ -134,7 +134,7 @@ abstract class NetworkBoundResource<ResponseObject, ViewStateType>(
         return job
     }
 
-    abstract suspend fun handleApiSuccessResponse(response: ApiSuccessResponse<ResponseObject>)
+    abstract fun handleApiSuccessResponse(response: ApiSuccessResponse<ResponseObject>)
 
     abstract fun createCall(): LiveData<GenericApiResponse<ResponseObject>>
 

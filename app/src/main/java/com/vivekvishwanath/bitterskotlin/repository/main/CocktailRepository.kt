@@ -31,7 +31,7 @@ class CocktailRepository @Inject constructor(
                 addJob("getPopularCocktails", job)
             }
 
-            override suspend fun handleApiSuccessResponse(response: ApiSuccessResponse<CocktailDbResponse>) {
+            override fun handleApiSuccessResponse(response: ApiSuccessResponse<CocktailDbResponse>) {
                 onCompleteJob(
                     DataState.data(responseMessage = null, data = MainViewState(response.body.drinks))
                 )

@@ -99,9 +99,8 @@ class AuthActivity : AppCompatActivity(), AuthStateChangedListener {
         finish()
     }
 
-
-    override fun onStop() {
-        super.onStop()
+    override fun onDestroy() {
+        super.onDestroy()
         viewModel.cancelJobs()
     }
 }

@@ -102,9 +102,6 @@ class RegisterFragment : BaseAuthFragment(), View.OnClickListener {
                 register_password_confirm_edit_text.text.toString()
             )
         )
-    }
-    override fun onDestroy() {
-        super.onDestroy()
         viewModel.cancelJobs()
     }
 }
