@@ -8,6 +8,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
+import androidx.navigation.NavDestination
+import androidx.navigation.Navigation
 import com.vivekvishwanath.bitterskotlin.BaseApplication
 import com.vivekvishwanath.bitterskotlin.R
 import com.vivekvishwanath.bitterskotlin.ui.*
@@ -18,7 +21,17 @@ import com.vivekvishwanath.bitterskotlin.viewmodel.ViewModelProviderFactory
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
-class AuthActivity : AppCompatActivity(), AuthStateChangedListener {
+class AuthActivity : AppCompatActivity(),
+    AuthStateChangedListener,
+    NavController.OnDestinationChangedListener {
+
+    override fun onDestinationChanged(
+        controller: NavController,
+        destination: NavDestination,
+        arguments: Bundle?
+    ) {
+        viewModel.cancelJobs()
+    }
 
     override fun onAuthStateChanged(authState: AuthState<*>) {
         if (authState is AuthState.Loading) {
@@ -45,8 +58,8 @@ class AuthActivity : AppCompatActivity(), AuthStateChangedListener {
         authComponent.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_auth)
-
         viewModel = ViewModelProvider(this, viewModelProviderFactory)[AuthViewModel::class.java]
+        Navigation.findNavController(this, R.id.auth_nav_host_fragment).addOnDestinationChangedListener(this)
         subscribeObservers()
     }
 
