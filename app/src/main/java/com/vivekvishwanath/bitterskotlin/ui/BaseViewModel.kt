@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
-import com.vivekvishwanath.bitterskotlin.util.DataState
+import com.vivekvishwanath.bitterskotlin.ui.main.DataState
 
 abstract class BaseViewModel<StateEvent, ViewState> : ViewModel() {
 

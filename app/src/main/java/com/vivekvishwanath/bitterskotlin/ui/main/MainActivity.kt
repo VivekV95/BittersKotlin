@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.core.view.GravityCompat
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavOptions
@@ -14,7 +15,7 @@ import com.vivekvishwanath.bitterskotlin.BaseApplication
 import com.vivekvishwanath.bitterskotlin.R
 import com.vivekvishwanath.bitterskotlin.network.CocktailDbServiceWrapper
 import com.vivekvishwanath.bitterskotlin.ui.BaseActivity
-import com.vivekvishwanath.bitterskotlin.util.AuthState
+import com.vivekvishwanath.bitterskotlin.ui.auth.AuthState
 import com.vivekvishwanath.bitterskotlin.viewmodel.ViewModelProviderFactory
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
@@ -34,6 +35,10 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     lateinit var viewModelProviderFactory: ViewModelProviderFactory
 
     lateinit var viewModel: CocktailViewModel
+
+    override fun displayProgressBar(isLoading: Boolean) {
+        main_progress_bar.isVisible = isLoading
+    }
 
     override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
         when (menuItem.itemId) {

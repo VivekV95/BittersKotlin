@@ -7,7 +7,6 @@ import com.vivekvishwanath.bitterskotlin.repository.main.CocktailRepository
 import com.vivekvishwanath.bitterskotlin.ui.BaseViewModel
 import com.vivekvishwanath.bitterskotlin.ui.main.state.MainStateEvent
 import com.vivekvishwanath.bitterskotlin.ui.main.state.MainViewState
-import com.vivekvishwanath.bitterskotlin.util.DataState
 import javax.inject.Inject
 
 @MainScope

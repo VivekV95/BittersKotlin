@@ -1,9 +1,11 @@
 package com.vivekvishwanath.bitterskotlin.repository
 
-import android.net.NetworkRequest
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
+import com.vivekvishwanath.bitterskotlin.ui.ResponseMessage
+import com.vivekvishwanath.bitterskotlin.ui.ResponseType
+import com.vivekvishwanath.bitterskotlin.ui.main.DataState
 import com.vivekvishwanath.bitterskotlin.util.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
@@ -43,7 +45,7 @@ abstract class NetworkBoundResource<ResponseObject, ViewStateType>(
 
     private fun doNetworkRequest() {
         coroutineScope.launch {
-            // delay(TESTING_NETWORK_DELAY)
+            //delay(TESTING_NETWORK_DELAY)
 
             withContext(Main) {
                 val apiResponse = createCall()
@@ -61,7 +63,7 @@ abstract class NetworkBoundResource<ResponseObject, ViewStateType>(
             delay(NETWORK_TIMEOUT)
 
             if (!job.isCompleted) {
-                Log.d(TAG, "${this.javaClass.simpleName}: Job network timeout")
+                Log.d(LOG_TAG, "${this.javaClass.simpleName}: Job network timeout")
                 job.cancel(CancellationException(NETWORK_TIMEOUT_MESSAGE))
             }
         }
@@ -102,24 +104,29 @@ abstract class NetworkBoundResource<ResponseObject, ViewStateType>(
             msg = ERROR_UNKNOWN
         else if (isNetworkError(msg))
             msg = ERROR_CHECK_NETWORK_CONNECTION
-        onCompleteJob(DataState.error(ResponseMessage(msg, ResponseType.Dialog)))
+        onCompleteJob(DataState.error(
+            ResponseMessage(
+                msg,
+                ResponseType.Dialog
+            )
+        ))
     }
 
     @UseExperimental(InternalCoroutinesApi::class)
     private fun initNewJob(): Job {
-        Log.d(TAG, "initNewJob: called.")
+        Log.d(LOG_TAG, "initNewJob: called.")
         job = Job()
         job.invokeOnCompletion(true, true, object : CompletionHandler {
             override fun invoke(cause: Throwable?) {
                 if (job.isCancelled) {
-                    Log.d(TAG, "NetworkBoundResource: Job has been cancelled.")
+                    Log.d(LOG_TAG, "NetworkBoundResource: Job has been cancelled.")
                     cause?.let { throwable ->
                         throwable.message?.let {
                             onReturnError(it)
                         }
                     } ?: onReturnError("Unknown error")
                 } else {
-                    Log.d(TAG, "${this.javaClass.simpleName}: Job has been completed")
+                    Log.d(LOG_TAG, "${this.javaClass.simpleName}: Job has been completed")
                 }
             }
         })

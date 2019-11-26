@@ -20,7 +20,7 @@ sealed class GenericApiResponse<T> {
 
         fun <T> create(response: Response<T>): GenericApiResponse<T> {
 
-            Log.d(TAG, "GenericApiResponse: response: ${response}")
+            Log.d(TAG, "GenericApiResponse: responseMessage: ${response}")
             Log.d(TAG, "GenericApiResponse: raw: ${response.raw()}")
             Log.d(TAG, "GenericApiResponse: headers: ${response.headers()}")
             Log.d(TAG, "GenericApiResponse: message: ${response.message()}")

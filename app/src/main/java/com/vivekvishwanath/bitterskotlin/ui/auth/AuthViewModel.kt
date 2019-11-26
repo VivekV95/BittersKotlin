@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseUser
-import com.vivekvishwanath.bitterskotlin.util.AuthState
 import com.vivekvishwanath.bitterskotlin.repository.auth.AuthRepository
 import com.vivekvishwanath.bitterskotlin.di.scope.AuthScope
 import com.vivekvishwanath.bitterskotlin.ui.auth.state.AuthStateEvent
@@ -45,7 +44,7 @@ class AuthViewModel @Inject constructor(
                 authRepository.registerAccount(stateEvent.email, stateEvent.password)
             }
             is AuthStateEvent.LoginEvent -> {
-                authRepository.signIn(stateEvent.email, stateEvent.password)
+                authRepository.signIn(stateEvent.email, stateEvent.password, false)
             }
             is AuthStateEvent.None -> {
                 AbsentLiveData.create()
