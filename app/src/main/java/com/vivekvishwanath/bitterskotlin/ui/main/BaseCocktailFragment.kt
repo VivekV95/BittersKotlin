@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.RequestManager
 import com.vivekvishwanath.bitterskotlin.ui.DataStateChangedListener
+import com.vivekvishwanath.bitterskotlin.ui.main.view.CocktailListViewModel
 import com.vivekvishwanath.bitterskotlin.util.LOG_TAG
 import com.vivekvishwanath.bitterskotlin.viewmodel.ViewModelProviderFactory
 import java.lang.ClassCastException
@@ -22,7 +23,7 @@ abstract class BaseCocktailFragment: Fragment() {
     @Inject
     lateinit var requestManager: RequestManager
 
-    lateinit var viewModel: CocktailViewModel
+    lateinit var viewModel: CocktailListViewModel
 
     lateinit var stateChangeListener: DataStateChangedListener
 
@@ -30,7 +31,7 @@ abstract class BaseCocktailFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel = activity?.run {
-            ViewModelProvider(this, viewModelProviderFactory)[CocktailViewModel::class.java]
+            ViewModelProvider(this, viewModelProviderFactory)[CocktailListViewModel::class.java]
         }?: throw Exception("Invalid Activity")
 
         cancelActiveJobs()

@@ -1,32 +1,24 @@
-package com.vivekvishwanath.bitterskotlin.ui.main.fragment
+package com.vivekvishwanath.bitterskotlin.ui.main.view
 
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
-import com.bumptech.glide.RequestManager
 
 import com.vivekvishwanath.bitterskotlin.R
 import com.vivekvishwanath.bitterskotlin.model.Cocktail
 import com.vivekvishwanath.bitterskotlin.ui.adapter.CocktailListAdapter
 import com.vivekvishwanath.bitterskotlin.ui.main.BaseCocktailFragment
 import com.vivekvishwanath.bitterskotlin.ui.main.MainActivity
-import com.vivekvishwanath.bitterskotlin.ui.main.CocktailViewModel
-import com.vivekvishwanath.bitterskotlin.ui.main.state.MainStateEvent
+import com.vivekvishwanath.bitterskotlin.ui.main.view.state.CocktailListStateEvent
 import com.vivekvishwanath.bitterskotlin.util.SpacingItemDecoration
-import com.vivekvishwanath.bitterskotlin.viewmodel.ViewModelProviderFactory
-import kotlinx.android.synthetic.main.fragment_popular.*
-import java.lang.Exception
-import javax.inject.Inject
+import kotlinx.android.synthetic.main.fragment_cocktail_list.*
 
-class PopularFragment : BaseCocktailFragment(), CocktailListAdapter.CocktailClickListener {
+class CocktailListFragment : BaseCocktailFragment(), CocktailListAdapter.CocktailClickListener {
 
 
     private lateinit var cocktailListAdapter: CocktailListAdapter
@@ -34,9 +26,7 @@ class PopularFragment : BaseCocktailFragment(), CocktailListAdapter.CocktailClic
     override fun onCocktailClicked(position: Int, item: Cocktail) {
         activity?.let {
             val bundle = bundleOf("cocktail" to item)
-            Navigation
-                .findNavController(it, R.id.main_nav_host_fragment)
-                .navigate(R.id.action_popularFragment_to_viewCocktailFragment, bundle)
+
         }
     }
 
@@ -49,7 +39,7 @@ class PopularFragment : BaseCocktailFragment(), CocktailListAdapter.CocktailClic
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_popular, container, false)
+        return inflater.inflate(R.layout.fragment_cocktail_list, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -61,14 +51,14 @@ class PopularFragment : BaseCocktailFragment(), CocktailListAdapter.CocktailClic
     }
 
     private fun triggerGetPopularCocktailsEvent() {
-        viewModel.setStateEvent(MainStateEvent.GetPopularCocktailsEvent)
+        viewModel.setStateEvent(CocktailListStateEvent.GetPopularCocktailsEvent)
     }
 
     private fun initRecyclerView() {
         popular_recycler_view.apply {
             layoutManager = GridLayoutManager(activity, 2)
             addItemDecoration(SpacingItemDecoration(8))
-            cocktailListAdapter = CocktailListAdapter(requestManager, this@PopularFragment)
+            cocktailListAdapter = CocktailListAdapter(requestManager, this@CocktailListFragment)
             adapter = cocktailListAdapter
         }
     }

@@ -1,7 +1,7 @@
-package com.vivekvishwanath.bitterskotlin.ui.main.state
+package com.vivekvishwanath.bitterskotlin.ui.main.view.state
 
 import com.vivekvishwanath.bitterskotlin.model.Cocktail
 
-data class MainViewState(
+data class CocktailListViewState(
     val popularCocktails: List<Cocktail>? = null
 )

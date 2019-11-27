@@ -1,4 +1,4 @@
-package com.vivekvishwanath.bitterskotlin.ui.main.fragment
+package com.vivekvishwanath.bitterskotlin.ui.main
 
 
 import android.os.Bundle
@@ -10,7 +10,6 @@ import com.bumptech.glide.RequestManager
 
 import com.vivekvishwanath.bitterskotlin.R
 import com.vivekvishwanath.bitterskotlin.model.Cocktail
-import com.vivekvishwanath.bitterskotlin.ui.main.MainActivity
 import kotlinx.android.synthetic.main.fragment_view_cocktail.*
 import javax.inject.Inject
 

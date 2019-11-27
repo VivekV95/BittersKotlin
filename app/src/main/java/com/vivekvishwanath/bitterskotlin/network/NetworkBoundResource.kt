@@ -1,4 +1,4 @@
-package com.vivekvishwanath.bitterskotlin.repository
+package com.vivekvishwanath.bitterskotlin.network
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -49,11 +49,13 @@ abstract class NetworkBoundResource<ResponseObject, ViewStateType>(
 
             withContext(Main) {
                 val apiResponse = createCall()
-                result.addSource(apiResponse) { response ->
-                    result.removeSource(apiResponse)
+                apiResponse?.let {
+                    result.addSource(apiResponse) { response ->
+                        result.removeSource(apiResponse)
 
-                    coroutineScope.launch {
-                        handleNetworkCall(response)
+                        coroutineScope.launch {
+                            handleNetworkCall(response)
+                        }
                     }
                 }
             }
@@ -136,7 +138,7 @@ abstract class NetworkBoundResource<ResponseObject, ViewStateType>(
 
     abstract fun handleApiSuccessResponse(response: ApiSuccessResponse<ResponseObject>)
 
-    abstract fun createCall(): LiveData<GenericApiResponse<ResponseObject>>
+    abstract fun createCall(): LiveData<GenericApiResponse<ResponseObject>>?
 
     fun asLiveData() = result as LiveData<DataState<ViewStateType>>
 

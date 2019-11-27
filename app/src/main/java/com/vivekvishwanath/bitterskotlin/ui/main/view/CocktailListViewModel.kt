@@ -1,25 +1,26 @@
-package com.vivekvishwanath.bitterskotlin.ui.main
+package com.vivekvishwanath.bitterskotlin.ui.main.view
 
 import androidx.lifecycle.LiveData
 import com.vivekvishwanath.bitterskotlin.di.scope.MainScope
 import com.vivekvishwanath.bitterskotlin.model.Cocktail
 import com.vivekvishwanath.bitterskotlin.repository.main.CocktailRepository
 import com.vivekvishwanath.bitterskotlin.ui.BaseViewModel
-import com.vivekvishwanath.bitterskotlin.ui.main.state.MainStateEvent
-import com.vivekvishwanath.bitterskotlin.ui.main.state.MainViewState
+import com.vivekvishwanath.bitterskotlin.ui.main.DataState
+import com.vivekvishwanath.bitterskotlin.ui.main.view.state.CocktailListStateEvent
+import com.vivekvishwanath.bitterskotlin.ui.main.view.state.CocktailListViewState
 import javax.inject.Inject
 
 @MainScope
-class CocktailViewModel @Inject constructor
-    (private val repository: CocktailRepository) : BaseViewModel<MainStateEvent, MainViewState>() {
+class CocktailListViewModel @Inject constructor
+    (private val repository: CocktailRepository) : BaseViewModel<CocktailListStateEvent, CocktailListViewState>() {
 
-    override fun initNewViewState(): MainViewState {
-        return MainViewState()
+    override fun initNewViewState(): CocktailListViewState {
+        return CocktailListViewState()
     }
 
-    override fun handleStateEvent(stateEvent: MainStateEvent): LiveData<DataState<MainViewState>> =
+    override fun handleStateEvent(stateEvent: CocktailListStateEvent): LiveData<DataState<CocktailListViewState>> =
         when (stateEvent) {
-            is MainStateEvent.GetPopularCocktailsEvent -> {
+            is CocktailListStateEvent.GetPopularCocktailsEvent -> {
                 repository.getPopularCocktails()
             }
         }

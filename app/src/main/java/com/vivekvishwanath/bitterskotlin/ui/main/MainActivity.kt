@@ -2,25 +2,22 @@ package com.vivekvishwanath.bitterskotlin.ui.main
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.view.MenuItem
-import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavOptions
-import androidx.navigation.Navigation
-import androidx.navigation.ui.NavigationUI
-import com.google.android.material.navigation.NavigationView
 import com.vivekvishwanath.bitterskotlin.BaseApplication
 import com.vivekvishwanath.bitterskotlin.R
 import com.vivekvishwanath.bitterskotlin.network.CocktailDbServiceWrapper
+import com.vivekvishwanath.bitterskotlin.network.FirebaseDatabaseDao
 import com.vivekvishwanath.bitterskotlin.ui.BaseActivity
 import com.vivekvishwanath.bitterskotlin.ui.auth.AuthState
+import com.vivekvishwanath.bitterskotlin.ui.main.view.CocktailListFragment
+import com.vivekvishwanath.bitterskotlin.ui.main.view.CocktailListViewModel
 import com.vivekvishwanath.bitterskotlin.viewmodel.ViewModelProviderFactory
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
-class MainActivity : BaseActivity()  {
+class MainActivity : BaseActivity() {
 
     val mainComponent by lazy {
         (application as BaseApplication)
@@ -32,30 +29,33 @@ class MainActivity : BaseActivity()  {
     lateinit var cocktailService: CocktailDbServiceWrapper
 
     @Inject
+    lateinit var firebaseDatabaseDao: FirebaseDatabaseDao
+
+    @Inject
     lateinit var viewModelProviderFactory: ViewModelProviderFactory
 
-    lateinit var viewModel: CocktailViewModel
+    lateinit var viewModel: CocktailListViewModel
 
     override fun displayProgressBar(isLoading: Boolean) {
         main_progress_bar.isVisible = isLoading
     }
 
 
-    private fun isValidDestination(destination: Int): Boolean =
-        destination != Navigation
-            .findNavController(this, R.id.main_nav_host_fragment)
-            .currentDestination
-            ?.id
-
     @SuppressLint("CheckResult")
     override fun onCreate(savedInstanceState: Bundle?) {
         mainComponent.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-      
-        viewModel = ViewModelProvider(this, viewModelProviderFactory)[CocktailViewModel::class.java]
+
+        viewModel =
+            ViewModelProvider(this, viewModelProviderFactory)[CocktailListViewModel::class.java]
 
         subscribeObservers()
+        testCocktails()
+
+        tool_bar.setOnClickListener {
+            sessionManager.logOut()
+        }
     }
 
     private fun subscribeObservers() {
@@ -69,5 +69,15 @@ class MainActivity : BaseActivity()  {
                 }
             }
         })
+    }
+
+    fun testCocktails() {
+        supportFragmentManager.beginTransaction()
+            .replace(
+                R.id.main_nav_host_fragment,
+                CocktailListFragment()
+            )
+            .commit()
+
     }
 }

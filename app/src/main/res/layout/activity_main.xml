@@ -63,10 +63,11 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:background="#fff"
-        app:itemTextColor="@color/tealDark"
+        app:itemTextColor="@color/bottom_nav_selector"
         app:menu="@menu/bottom_nav_menu"
-        app:itemIconTint="@color/tealDark"
+        app:itemIconTint="@color/bottom_nav_selector"
         android:elevation="6dp"
+        style="@style/BottomNavigationView"
         />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
