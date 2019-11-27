@@ -47,6 +47,12 @@ class CocktailRepository @Inject constructor(
 
         }.asLiveData()
 
+    fun getFavoriteIds() = firebaseDatabaseDao.favoriteCocktailIds
+
+    fun refreshFavorites() {
+        firebaseDatabaseDao.refreshFavorites()
+    }
+
     fun logOut() {
         sessionManager.logOut()
     }

@@ -20,12 +20,6 @@ abstract class BaseActivity : AppCompatActivity(), DataStateChangedListener {
     lateinit var sessionManager: SessionManager
 
 
-    fun navToAuth() {
-        Intent(this, AuthActivity::class.java)
-            .apply { startActivity(this) }
-        finish()
-    }
-
     override fun onDataStateChanged(dataState: DataState<*>?) {
         dataState?.let {
             GlobalScope.launch(Main) {

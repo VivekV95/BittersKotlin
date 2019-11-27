@@ -30,6 +30,17 @@ class CocktailListViewModel @Inject constructor
         _viewState.value = update
     }
 
+    fun setFavoriteIdsData(ids: List<Int>) {
+        val update = getCurrentViewStateOrNew().copy(favoriteCocktailIds = ids)
+        _viewState.value = update
+    }
+
+    fun getFavoriteIds() = repository.getFavoriteIds()
+
+    fun refreshFavorites() {
+        repository.refreshFavorites()
+    }
+
     fun logOut() {
         repository.logOut()
     }

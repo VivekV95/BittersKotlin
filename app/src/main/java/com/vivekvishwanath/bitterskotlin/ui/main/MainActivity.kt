@@ -13,6 +13,7 @@ import com.vivekvishwanath.bitterskotlin.ui.BaseActivity
 import com.vivekvishwanath.bitterskotlin.ui.auth.AuthState
 import com.vivekvishwanath.bitterskotlin.ui.main.view.CocktailListFragment
 import com.vivekvishwanath.bitterskotlin.ui.main.view.CocktailListViewModel
+import com.vivekvishwanath.bitterskotlin.ui.navToAuth
 import com.vivekvishwanath.bitterskotlin.viewmodel.ViewModelProviderFactory
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
@@ -49,6 +50,7 @@ class MainActivity : BaseActivity() {
 
         viewModel =
             ViewModelProvider(this, viewModelProviderFactory)[CocktailListViewModel::class.java]
+        viewModel.refreshFavorites()
 
         subscribeObservers()
         testCocktails()

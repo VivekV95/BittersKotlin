@@ -9,6 +9,8 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class Cocktail(
 
+    var isFavorite: Boolean,
+
     @SerializedName("idDrink")
     val drinkId: String,
 

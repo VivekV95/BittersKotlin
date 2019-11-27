@@ -26,7 +26,6 @@ class CocktailListFragment : BaseCocktailFragment(), CocktailListAdapter.Cocktai
     override fun onCocktailClicked(position: Int, item: Cocktail) {
         activity?.let {
             val bundle = bundleOf("cocktail" to item)
-
         }
     }
 
@@ -45,8 +44,8 @@ class CocktailListFragment : BaseCocktailFragment(), CocktailListAdapter.Cocktai
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        subscribeObservers()
         initRecyclerView()
+        subscribeObservers()
         triggerGetPopularCocktailsEvent()
     }
 
@@ -64,7 +63,7 @@ class CocktailListFragment : BaseCocktailFragment(), CocktailListAdapter.Cocktai
     }
 
     private fun subscribeObservers() {
-        viewModel.dataState.observe(this, Observer { dataState ->
+        viewModel.dataState.observe(viewLifecycleOwner, Observer { dataState ->
             stateChangeListener.onDataStateChanged(dataState)
             dataState.data?.data?.let { event ->
                 event.getContentIfNotHandled()?.let { mainViewState ->
@@ -75,9 +74,22 @@ class CocktailListFragment : BaseCocktailFragment(), CocktailListAdapter.Cocktai
             }
         })
 
+        viewModel.getFavoriteIds().observe(viewLifecycleOwner, Observer { dataState ->
+            dataState.data?.data?.let { event ->
+                event.getContentIfNotHandled()?.let { ids ->
+                    viewModel.setFavoriteIdsData(ids)
+                }
+            }
+
+        })
+
         viewModel.viewState.observe(this, Observer { viewState ->
             viewState.popularCocktails?.let { cocktails ->
-                cocktailListAdapter.submitList(cocktails)
+                cocktailListAdapter.submitCocktails(cocktails)
+            }
+
+            viewState.favoriteCocktailIds?.let { ids ->
+                cocktailListAdapter.submitFavoriteIds(ids)
             }
         })
     }

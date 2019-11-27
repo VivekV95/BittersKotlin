@@ -29,15 +29,14 @@ class FirebaseDatabaseDao @Inject constructor(
     private val _favoriteCocktails = MediatorLiveData<DataState<ArrayList<Int>>>()
 
     val favoriteCocktailIds: LiveData<DataState<ArrayList<Int>>>
-        get() {
-            val source = listenToFavoriteCocktailIds()
-            _favoriteCocktails.addSource(source) { dataState ->
-                _favoriteCocktails.value = dataState
-                if (!dataState.loading.isLoading)
-                    _favoriteCocktails.removeSource(source)
-            }
-            return _favoriteCocktails
+        get() =_favoriteCocktails
+
+    fun refreshFavorites() {
+        val source = listenToFavoriteCocktailIds()
+        _favoriteCocktails.addSource(source) { dataState ->
+            _favoriteCocktails.value = dataState
         }
+    }
 
     private fun listenToFavoriteCocktailIds(): LiveData<DataState<ArrayList<Int>>> {
         return object : NetworkBoundResource<Void, ArrayList<Int>>(
@@ -58,7 +57,7 @@ class FirebaseDatabaseDao @Inject constructor(
                         .child(FIREBASE_FAVORITE_IDS_KEY)
                         .addValueEventListener(object : ValueEventListener {
                             override fun onCancelled(error: DatabaseError) {
-                               onReturnError(error.message)
+                                onReturnError(error.message)
                             }
 
                             override fun onDataChange(dataSnapshot: DataSnapshot) {

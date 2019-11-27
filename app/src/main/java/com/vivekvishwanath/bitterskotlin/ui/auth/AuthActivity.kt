@@ -104,14 +104,6 @@ class AuthActivity : AppCompatActivity(),
         }
     }
 
-    private fun navToMain() {
-        Intent(this, MainActivity::class.java)
-            .apply {
-                startActivity(this)
-            }
-        finish()
-    }
-
     override fun onDestroy() {
         super.onDestroy()
         viewModel.cancelJobs()
