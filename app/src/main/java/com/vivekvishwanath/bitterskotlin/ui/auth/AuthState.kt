@@ -20,5 +20,6 @@ sealed class AuthState<T>(
     class Error<T>(responseMessage: ResponseMessage, data: T? = null) :
         AuthState<T>(message = Event.messageEvent(responseMessage), data = Event.dataEvent(data))
 
-    class NotAuthenticated<T>: AuthState<T>()
+    class NotAuthenticated<T>(responseMessage: ResponseMessage? = null):
+        AuthState<T>(message = Event.messageEvent(responseMessage))
 }

@@ -1,4 +1,4 @@
-package com.vivekvishwanath.bitterskotlin.ui.main.fragment
+package com.vivekvishwanath.bitterskotlin.ui.main.filter
 
 
 import android.os.Bundle

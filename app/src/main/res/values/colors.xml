@@ -3,9 +3,11 @@
     <color name="colorPrimary">#303030</color>
     <color name="colorPrimaryDark">#0c0c0c</color>
     <color name="colorPrimaryLight">#5c5c5c</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorAccent">#0094DE</color>
     <color name="colorBlack">#000000</color>
 
     <color name="tealDark">#0094DE</color>
     <color name="white">#ffffff</color>
+    <color name="grey4">#7d7d7d</color>
+    <color name="background">#7d7d7d</color>
 </resources>

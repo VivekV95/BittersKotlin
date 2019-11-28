@@ -114,10 +114,6 @@ class LoginFragment : BaseAuthFragment(), View.OnClickListener {
                 login_password_edit_text.text.toString()
             )
         )
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
         viewModel.cancelJobs()
     }
 }

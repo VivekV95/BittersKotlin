@@ -3,6 +3,7 @@ package com.vivekvishwanath.bitterskotlin.ui
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.app.Activity
+import android.content.Intent
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.Toast
@@ -10,6 +11,8 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import com.vivekvishwanath.bitterskotlin.R
+import com.vivekvishwanath.bitterskotlin.ui.auth.AuthActivity
+import com.vivekvishwanath.bitterskotlin.ui.main.MainActivity
 import com.vivekvishwanath.bitterskotlin.util.CROSS_FADE_DURATION
 
 
@@ -99,3 +102,12 @@ fun Activity.displaySuccessDialog(successMessage: String) {
         }
 }
 
+fun Activity.navToAuth() {
+    Intent(this, AuthActivity::class.java)
+        .apply { startActivity(this) }
+}
+
+fun Activity.navToMain() {
+    Intent(this, MainActivity::class.java)
+        .apply { startActivity(this) }
+}

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:drawable="@drawable/ic_empty_star"
-        android:state_focused="false"
-        android:state_pressed="false"
-        android:state_selected="false"/>
+        android:state_checkable="true"
+        android:state_checked="false"/>
     <item android:drawable="@drawable/ic_filled_star"
-        android:state_focused="false"
-        android:state_pressed="true"
-        android:state_selected="true"/>
+        android:state_checked="true"
+        android:state_checkable="true"/>
+    <item
+        android:drawable="@drawable/ic_empty_star"/>
 </selector>

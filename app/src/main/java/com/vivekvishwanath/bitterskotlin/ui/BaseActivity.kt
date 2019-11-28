@@ -1,13 +1,20 @@
 package com.vivekvishwanath.bitterskotlin.ui
 
 import android.content.Intent
+import android.os.Bundle
+import android.os.PersistableBundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.vivekvishwanath.bitterskotlin.session.SessionManager
 import com.vivekvishwanath.bitterskotlin.ui.auth.AuthActivity
+import com.vivekvishwanath.bitterskotlin.ui.auth.AuthState
 import com.vivekvishwanath.bitterskotlin.ui.main.MainActivity
 import com.vivekvishwanath.bitterskotlin.ui.main.DataState
+import com.vivekvishwanath.bitterskotlin.ui.main.view.CocktailListViewModel
 import com.vivekvishwanath.bitterskotlin.util.LOG_TAG
+import com.vivekvishwanath.bitterskotlin.viewmodel.ViewModelProviderFactory
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -19,15 +26,35 @@ abstract class BaseActivity : AppCompatActivity(), DataStateChangedListener {
     @Inject
     lateinit var sessionManager: SessionManager
 
+    @Inject
+    lateinit var viewModelProviderFactory: ViewModelProviderFactory
 
-    fun navToAuth() {
-        Intent(this, AuthActivity::class.java)
-            .apply { startActivity(this) }
-        finish()
+    lateinit var viewModel: CocktailListViewModel
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel =
+            ViewModelProvider(this, viewModelProviderFactory)[CocktailListViewModel::class.java]
+
+        subscribeObservers()
     }
+    private fun subscribeObservers() {
+        sessionManager.getCurrentUser().observe(this, Observer { authState ->
+            when (authState) {
+                is AuthState.NotAuthenticated -> {
+                    navToAuth()
+                }
+                is AuthState.Error -> {
+                    navToAuth()
+                }
+            }
+        })
+    }
+
 
     override fun onDataStateChanged(dataState: DataState<*>?) {
         dataState?.let {
+            displayProgressBar(false)
             GlobalScope.launch(Main) {
                 displayProgressBar(dataState.loading.isLoading)
 

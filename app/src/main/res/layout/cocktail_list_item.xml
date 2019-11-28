@@ -9,20 +9,30 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cocktail_card">
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:background="@color/background"/>
+
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
         <ImageView
             android:id="@+id/cocktail_card_image"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="1000dp"
+            android:layout_height="200dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:src="@drawable/ic_launcher_background"/>
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/cocktail_card_label_guideline"
@@ -54,14 +64,14 @@
                     android:gravity="center_vertical"
                     android:layout_marginStart="8dp"
                     android:textColor="@android:color/white"
-                    android:textSize="14dp"
+                    android:textSize="16sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/cocktail_card_name_guideline"/>
 
                 <ImageView
-                    android:id="@+id/coctail_card_star"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:id="@+id/cocktail_card_star"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     app:layout_constraintStart_toStartOf="@id/cocktail_card_name_guideline"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"

@@ -1,4 +1,4 @@
-package com.vivekvishwanath.bitterskotlin.repository
+package com.vivekvishwanath.bitterskotlin.network
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -48,12 +48,16 @@ abstract class NetworkBoundResource<ResponseObject, ViewStateType>(
             //delay(TESTING_NETWORK_DELAY)
 
             withContext(Main) {
+                Log.d(LOG_TAG, "${this.javaClass.simpleName}: ${Thread.currentThread()}")
                 val apiResponse = createCall()
-                result.addSource(apiResponse) { response ->
-                    result.removeSource(apiResponse)
+                apiResponse?.let {
+                    result.addSource(apiResponse) { response ->
+                        result.removeSource(apiResponse)
 
-                    coroutineScope.launch {
-                        handleNetworkCall(response)
+                        coroutineScope.launch {
+                            Log.d(LOG_TAG, "${this.javaClass.simpleName}: ${Thread.currentThread()}")
+                            handleNetworkCall(response)
+                        }
                     }
                 }
             }
@@ -73,7 +77,7 @@ abstract class NetworkBoundResource<ResponseObject, ViewStateType>(
         //TODO: Perform cache request when network fails
     }
 
-    private suspend fun handleNetworkCall(response: GenericApiResponse<ResponseObject>?) {
+    private fun handleNetworkCall(response: GenericApiResponse<ResponseObject>?) {
         when (response) {
             is ApiSuccessResponse -> {
                 handleApiSuccessResponse(response)
@@ -134,9 +138,9 @@ abstract class NetworkBoundResource<ResponseObject, ViewStateType>(
         return job
     }
 
-    abstract suspend fun handleApiSuccessResponse(response: ApiSuccessResponse<ResponseObject>)
+    abstract fun handleApiSuccessResponse(response: ApiSuccessResponse<ResponseObject>)
 
-    abstract fun createCall(): LiveData<GenericApiResponse<ResponseObject>>
+    abstract fun createCall(): LiveData<GenericApiResponse<ResponseObject>>?
 
     fun asLiveData() = result as LiveData<DataState<ViewStateType>>
 
