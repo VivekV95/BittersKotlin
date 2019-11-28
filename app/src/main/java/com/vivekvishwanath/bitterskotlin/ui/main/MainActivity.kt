@@ -26,13 +26,6 @@ class MainActivity : BaseActivity() {
             .mainComponent()
     }
 
-    @Inject
-    lateinit var cocktailService: CocktailDbServiceWrapper
-
-    @Inject
-    lateinit var viewModelProviderFactory: ViewModelProviderFactory
-
-    lateinit var viewModel: CocktailListViewModel
 
     override fun displayProgressBar(isLoading: Boolean) {
         main_progress_bar.isVisible = isLoading
@@ -45,10 +38,6 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        viewModel =
-            ViewModelProvider(this, viewModelProviderFactory)[CocktailListViewModel::class.java]
-
-        subscribeObservers()
         testCocktails()
 
         tool_bar.setOnClickListener {
@@ -64,19 +53,6 @@ class MainActivity : BaseActivity() {
     override fun onStop() {
         super.onStop()
         viewModel.cancelActiveJobs()
-    }
-
-    private fun subscribeObservers() {
-        sessionManager.getCurrentUser().observe(this, Observer { authState ->
-            when (authState) {
-                is AuthState.NotAuthenticated -> {
-                    navToAuth()
-                }
-                is AuthState.Error -> {
-                    navToAuth()
-                }
-            }
-        })
     }
 
     fun testCocktails() {

@@ -27,12 +27,19 @@ class CocktailListFragment : BaseCocktailFragment(), CocktailListAdapter.Cocktai
 
     private lateinit var cocktailListAdapter: CocktailListAdapter
 
-    override fun onCocktailClicked(position: Int, item: Cocktail) {
+    override fun onCocktailClicked(position: Int, item: Cocktail, favorite: Boolean) {
         activity?.let {
             GlobalScope.launch(Main) {
-                val dataState = viewModel.addFavoriteCocktail(cocktail = item)
-                dataState.data?.data?.getContentIfNotHandled()?.let {
-                    cocktailListAdapter.notifyItemChanged(position)
+                if (!favorite) {
+                    val dataState = viewModel.addFavoriteCocktail(cocktail = item)
+                    dataState.data?.data?.getContentIfNotHandled()?.let {
+                        cocktailListAdapter.notifyItemChanged(position)
+                    }
+                } else {
+                    val dataState = viewModel.deleteFavoriteCocktail(cocktail = item)
+                    dataState.data?.data?.getContentIfNotHandled()?.let {
+                        cocktailListAdapter.notifyItemChanged(position)
+                    }
                 }
             }
         }

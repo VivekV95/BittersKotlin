@@ -39,6 +39,8 @@ class CocktailListViewModel @Inject constructor
 
     suspend fun addFavoriteCocktail(cocktail: Cocktail) = repository.addToFavorites(cocktail)
 
+    suspend fun deleteFavoriteCocktail(cocktail: Cocktail) = repository.deleteFromFavorites(cocktail)
+
     fun refreshFavorites() {
         repository.refreshFavorites()
     }

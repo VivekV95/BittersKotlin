@@ -76,44 +76,79 @@ class FirebaseDatabaseDao @Inject constructor(
         cocktail: Cocktail
     ): DataState<String> {
         return suspendCoroutine { cont ->
-            addJob("addFavoriteCocktail", initNewJob())
-            coroutineScope.launch {
-                firebaseUser?.let {
-                    firebaseDatabase
-                        .child(FIREBASE_USERS_KEY)
-                        .child(firebaseUser.uid)
-                        .child(FIREBASE_FAVORITE_COCKTAILS_KEY)
-                        .child(cocktail.drinkId)
-                        .setValue(
-                            cocktail
-                        ){ error, reference ->
-                            error?.let {
-                                cont.resume(DataState.error(ResponseMessage(error.message, ResponseType.Toast)))
-                            }?: cont.resume(DataState.data("${cocktail.drinkName} is now a favorite"))
-                        }
+            if (sessionManager.isConnectedToTheInternet()) {
+                addJob("addFavoriteCocktail", initNewJob())
+                coroutineScope.launch {
+                    firebaseUser?.let {
+                        firebaseDatabase
+                            .child(FIREBASE_USERS_KEY)
+                            .child(firebaseUser.uid)
+                            .child(FIREBASE_FAVORITE_COCKTAILS_KEY)
+                            .child(cocktail.drinkId)
+                            .setValue(
+                                cocktail
+                            ) { error, reference ->
+                                error?.let {
+                                    cont.resume(
+                                        DataState.error(
+                                            ResponseMessage(
+                                                addFavoriteError(cocktail.drinkName),
+                                                ResponseType.Toast
+                                            )
+                                        )
+                                    )
+                                } ?: cont.resume(DataState.data("Success"))
+                            }
+                    }
                 }
-            }
+            } else
+                cont.resume(
+                    DataState.error(
+                        ResponseMessage(
+                            UNABLE_TODO_OPERATION_WO_INTERNET,
+                            ResponseType.Dialog
+                        )
+                    )
+                )
         }
     }
 
-    fun deleteFavoriteCocktail(
-        id: String,
-        callback: (DataState<String>) -> Unit) {
-        addJob("deleteFavoriteCocktail", initNewJob())
-        coroutineScope.launch {
-            firebaseUser?.let {
-                firebaseDatabase
-                    .child(FIREBASE_USERS_KEY)
-                    .child(firebaseUser.uid)
-                    .child(FIREBASE_FAVORITE_COCKTAILS_KEY)
-                    .child(id)
-                    .removeValue() { error, reference ->
-                        error?.let {
-                            callback(DataState.error(ResponseMessage(error.message, ResponseType.Toast)))
-                        }?: callback(DataState.data("Deleted from favorites"))
-
+    suspend fun deleteFavoriteCocktail(
+        cocktail: Cocktail
+    ): DataState<String> {
+        return suspendCoroutine { cont ->
+            if (sessionManager.isConnectedToTheInternet()) {
+                addJob("deleteFavoriteCocktail", initNewJob())
+                coroutineScope.launch {
+                    firebaseUser?.let {
+                        firebaseDatabase
+                            .child(FIREBASE_USERS_KEY)
+                            .child(firebaseUser.uid)
+                            .child(FIREBASE_FAVORITE_COCKTAILS_KEY)
+                            .child(cocktail.drinkId)
+                            .removeValue { error, reference ->
+                                error?.let {
+                                    cont.resume(
+                                        DataState.error(
+                                            ResponseMessage(
+                                                deleteFavoriteError(cocktail.drinkName),
+                                                ResponseType.Toast
+                                            )
+                                        )
+                                    )
+                                } ?: cont.resume(DataState.data("Success"))
+                            }
                     }
-            }
+                }
+            } else
+                cont.resume(
+                    DataState.error(
+                        ResponseMessage(
+                            UNABLE_TODO_OPERATION_WO_INTERNET,
+                            ResponseType.Dialog
+                        )
+                    )
+                )
         }
     }
 

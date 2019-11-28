@@ -52,10 +52,10 @@ class CocktailListAdapter(
 
     private fun setEnterAnimation(viewToAnimate: View, position: Int) {
         //if (position > lastPosition) {
-            val animation =
-                AnimationUtils.loadAnimation(viewToAnimate.context, android.R.anim.slide_in_left)
-            viewToAnimate.startAnimation(animation)
-          //  lastPosition = position
+        val animation =
+            AnimationUtils.loadAnimation(viewToAnimate.context, android.R.anim.slide_in_left)
+        viewToAnimate.startAnimation(animation)
+        //  lastPosition = position
         //}
     }
 
@@ -74,11 +74,15 @@ class CocktailListAdapter(
 
     inner class CocktailViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(item: Cocktail) = with(itemView) {
-            itemView.setOnClickListener {
-                cocktailClickListener?.onCocktailClicked(adapterPosition, item)
+            val isFavorite = favoriteids.contains(item.drinkId.toInt())
+
+            itemView.setOnLongClickListener {
+                cocktailClickListener?.onCocktailClicked(adapterPosition, item, isFavorite)
+                true
             }
 
             itemView.cocktail_card_name.text = item.drinkName
+
             if (favoriteids.contains(item.drinkId.toInt()))
                 itemView.coctail_card_star.setImageResource(R.drawable.ic_filled_star)
             else
@@ -91,6 +95,6 @@ class CocktailListAdapter(
     }
 
     interface CocktailClickListener {
-        fun onCocktailClicked(position: Int, item: Cocktail)
+        fun onCocktailClicked(position: Int, item: Cocktail, favorite: Boolean)
     }
 }

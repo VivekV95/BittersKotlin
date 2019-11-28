@@ -56,6 +56,8 @@ class CocktailRepository @Inject constructor(
 
     suspend fun addToFavorites(cocktail: Cocktail) = firebaseDatabaseDao.addFavoriteCocktail(cocktail)
 
+    suspend fun deleteFromFavorites(cocktail: Cocktail) = firebaseDatabaseDao.deleteFavoriteCocktail(cocktail)
+
     fun logOut() {
         sessionManager.logOut()
     }
