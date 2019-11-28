@@ -13,6 +13,7 @@ import com.vivekvishwanath.bitterskotlin.ui.BaseActivity
 import com.vivekvishwanath.bitterskotlin.ui.auth.AuthState
 import com.vivekvishwanath.bitterskotlin.ui.main.view.CocktailListFragment
 import com.vivekvishwanath.bitterskotlin.ui.main.view.CocktailListViewModel
+import com.vivekvishwanath.bitterskotlin.ui.main.view.state.CocktailListStateEvent
 import com.vivekvishwanath.bitterskotlin.ui.navToAuth
 import com.vivekvishwanath.bitterskotlin.viewmodel.ViewModelProviderFactory
 import kotlinx.android.synthetic.main.activity_main.*
@@ -41,7 +42,7 @@ class MainActivity : BaseActivity() {
         testCocktails()
 
         tool_bar.setOnClickListener {
-            sessionManager.logOut()
+            viewModel.setStateEvent(CocktailListStateEvent.GetPopularCocktailsEvent)
         }
     }
 

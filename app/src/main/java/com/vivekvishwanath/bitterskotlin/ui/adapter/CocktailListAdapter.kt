@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import androidx.recyclerview.widget.*
 import com.bumptech.glide.RequestManager
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.vivekvishwanath.bitterskotlin.R
 import com.vivekvishwanath.bitterskotlin.model.Cocktail
 import kotlinx.android.synthetic.main.cocktail_list_item.view.*
@@ -46,6 +47,13 @@ class CocktailListAdapter(
 
     override fun onBindViewHolder(holder: CocktailViewHolder, position: Int) {
         holder.bind(differ.currentList[position])
+        requestManager
+            .load(cocktails[position].drinkImage)
+            .diskCacheStrategy(DiskCacheStrategy.NONE)
+            .skipMemoryCache(true)
+            .placeholder(R.drawable.cocktail)
+            .into(holder.itemView.cocktail_card_image)
+
         setEnterAnimation(holder.itemView, position)
     }
 
@@ -80,10 +88,6 @@ class CocktailListAdapter(
                 itemView.cocktail_card_star.setImageResource(R.drawable.ic_filled_star)
             else
                 itemView.cocktail_card_star.setImageResource(R.drawable.ic_empty_star)
-
-            requestManager
-                .load(item.drinkImage)
-                .into(itemView.cocktail_card_image)
         }
     }
 

@@ -54,6 +54,7 @@ abstract class BaseActivity : AppCompatActivity(), DataStateChangedListener {
 
     override fun onDataStateChanged(dataState: DataState<*>?) {
         dataState?.let {
+            displayProgressBar(false)
             GlobalScope.launch(Main) {
                 displayProgressBar(dataState.loading.isLoading)
 

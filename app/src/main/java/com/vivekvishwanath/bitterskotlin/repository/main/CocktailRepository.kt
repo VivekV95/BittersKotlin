@@ -1,5 +1,6 @@
 package com.vivekvishwanath.bitterskotlin.repository.main
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import com.vivekvishwanath.bitterskotlin.di.scope.MainScope
 import com.vivekvishwanath.bitterskotlin.model.Cocktail
@@ -13,6 +14,7 @@ import com.vivekvishwanath.bitterskotlin.ui.main.view.state.CocktailListViewStat
 import com.vivekvishwanath.bitterskotlin.util.ApiSuccessResponse
 import com.vivekvishwanath.bitterskotlin.ui.main.DataState
 import com.vivekvishwanath.bitterskotlin.util.GenericApiResponse
+import com.vivekvishwanath.bitterskotlin.util.LOG_TAG
 import kotlinx.coroutines.Job
 import javax.inject.Inject
 
@@ -35,11 +37,11 @@ class CocktailRepository @Inject constructor(
             }
 
             override fun handleApiSuccessResponse(response: ApiSuccessResponse<CocktailDbResponse>) {
+                Log.d(LOG_TAG, "${this.javaClass.simpleName}: ${Thread.currentThread()}")
                 onCompleteJob(
                     DataState.data(responseMessage = null, data = CocktailListViewState(
                         response.body.drinks
-                    )
-                    )
+                    ))
                 )
             }
 

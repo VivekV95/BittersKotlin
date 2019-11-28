@@ -48,12 +48,14 @@ abstract class NetworkBoundResource<ResponseObject, ViewStateType>(
             //delay(TESTING_NETWORK_DELAY)
 
             withContext(Main) {
+                Log.d(LOG_TAG, "${this.javaClass.simpleName}: ${Thread.currentThread()}")
                 val apiResponse = createCall()
                 apiResponse?.let {
                     result.addSource(apiResponse) { response ->
                         result.removeSource(apiResponse)
 
                         coroutineScope.launch {
+                            Log.d(LOG_TAG, "${this.javaClass.simpleName}: ${Thread.currentThread()}")
                             handleNetworkCall(response)
                         }
                     }
