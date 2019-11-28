@@ -53,14 +53,14 @@
                     android:gravity="center_vertical"
                     android:layout_marginStart="8dp"
                     android:textColor="@android:color/white"
-                    android:textSize="14dp"
+                    android:textSize="16sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/cocktail_card_name_guideline"/>
 
                 <ImageView
-                    android:id="@+id/coctail_card_star"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:id="@+id/cocktail_card_star"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     app:layout_constraintStart_toStartOf="@id/cocktail_card_name_guideline"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"

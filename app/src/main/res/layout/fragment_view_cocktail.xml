@@ -76,7 +76,7 @@
                             app:layout_constraintEnd_toStartOf="@id/view_cocktail_card_name_guideline"/>
 
                         <ImageView
-                            android:id="@+id/coctail_card_star"
+                            android:id="@+id/cocktail_card_star"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             app:layout_constraintStart_toStartOf="@id/view_cocktail_card_name_guideline"

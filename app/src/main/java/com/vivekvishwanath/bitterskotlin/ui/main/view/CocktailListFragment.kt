@@ -10,43 +10,25 @@ import androidx.recyclerview.widget.GridLayoutManager
 
 import com.vivekvishwanath.bitterskotlin.R
 import com.vivekvishwanath.bitterskotlin.model.Cocktail
-import com.vivekvishwanath.bitterskotlin.network.FirebaseDatabaseDao
 import com.vivekvishwanath.bitterskotlin.ui.adapter.CocktailListAdapter
 import com.vivekvishwanath.bitterskotlin.ui.main.BaseCocktailFragment
 import com.vivekvishwanath.bitterskotlin.ui.main.DataState
 import com.vivekvishwanath.bitterskotlin.ui.main.MainActivity
 import com.vivekvishwanath.bitterskotlin.ui.main.view.state.CocktailListStateEvent
 import com.vivekvishwanath.bitterskotlin.util.SpacingItemDecoration
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_cocktail_list.*
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-class CocktailListFragment : BaseCocktailFragment(), CocktailListAdapter.CocktailClickListener {
+class CocktailListFragment : BaseCocktailFragment(), CocktailListAdapter.CocktailInteractionListener {
 
 
     private lateinit var cocktailListAdapter: CocktailListAdapter
 
-    override fun onCocktailClicked(position: Int, item: Cocktail, favorite: Boolean) {
+    override fun onCocktailSelected(position: Int, item: Cocktail) {
         activity?.let {
-            GlobalScope.launch(Main) {
-                stateChangeListener.onDataStateChanged(DataState.loading(true, null))
-                if (!favorite) {
-                    val dataState = viewModel.addFavoriteCocktail(cocktail = item)
-                    stateChangeListener.onDataStateChanged(DataState.loading(false, null))
-                    dataState.data?.data?.getContentIfNotHandled()?.let {
-                        cocktailListAdapter.notifyItemChanged(position)
-                    }
-                } else {
-                    val dataState = viewModel.deleteFavoriteCocktail(cocktail = item)
-                    stateChangeListener.onDataStateChanged(DataState.loading(false, null))
-                    dataState.data?.data?.getContentIfNotHandled()?.let {
-                        cocktailListAdapter.notifyItemChanged(position)
-                    }
-                }
-            }
+
         }
     }
 
