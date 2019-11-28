@@ -18,7 +18,7 @@ class CocktailListAdapter(
 ) :
     RecyclerView.Adapter<CocktailListAdapter.CocktailViewHolder>() {
 
-    private var favoriteIds = listOf<Int>()
+    private var favoriteids = setOf<Int>()
     private var cocktails = listOf<Cocktail>()
 
     private var lastPosition = -1
@@ -49,14 +49,6 @@ class CocktailListAdapter(
         holder.bind(differ.currentList[position])
         setEnterAnimation(holder.itemView, position)
     }
-//    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-//        when (holder) {
-//            is CocktailViewHolder -> {
-//                holder.bind(differ.currentList[position])
-//                //setEnterAnimation(holder.itemView.cocktail_card, position)
-//            }
-//        }
-//    }
 
     private fun setEnterAnimation(viewToAnimate: View, position: Int) {
         //if (position > lastPosition) {
@@ -69,18 +61,11 @@ class CocktailListAdapter(
 
     fun submitCocktails(list: List<Cocktail>) {
         this.cocktails = list
-        cocktails.forEach { cocktail ->
-            cocktail.isFavorite = favoriteIds.contains(cocktail.drinkId.toInt())
-        }
         submitList()
     }
 
-    fun submitFavoriteIds(favoriteIds: List<Int>) {
-        this.favoriteIds = favoriteIds
-        cocktails.forEach { cocktail ->
-            cocktail.isFavorite = favoriteIds.contains(cocktail.drinkId.toInt())
-        }
-        submitList()
+    fun submitFavoriteIds(favoriteids: Set<Int>) {
+        this.favoriteids = favoriteids
     }
 
     private fun submitList() {
@@ -91,11 +76,10 @@ class CocktailListAdapter(
         fun bind(item: Cocktail) = with(itemView) {
             itemView.setOnClickListener {
                 cocktailClickListener?.onCocktailClicked(adapterPosition, item)
-                notifyItemChanged(adapterPosition)
             }
 
             itemView.cocktail_card_name.text = item.drinkName
-            if (item.isFavorite)
+            if (favoriteids.contains(item.drinkId.toInt()))
                 itemView.coctail_card_star.setImageResource(R.drawable.ic_filled_star)
             else
                 itemView.coctail_card_star.setImageResource(R.drawable.ic_empty_star)

@@ -30,9 +30,6 @@ class MainActivity : BaseActivity() {
     lateinit var cocktailService: CocktailDbServiceWrapper
 
     @Inject
-    lateinit var firebaseDatabaseDao: FirebaseDatabaseDao
-
-    @Inject
     lateinit var viewModelProviderFactory: ViewModelProviderFactory
 
     lateinit var viewModel: CocktailListViewModel
@@ -50,7 +47,6 @@ class MainActivity : BaseActivity() {
 
         viewModel =
             ViewModelProvider(this, viewModelProviderFactory)[CocktailListViewModel::class.java]
-        viewModel.refreshFavorites()
 
         subscribeObservers()
         testCocktails()
@@ -58,6 +54,16 @@ class MainActivity : BaseActivity() {
         tool_bar.setOnClickListener {
             sessionManager.logOut()
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        viewModel.refreshFavorites()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        viewModel.cancelActiveJobs()
     }
 
     private fun subscribeObservers() {

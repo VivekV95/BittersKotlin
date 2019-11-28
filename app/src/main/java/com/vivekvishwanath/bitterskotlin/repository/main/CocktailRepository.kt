@@ -2,6 +2,7 @@ package com.vivekvishwanath.bitterskotlin.repository.main
 
 import androidx.lifecycle.LiveData
 import com.vivekvishwanath.bitterskotlin.di.scope.MainScope
+import com.vivekvishwanath.bitterskotlin.model.Cocktail
 import com.vivekvishwanath.bitterskotlin.model.CocktailDbResponse
 import com.vivekvishwanath.bitterskotlin.network.CocktailDbServiceWrapper
 import com.vivekvishwanath.bitterskotlin.network.FirebaseDatabaseDao
@@ -53,8 +54,14 @@ class CocktailRepository @Inject constructor(
         firebaseDatabaseDao.refreshFavorites()
     }
 
+    suspend fun addToFavorites(cocktail: Cocktail) = firebaseDatabaseDao.addFavoriteCocktail(cocktail)
+
     fun logOut() {
         sessionManager.logOut()
     }
 
+    fun cancelJobs() {
+        cancelActiveJobs()
+        firebaseDatabaseDao.cancelTasks()
+    }
 }

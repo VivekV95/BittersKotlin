@@ -8,4 +8,4 @@ const val NETWORK_TIMEOUT = 10000L
 const val AUTH_TIMEOUT = 4000L
 
 const val FIREBASE_USERS_KEY = "users"
-const val FIREBASE_FAVORITE_IDS_KEY = "favoriteCocktails"
+const val FIREBASE_FAVORITE_COCKTAILS_KEY = "favoriteCocktails"

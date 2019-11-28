@@ -5,18 +5,22 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 
 import com.vivekvishwanath.bitterskotlin.R
 import com.vivekvishwanath.bitterskotlin.model.Cocktail
+import com.vivekvishwanath.bitterskotlin.network.FirebaseDatabaseDao
 import com.vivekvishwanath.bitterskotlin.ui.adapter.CocktailListAdapter
 import com.vivekvishwanath.bitterskotlin.ui.main.BaseCocktailFragment
 import com.vivekvishwanath.bitterskotlin.ui.main.MainActivity
 import com.vivekvishwanath.bitterskotlin.ui.main.view.state.CocktailListStateEvent
 import com.vivekvishwanath.bitterskotlin.util.SpacingItemDecoration
 import kotlinx.android.synthetic.main.fragment_cocktail_list.*
+import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 class CocktailListFragment : BaseCocktailFragment(), CocktailListAdapter.CocktailClickListener {
 
@@ -25,7 +29,12 @@ class CocktailListFragment : BaseCocktailFragment(), CocktailListAdapter.Cocktai
 
     override fun onCocktailClicked(position: Int, item: Cocktail) {
         activity?.let {
-            val bundle = bundleOf("cocktail" to item)
+            GlobalScope.launch(Main) {
+                val dataState = viewModel.addFavoriteCocktail(cocktail = item)
+                dataState.data?.data?.getContentIfNotHandled()?.let {
+                    cocktailListAdapter.notifyItemChanged(position)
+                }
+            }
         }
     }
 
@@ -75,7 +84,7 @@ class CocktailListFragment : BaseCocktailFragment(), CocktailListAdapter.Cocktai
         })
 
         viewModel.getFavoriteIds().observe(viewLifecycleOwner, Observer { dataState ->
-            dataState.data?.data?.let { event ->
+            dataState?.data?.data?.let { event ->
                 event.getContentIfNotHandled()?.let { ids ->
                     viewModel.setFavoriteIdsData(ids)
                 }
@@ -88,7 +97,7 @@ class CocktailListFragment : BaseCocktailFragment(), CocktailListAdapter.Cocktai
                 cocktailListAdapter.submitCocktails(cocktails)
             }
 
-            viewState.favoriteCocktailIds?.let { ids ->
+            viewState.favoriteCocktailIds?.let { ids  ->
                 cocktailListAdapter.submitFavoriteIds(ids)
             }
         })

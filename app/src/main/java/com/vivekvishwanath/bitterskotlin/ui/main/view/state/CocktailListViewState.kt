@@ -4,5 +4,5 @@ import com.vivekvishwanath.bitterskotlin.model.Cocktail
 
 data class CocktailListViewState(
     val popularCocktails: List<Cocktail>? = null,
-    val favoriteCocktailIds: List<Int>? = null
+    val favoriteCocktailIds: Set<Int>? = null
 )

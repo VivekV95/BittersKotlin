@@ -19,7 +19,6 @@ abstract class BaseActivity : AppCompatActivity(), DataStateChangedListener {
     @Inject
     lateinit var sessionManager: SessionManager
 
-
     override fun onDataStateChanged(dataState: DataState<*>?) {
         dataState?.let {
             GlobalScope.launch(Main) {

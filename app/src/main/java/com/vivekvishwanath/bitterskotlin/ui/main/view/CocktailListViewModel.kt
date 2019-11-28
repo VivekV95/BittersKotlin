@@ -30,12 +30,14 @@ class CocktailListViewModel @Inject constructor
         _viewState.value = update
     }
 
-    fun setFavoriteIdsData(ids: List<Int>) {
+    fun setFavoriteIdsData(ids: Set<Int>) {
         val update = getCurrentViewStateOrNew().copy(favoriteCocktailIds = ids)
         _viewState.value = update
     }
 
     fun getFavoriteIds() = repository.getFavoriteIds()
+
+    suspend fun addFavoriteCocktail(cocktail: Cocktail) = repository.addToFavorites(cocktail)
 
     fun refreshFavorites() {
         repository.refreshFavorites()
@@ -46,6 +48,6 @@ class CocktailListViewModel @Inject constructor
     }
 
     fun cancelActiveJobs() {
-        repository.cancelActiveJobs()
+        repository.cancelJobs()
     }
 }
