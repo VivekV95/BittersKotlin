@@ -79,6 +79,7 @@ class FirebaseDatabaseDao @Inject constructor(
             if (sessionManager.isConnectedToTheInternet()) {
                 addJob("addFavoriteCocktail", initNewJob())
                 coroutineScope.launch {
+                    delay(TESTING_NETWORK_DELAY)
                     firebaseUser?.let {
                         firebaseDatabase
                             .child(FIREBASE_USERS_KEY)
@@ -120,6 +121,7 @@ class FirebaseDatabaseDao @Inject constructor(
             if (sessionManager.isConnectedToTheInternet()) {
                 addJob("deleteFavoriteCocktail", initNewJob())
                 coroutineScope.launch {
+                    delay(TESTING_NETWORK_DELAY)
                     firebaseUser?.let {
                         firebaseDatabase
                             .child(FIREBASE_USERS_KEY)

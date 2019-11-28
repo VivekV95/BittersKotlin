@@ -45,7 +45,7 @@ abstract class NetworkBoundResource<ResponseObject, ViewStateType>(
 
     private fun doNetworkRequest() {
         coroutineScope.launch {
-            //delay(TESTING_NETWORK_DELAY)
+            delay(TESTING_NETWORK_DELAY)
 
             withContext(Main) {
                 val apiResponse = createCall()

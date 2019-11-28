@@ -28,13 +28,14 @@
 
             </androidx.appcompat.widget.Toolbar>
 
-            <ProgressBar
+            <me.zhanghai.android.materialprogressbar.MaterialProgressBar
                 android:id="@+id/main_progress_bar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                android:layout_height="4dp"
+                app:mpb_progressStyle="horizontal"
                 android:indeterminate="true"
-                android:layout_gravity="center_vertical"
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                app:mpb_useIntrinsicPadding="false"
                 app:layout_constraintBottom_toBottomOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

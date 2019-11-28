@@ -20,12 +20,14 @@
 
     <!-- inactive tab icon style -->
     <style name="TextAppearance.BottomNavigationView.Inactive">
-        <item name="android:textSize">12sp</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <!-- active tab icon style -->
     <style name="TextAppearance.BottomNavigationView.Active">
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
 </resources>

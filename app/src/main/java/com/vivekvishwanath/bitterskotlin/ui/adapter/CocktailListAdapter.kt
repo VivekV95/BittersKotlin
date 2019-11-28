@@ -51,12 +51,12 @@ class CocktailListAdapter(
     }
 
     private fun setEnterAnimation(viewToAnimate: View, position: Int) {
-        //if (position > lastPosition) {
-        val animation =
-            AnimationUtils.loadAnimation(viewToAnimate.context, android.R.anim.slide_in_left)
-        viewToAnimate.startAnimation(animation)
-        //  lastPosition = position
-        //}
+       // if (position > lastPosition) {
+            val animation =
+                AnimationUtils.loadAnimation(viewToAnimate.context, android.R.anim.slide_in_left)
+            viewToAnimate.startAnimation(animation)
+        //    lastPosition = position
+       // }
     }
 
     fun submitCocktails(list: List<Cocktail>) {
@@ -76,9 +76,8 @@ class CocktailListAdapter(
         fun bind(item: Cocktail) = with(itemView) {
             val isFavorite = favoriteids.contains(item.drinkId.toInt())
 
-            itemView.setOnLongClickListener {
+            itemView.setOnClickListener {
                 cocktailClickListener?.onCocktailClicked(adapterPosition, item, isFavorite)
-                true
             }
 
             itemView.cocktail_card_name.text = item.drinkName
