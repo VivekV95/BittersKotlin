@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_view"
+    app:startDestination="@id/cocktailListFragment">
+
+    <fragment
+        android:id="@+id/cocktailListFragment"
+        android:name="com.vivekvishwanath.bitterskotlin.ui.main.view.CocktailListFragment"
+        android:label="fragment_cocktail_list"
+        tools:layout="@layout/fragment_cocktail_list" >
+        <action
+            android:id="@+id/action_cocktailListFragment_to_viewCocktailFragment"
+            app:destination="@id/viewCocktailFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"/>
+    </fragment>
+    <fragment
+        android:id="@+id/viewCocktailFragment"
+        android:name="com.vivekvishwanath.bitterskotlin.ui.main.ViewCocktailFragment"
+        android:label="fragment_view_cocktail"
+        tools:layout="@layout/fragment_view_cocktail" >
+        <action
+            android:id="@+id/action_viewCocktailFragment_to_cocktailListFragment"
+            app:destination="@id/cocktailListFragment" />
+    </fragment>
+</navigation>

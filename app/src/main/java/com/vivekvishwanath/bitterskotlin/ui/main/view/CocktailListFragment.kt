@@ -1,6 +1,7 @@
 package com.vivekvishwanath.bitterskotlin.ui.main.view
 
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -58,8 +59,14 @@ class CocktailListFragment : BaseCocktailFragment(), CocktailListAdapter.Cocktai
 
     private fun initRecyclerView() {
         popular_recycler_view.apply {
-            layoutManager = GridLayoutManager(activity, 2)
-            addItemDecoration(SpacingItemDecoration(8))
+            if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                layoutManager = GridLayoutManager(activity, 4)
+                addItemDecoration(SpacingItemDecoration(8, false))
+            }
+             else {
+                layoutManager = GridLayoutManager(activity, 2)
+                addItemDecoration(SpacingItemDecoration(8, true))
+            }
             cocktailListAdapter = CocktailListAdapter(requestManager, this@CocktailListFragment)
             adapter = cocktailListAdapter
         }

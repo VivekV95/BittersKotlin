@@ -1,12 +1,17 @@
 package com.vivekvishwanath.bitterskotlin.ui.adapter
 
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import androidx.recyclerview.widget.*
 import com.bumptech.glide.RequestManager
+import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.vivekvishwanath.bitterskotlin.R
 import com.vivekvishwanath.bitterskotlin.model.Cocktail
 import kotlinx.android.synthetic.main.cocktail_list_item.view.*
@@ -47,12 +52,34 @@ class CocktailListAdapter(
 
     override fun onBindViewHolder(holder: CocktailViewHolder, position: Int) {
         holder.bind(differ.currentList[position])
+        holder.itemView.shimmar_layout.showShimmer(true)
         requestManager
             .load(cocktails[position].drinkImage)
-            .diskCacheStrategy(DiskCacheStrategy.NONE)
-            .skipMemoryCache(true)
-            .placeholder(R.drawable.cocktail)
+            .timeout(10000)
+            .listener(object: RequestListener<Drawable> {
+                override fun onLoadFailed(
+                    e: GlideException?,
+                    model: Any?,
+                    target: Target<Drawable>?,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    holder.itemView.shimmar_layout.hideShimmer()
+                    return true
+                }
+
+                override fun onResourceReady(
+                    resource: Drawable?,
+                    model: Any?,
+                    target: Target<Drawable>?,
+                    dataSource: DataSource?,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    holder.itemView.shimmar_layout.stopShimmer()
+                    return false
+                }
+            })
             .into(holder.itemView.cocktail_card_image)
+            .clearOnDetach()
 
         setEnterAnimation(holder.itemView, position)
     }
