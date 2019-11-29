@@ -3,13 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.main.filter.FilterFragment">
+    tools:context=".ui.main.create.CreateFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <Button
-        android:id="@+id/view_cocktail_test_button"
+        android:id="@+id/view_ingredients_fragment_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="View Cocktail" />
+        android:text="Select Ingredients"/>
 
 </FrameLayout>

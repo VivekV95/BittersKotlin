@@ -109,12 +109,20 @@ class CocktailListAdapter(
     inner class CocktailViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(item: Cocktail) = with(itemView) {
 
+            val isFavorite = favoriteids.contains(item.drinkId.toInt())
+
             itemView.cocktail_card_name.text = item.drinkName
 
-            if (favoriteids.contains(item.drinkId.toInt()))
+            if (isFavorite)
                 itemView.cocktail_card_star.setImageResource(R.drawable.ic_filled_star)
             else
                 itemView.cocktail_card_star.setImageResource(R.drawable.ic_empty_star)
+
+            itemView.setOnClickListener {
+                val cocktail = item.copy()
+                cocktail.isFavorite = isFavorite
+                cocktailInteractionListener?.onCocktailSelected(adapterPosition, cocktail)
+            }
         }
     }
 

@@ -7,6 +7,11 @@ import android.content.Intent
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.annotation.IdRes
+import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.NavHostFragment
 import com.afollestad.materialdialogs.MaterialDialog
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
@@ -104,10 +109,12 @@ fun Activity.displaySuccessDialog(successMessage: String) {
 
 fun Activity.navToAuth() {
     Intent(this, AuthActivity::class.java)
-        .apply { startActivity(this) }
+        .apply { startActivity(this)
+        finish()}
 }
 
 fun Activity.navToMain() {
     Intent(this, MainActivity::class.java)
-        .apply { startActivity(this) }
+        .apply { startActivity(this)
+        finish()}
 }
