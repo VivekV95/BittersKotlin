@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 
 import com.vivekvishwanath.bitterskotlin.R
@@ -34,7 +35,7 @@ class CocktailListFragment : BaseCocktailFragment(), CocktailListAdapter.Cocktai
     override fun onCocktailSelected(position: Int, item: Cocktail) {
         val bundle = bundleOf("cocktail" to item)
 
-        NavHostFragment.findNavController(this).navigate(
+        findNavController().navigate(
             R.id.action_cocktailListFragment_to_viewCocktailFragment,
             bundle)
     }
