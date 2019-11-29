@@ -74,6 +74,7 @@ dependencies {
 
     implementation "androidx.navigation:navigation-fragment:2.1.0"
     implementation "androidx.navigation:navigation-ui:2.1.0"
+    implementation "androidx.navigation:navigation-ui-ktx:2.1.0"
     implementation "androidx.navigation:navigation-runtime:2.1.0"
 
     implementation 'com.google.firebase:firebase-core:17.2.1'

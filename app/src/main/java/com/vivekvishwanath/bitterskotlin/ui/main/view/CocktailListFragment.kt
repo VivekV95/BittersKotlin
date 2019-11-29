@@ -6,7 +6,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
+import androidx.navigation.Navigation.findNavController
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.GridLayoutManager
 
 import com.vivekvishwanath.bitterskotlin.R
@@ -28,9 +32,11 @@ class CocktailListFragment : BaseCocktailFragment(), CocktailListAdapter.Cocktai
     private lateinit var cocktailListAdapter: CocktailListAdapter
 
     override fun onCocktailSelected(position: Int, item: Cocktail) {
-        activity?.let {
+        val bundle = bundleOf("cocktail" to item)
 
-        }
+        NavHostFragment.findNavController(this).navigate(
+            R.id.action_cocktailListFragment_to_viewCocktailFragment,
+            bundle)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
