@@ -11,6 +11,11 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 
+/**
+ * Concept borrowed from the GithubBrowserSample app from Google's
+ * architecture-components-samples at
+ * https://github.com/android/architecture-components-samples/tree/master/GithubBrowserSample
+ */
 abstract class NetworkBoundResource<ResponseObject, ViewStateType>(
     isNetworkAvailable: Boolean,
     isNetworkRequest: Boolean,

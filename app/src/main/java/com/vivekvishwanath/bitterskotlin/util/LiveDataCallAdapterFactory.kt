@@ -6,6 +6,11 @@ import retrofit2.Retrofit
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
 
+/**
+ * Taken from the GithubBrowserSample app from Google's
+ * architecture-components-samples at
+ * https://github.com/android/architecture-components-samples/tree/master/GithubBrowserSample
+ */
 class LiveDataCallAdapterFactory : CallAdapter.Factory() {
     override fun get(
         returnType: Type,

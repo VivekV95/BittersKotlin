@@ -24,7 +24,7 @@ import com.vivekvishwanath.bitterskotlin.R
  * https://github.com/android/architecture-components-samples/tree/master/NavigationAdvancedSample
  *
  * Necessary as the standard navigation component library doesn't have an out-of-the-box
- * way to handle multiple backstacks
+ * solution to handle multiple back-stacks
  */
 fun BottomNavigationView.setupWithNavController(
     navGraphIds: List<Int>,
