@@ -8,21 +8,21 @@
     <fragment
         android:id="@+id/cocktailListFragment"
         android:name="com.vivekvishwanath.bitterskotlin.ui.main.view.CocktailListFragment"
-        android:label="fragment_cocktail_list"
+        android:label="Cocktail Home"
         tools:layout="@layout/fragment_cocktail_list" >
         <action
             android:id="@+id/action_cocktailListFragment_to_viewCocktailFragment"
             app:destination="@id/viewCocktailFragment"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:exitAnim="@anim/slide_out_right"
-            app:enterAnim="@anim/slide_in_right"
-            app:popExitAnim="@anim/slide_out_left"/>
+            app:popEnterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:enterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"/>
     </fragment>
 
     <fragment
         android:id="@+id/viewCocktailFragment"
         android:name="com.vivekvishwanath.bitterskotlin.ui.main.ViewCocktailFragment"
-        android:label="fragment_view_cocktail"
+        android:label="View Cocktail"
         tools:layout="@layout/fragment_view_cocktail" >
         <action
             android:id="@+id/action_viewCocktailFragment_to_cocktailListFragment"

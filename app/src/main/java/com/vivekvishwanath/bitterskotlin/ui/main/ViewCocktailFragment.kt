@@ -2,10 +2,12 @@ package com.vivekvishwanath.bitterskotlin.ui.main
 
 
 import android.os.Bundle
+import android.transition.TransitionInflater
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.ViewCompat
 import com.bumptech.glide.RequestManager
 
 import com.vivekvishwanath.bitterskotlin.R
@@ -24,6 +26,10 @@ class ViewCocktailFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         (activity as MainActivity).mainComponent.inject(this)
         super.onCreate(savedInstanceState)
+        sharedElementEnterTransition =
+            TransitionInflater
+                .from(context)
+                .inflateTransition(android.R.transition.move)
     }
 
     override fun onCreateView(
@@ -40,7 +46,10 @@ class ViewCocktailFragment : Fragment() {
             requestManager
                 .load(it?.drinkImage)
                 .into(view_cocktail_card_image)
-            view_cocktail_card_name.text = it?.drinkName
+        }
+
+        arguments?.getInt("position").let {  position ->
+            ViewCompat.setTransitionName(view_cocktail_card_image,"cocktail_image_$position")
         }
     }
 

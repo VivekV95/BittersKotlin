@@ -11,9 +11,7 @@ import androidx.navigation.fragment.findNavController
 import com.vivekvishwanath.bitterskotlin.R
 import kotlinx.android.synthetic.main.fragment_create.*
 
-/**
- * A simple [Fragment] subclass.
- */
+
 class CreateFragment : Fragment() {
 
     override fun onCreateView(
