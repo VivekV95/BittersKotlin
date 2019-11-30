@@ -34,7 +34,6 @@ import kotlinx.coroutines.launch
 
 class CocktailListFragment : BaseCocktailFragment(), CocktailListAdapter.CocktailInteractionListener {
 
-
     private lateinit var cocktailListAdapter: CocktailListAdapter
 
     override fun onCocktailSelected(position: Int, item: Cocktail, extras: FragmentNavigator.Extras) {
@@ -44,6 +43,15 @@ class CocktailListFragment : BaseCocktailFragment(), CocktailListAdapter.Cocktai
         findNavController().navigate(
             R.id.action_cocktailListFragment_to_viewCocktailFragment,
             bundle, null, extras)
+    }
+
+    override fun onCocktailLongPressed(position: Int, item: Cocktail) {
+        GlobalScope.launch(Main) {
+            if(item.isFavorite)
+                viewModel.addFavoriteCocktail(item)
+            else
+                viewModel.deleteFavoriteCocktail(item)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

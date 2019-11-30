@@ -1,13 +1,13 @@
 package com.vivekvishwanath.bitterskotlin.ui.adapter
 
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.view.animation.AnimationUtils
 import androidx.core.view.ViewCompat
 import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.recyclerview.widget.*
+import com.daimajia.androidanimations.library.Techniques
+import com.daimajia.androidanimations.library.YoYo
 import com.squareup.picasso.Picasso
 import com.vivekvishwanath.bitterskotlin.R
 import com.vivekvishwanath.bitterskotlin.model.Cocktail
@@ -103,10 +103,28 @@ class CocktailListAdapter(
                 )
                 cocktailInteractionListener?.onCocktailSelected(adapterPosition, cocktail, extras)
             }
+
+            itemView.setOnLongClickListener {
+                cocktailInteractionListener?.onCocktailLongPressed(adapterPosition, item)
+                if (isFavorite) {
+                    itemView.cocktail_card_star.setImageResource(R.drawable.ic_empty_star_cocktail_card)
+                    item.isFavorite = false
+                } else {
+                    itemView.cocktail_card_star.setImageResource(R.drawable.ic_filled_star_cocktail_card)
+                    item.isFavorite = true
+                }
+                YoYo
+                    .with(Techniques.RubberBand)
+                    .duration(500)
+                    .playOn(itemView)
+                true
+            }
         }
     }
 
     interface CocktailInteractionListener {
         fun onCocktailSelected(position: Int, item: Cocktail, extras: FragmentNavigator.Extras)
+
+        fun onCocktailLongPressed(position: Int, item: Cocktail)
     }
 }

@@ -11,6 +11,9 @@ import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import androidx.core.view.ViewCompat
 import androidx.lifecycle.Observer
+import com.daimajia.androidanimations.library.Techniques
+import com.daimajia.androidanimations.library.YoYo
+import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
 
 import com.vivekvishwanath.bitterskotlin.R
@@ -29,7 +32,7 @@ class ViewCocktailFragment : BaseCocktailFragment(), View.OnClickListener {
 
     override fun onClick(v: View?) {
         when (v) {
-            view_cocktail_favorite_star -> {
+            view_cocktail_star_layout -> {
                 if (currentCocktail.isFavorite) {
                     setStarSelected(false)
                     GlobalScope.launch(Main) {
@@ -41,6 +44,10 @@ class ViewCocktailFragment : BaseCocktailFragment(), View.OnClickListener {
                         viewModel.addFavoriteCocktail(currentCocktail)
                     }
                 }
+                YoYo
+                    .with(Techniques.RubberBand)
+                    .duration(500)
+                    .playOn(view_cocktail_favorite_star)
             }
         }
     }
@@ -94,19 +101,21 @@ class ViewCocktailFragment : BaseCocktailFragment(), View.OnClickListener {
     }
 
     private fun showCocktail(cocktail: Cocktail) {
+
+        view_cocktail_name.text = cocktail.drinkName
         picasso
             .load(cocktail.drinkImage)
             .into(view_cocktail_card_image)
 
         setStarSelected(cocktail.isFavorite)
-        view_cocktail_favorite_star.setOnClickListener(this)
+        view_cocktail_star_layout.setOnClickListener(this)
 
         arguments?.getInt("position").let { position ->
             ViewCompat.setTransitionName(view_cocktail_card_image, "cocktail_image_$position")
         }
     }
 
-    fun setStarSelected(isFavorite: Boolean) {
+    private fun setStarSelected(isFavorite: Boolean) {
         view_cocktail_favorite_star.setImageResource(
             if (isFavorite) R.drawable.ic_filled_star_view_cocktail
             else R.drawable.ic_empty_star_view_cocktail
