@@ -87,9 +87,9 @@ class CocktailListAdapter(
             itemView.cocktail_card_name.text = item.drinkName
 
             if (isFavorite)
-                itemView.cocktail_card_star.setImageResource(R.drawable.ic_filled_star)
+                itemView.cocktail_card_star.setImageResource(R.drawable.ic_filled_star_cocktail_card)
             else
-                itemView.cocktail_card_star.setImageResource(R.drawable.ic_empty_star)
+                itemView.cocktail_card_star.setImageResource(R.drawable.ic_empty_star_cocktail_card)
 
             ViewCompat.setTransitionName(
                 itemView.cocktail_card_image, "cocktail_image_$adapterPosition"

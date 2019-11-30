@@ -26,16 +26,22 @@ class CocktailListViewModel @Inject constructor
         }
 
     fun setPopularCocktailsData(cocktails: List<Cocktail>) {
-        val update = getCurrentViewStateOrNew().copy(popularCocktails = cocktails)
+        val update = getCurrentViewStateOrNew().copy()
+        update.cocktailFields.popularCocktails = cocktails
         _viewState.value = update
     }
 
     fun setFavoriteIdsData(ids: Set<Int>) {
-        val update = getCurrentViewStateOrNew().copy(favoriteCocktailIds = ids)
+        val update = getCurrentViewStateOrNew().copy()
+        update.favoriteIds = ids
         _viewState.value = update
     }
 
     fun getFavoriteIds() = repository.getFavoriteIds()
+
+    fun setCurrentCocktail(cocktail: Cocktail) {
+        _viewState.value?.viewCocktailField?.currentCocktail = cocktail
+    }
 
     suspend fun addFavoriteCocktail(cocktail: Cocktail) = repository.addToFavorites(cocktail)
 

@@ -63,7 +63,7 @@
                 android:text="@string/cocktail_name"
                 android:gravity="center_vertical"
                 android:layout_marginStart="8dp"
-                android:textColor="@android:color/white"
+                android:textColor="@color/cocktailCardTextColor"
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/cocktail_card_name_guideline"/>
@@ -76,7 +76,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:src="@drawable/star"/>
+                android:src="@drawable/star_cocktail_card"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -91,7 +91,7 @@ class CocktailListFragment : BaseCocktailFragment(), CocktailListAdapter.Cocktai
             stateChangeListener.onDataStateChanged(dataState)
             dataState.data?.data?.let { event ->
                 event.getContentIfNotHandled()?.let { mainViewState ->
-                    mainViewState.popularCocktails?.let { cocktails ->
+                    mainViewState.cocktailFields.popularCocktails.let { cocktails ->
                         viewModel.setPopularCocktailsData(cocktails)
                     }
                 }
@@ -107,12 +107,12 @@ class CocktailListFragment : BaseCocktailFragment(), CocktailListAdapter.Cocktai
 
         })
 
-        viewModel.viewState.observe(this, Observer { viewState ->
-            viewState.popularCocktails?.let { cocktails ->
+        viewModel.viewState.observe(viewLifecycleOwner, Observer { viewState ->
+            viewState.cocktailFields.popularCocktails.let { cocktails ->
                 cocktailListAdapter.submitCocktails(cocktails)
             }
 
-            viewState.favoriteCocktailIds?.let { ids  ->
+            viewState.favoriteIds.let { ids ->
                 cocktailListAdapter.submitFavoriteIds(ids)
             }
         })
