@@ -5,6 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
+import androidx.core.view.ViewCompat
+import androidx.navigation.fragment.FragmentNavigator
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.recyclerview.widget.*
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.load.DataSource
@@ -56,7 +59,7 @@ class CocktailListAdapter(
         requestManager
             .load(cocktails[position].drinkImage)
             .timeout(10000)
-            .listener(object: RequestListener<Drawable> {
+            .listener(object : RequestListener<Drawable> {
                 override fun onLoadFailed(
                     e: GlideException?,
                     model: Any?,
@@ -85,12 +88,12 @@ class CocktailListAdapter(
     }
 
     private fun setEnterAnimation(viewToAnimate: View, position: Int) {
-       // if (position > lastPosition) {
-            val animation =
-                AnimationUtils.loadAnimation(viewToAnimate.context, android.R.anim.slide_in_left)
-            viewToAnimate.startAnimation(animation)
+        // if (position > lastPosition) {
+        val animation =
+            AnimationUtils.loadAnimation(viewToAnimate.context, android.R.anim.slide_in_left)
+        viewToAnimate.startAnimation(animation)
         //    lastPosition = position
-       // }
+        // }
     }
 
     fun submitCocktails(list: List<Cocktail>) {
@@ -118,15 +121,22 @@ class CocktailListAdapter(
             else
                 itemView.cocktail_card_star.setImageResource(R.drawable.ic_empty_star)
 
+            ViewCompat.setTransitionName(
+                itemView.cocktail_card_image, "cocktail_image_$adapterPosition"
+            )
+
             itemView.setOnClickListener {
                 val cocktail = item.copy()
                 cocktail.isFavorite = isFavorite
-                cocktailInteractionListener?.onCocktailSelected(adapterPosition, cocktail)
+                val extras = FragmentNavigatorExtras(
+                    itemView.cocktail_card_image to ViewCompat.getTransitionName(itemView.cocktail_card_image)!!
+                )
+                cocktailInteractionListener?.onCocktailSelected(adapterPosition, cocktail, extras)
             }
         }
     }
 
     interface CocktailInteractionListener {
-        fun onCocktailSelected(position: Int, item: Cocktail)
+        fun onCocktailSelected(position: Int, item: Cocktail, extras: FragmentNavigator.Extras)
     }
 }

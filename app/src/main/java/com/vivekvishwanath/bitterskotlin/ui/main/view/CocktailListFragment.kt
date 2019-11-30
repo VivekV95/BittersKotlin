@@ -10,6 +10,8 @@ import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.FragmentNavigator
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
@@ -21,6 +23,9 @@ import com.vivekvishwanath.bitterskotlin.ui.main.BaseCocktailFragment
 import com.vivekvishwanath.bitterskotlin.ui.main.DataState
 import com.vivekvishwanath.bitterskotlin.ui.main.MainActivity
 import com.vivekvishwanath.bitterskotlin.ui.main.view.state.CocktailListStateEvent
+import com.vivekvishwanath.bitterskotlin.util.COCKTAIL_RV_SPACING
+import com.vivekvishwanath.bitterskotlin.util.LANDSCAPE_RV_COLUMNS
+import com.vivekvishwanath.bitterskotlin.util.PORTRAIT_RV_COLUMNS
 import com.vivekvishwanath.bitterskotlin.util.SpacingItemDecoration
 import kotlinx.android.synthetic.main.fragment_cocktail_list.*
 import kotlinx.coroutines.Dispatchers.Main
@@ -32,12 +37,13 @@ class CocktailListFragment : BaseCocktailFragment(), CocktailListAdapter.Cocktai
 
     private lateinit var cocktailListAdapter: CocktailListAdapter
 
-    override fun onCocktailSelected(position: Int, item: Cocktail) {
-        val bundle = bundleOf("cocktail" to item)
+    override fun onCocktailSelected(position: Int, item: Cocktail, extras: FragmentNavigator.Extras) {
+        val bundle = bundleOf("cocktail" to item,
+            "position" to position)
 
         findNavController().navigate(
             R.id.action_cocktailListFragment_to_viewCocktailFragment,
-            bundle)
+            bundle, null, extras)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,15 +73,21 @@ class CocktailListFragment : BaseCocktailFragment(), CocktailListAdapter.Cocktai
     private fun initRecyclerView() {
         popular_recycler_view.apply {
             if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                layoutManager = GridLayoutManager(activity, 4)
-                addItemDecoration(SpacingItemDecoration(8, false))
+                layoutManager = GridLayoutManager(activity, LANDSCAPE_RV_COLUMNS)
+                addItemDecoration(SpacingItemDecoration(COCKTAIL_RV_SPACING, false))
             }
              else {
-                layoutManager = GridLayoutManager(activity, 2)
-                addItemDecoration(SpacingItemDecoration(8, true))
+                layoutManager = GridLayoutManager(activity, PORTRAIT_RV_COLUMNS)
+                addItemDecoration(SpacingItemDecoration(COCKTAIL_RV_SPACING, true))
             }
             cocktailListAdapter = CocktailListAdapter(requestManager, this@CocktailListFragment)
             adapter = cocktailListAdapter
+            postponeEnterTransition()
+            viewTreeObserver
+                .addOnPreDrawListener {
+                    startPostponedEnterTransition()
+                    true
+                }
         }
     }
 
