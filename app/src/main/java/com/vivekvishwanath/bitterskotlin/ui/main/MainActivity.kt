@@ -56,6 +56,7 @@ class MainActivity : BaseActivity() {
         }
 
         setupBottomNavigationBar()
+        viewModel.setStateEvent(CocktailListStateEvent.GetPopularCocktailsEvent)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {

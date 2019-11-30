@@ -1,9 +1,9 @@
 package com.vivekvishwanath.bitterskotlin.di.main
 
 import android.app.Application
-import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import com.squareup.picasso.Picasso
 import com.vivekvishwanath.bitterskotlin.di.scope.MainScope
 import com.vivekvishwanath.bitterskotlin.network.CocktailDbService
 import com.vivekvishwanath.bitterskotlin.network.CocktailDbServiceWrapper
@@ -24,7 +24,7 @@ class MainModule {
         @MainScope
         @Provides
         @JvmStatic
-        fun provideGlideInstance(application: Application) = Glide.with(application)
+        fun providePicassoInstance(application: Application) = Picasso.get()
 
         @MainScope
         @Provides

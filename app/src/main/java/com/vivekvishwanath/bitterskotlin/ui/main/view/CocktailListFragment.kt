@@ -63,11 +63,6 @@ class CocktailListFragment : BaseCocktailFragment(), CocktailListAdapter.Cocktai
 
         initRecyclerView()
         subscribeObservers()
-        triggerGetPopularCocktailsEvent()
-    }
-
-    private fun triggerGetPopularCocktailsEvent() {
-        viewModel.setStateEvent(CocktailListStateEvent.GetPopularCocktailsEvent)
     }
 
     private fun initRecyclerView() {
@@ -80,7 +75,7 @@ class CocktailListFragment : BaseCocktailFragment(), CocktailListAdapter.Cocktai
                 layoutManager = GridLayoutManager(activity, PORTRAIT_RV_COLUMNS)
                 addItemDecoration(SpacingItemDecoration(COCKTAIL_RV_SPACING, true))
             }
-            cocktailListAdapter = CocktailListAdapter(requestManager, this@CocktailListFragment)
+            cocktailListAdapter = CocktailListAdapter(picasso, this@CocktailListFragment)
             adapter = cocktailListAdapter
             postponeEnterTransition()
             viewTreeObserver

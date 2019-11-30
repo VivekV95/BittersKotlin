@@ -1,6 +1,5 @@
 package com.vivekvishwanath.bitterskotlin.ui.adapter
 
-import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,19 +8,14 @@ import androidx.core.view.ViewCompat
 import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.recyclerview.widget.*
-import com.bumptech.glide.RequestManager
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.target.Target
+import com.squareup.picasso.Picasso
 import com.vivekvishwanath.bitterskotlin.R
 import com.vivekvishwanath.bitterskotlin.model.Cocktail
 import kotlinx.android.synthetic.main.cocktail_list_item.view.*
 import kotlinx.android.synthetic.main.cocktail_list_item.view.cocktail_card_star
 
 class CocktailListAdapter(
-    private val requestManager: RequestManager,
+    private val picasso: Picasso,
     private val cocktailInteractionListener: CocktailInteractionListener? = null
 ) :
     RecyclerView.Adapter<CocktailListAdapter.CocktailViewHolder>() {
@@ -56,44 +50,20 @@ class CocktailListAdapter(
     override fun onBindViewHolder(holder: CocktailViewHolder, position: Int) {
         holder.bind(differ.currentList[position])
         holder.itemView.shimmar_layout.showShimmer(true)
-        requestManager
+        picasso
             .load(cocktails[position].drinkImage)
-            .timeout(10000)
-            .listener(object : RequestListener<Drawable> {
-                override fun onLoadFailed(
-                    e: GlideException?,
-                    model: Any?,
-                    target: Target<Drawable>?,
-                    isFirstResource: Boolean
-                ): Boolean {
-                    holder.itemView.shimmar_layout.hideShimmer()
-                    return true
-                }
-
-                override fun onResourceReady(
-                    resource: Drawable?,
-                    model: Any?,
-                    target: Target<Drawable>?,
-                    dataSource: DataSource?,
-                    isFirstResource: Boolean
-                ): Boolean {
-                    holder.itemView.shimmar_layout.stopShimmer()
-                    return false
-                }
-            })
             .into(holder.itemView.cocktail_card_image)
-            .clearOnDetach()
 
         setEnterAnimation(holder.itemView, position)
     }
 
     private fun setEnterAnimation(viewToAnimate: View, position: Int) {
-        // if (position > lastPosition) {
-        val animation =
-            AnimationUtils.loadAnimation(viewToAnimate.context, android.R.anim.slide_in_left)
-        viewToAnimate.startAnimation(animation)
-        //    lastPosition = position
-        // }
+        if (position > lastPosition) {
+            val animation =
+                AnimationUtils.loadAnimation(viewToAnimate.context, android.R.anim.fade_in)
+            viewToAnimate.startAnimation(animation)
+            lastPosition = position
+        }
     }
 
     fun submitCocktails(list: List<Cocktail>) {
