@@ -110,6 +110,7 @@ class ViewCocktailFragment : BaseCocktailFragment(), View.OnClickListener {
     private fun showCocktail(cocktail: Cocktail) {
 
         view_cocktail_name.text = cocktail.drinkName
+        view_cocktail_instructions.text = cocktail.drinkInstructions?.trim()
         picasso
             .load(cocktail.drinkImage)
             .into(view_cocktail_card_image)
