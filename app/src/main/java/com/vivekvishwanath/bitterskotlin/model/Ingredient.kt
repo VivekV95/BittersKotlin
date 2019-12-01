@@ -5,7 +5,11 @@ import com.google.gson.annotations.SerializedName
 data class Ingredient(
 
     @SerializedName("strIngredient1")
-    val ingredientName: String
+    val ingredientName: String?,
+
+    val ingredientMeasurement: String?,
+
+    val ingredientImage: String?
 )
 
 data class IngredientDbResponse(

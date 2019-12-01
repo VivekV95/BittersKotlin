@@ -40,7 +40,7 @@ class CocktailRepository @Inject constructor(
                 Log.d(LOG_TAG, "${this.javaClass.simpleName}: ${Thread.currentThread()}")
                 onCompleteJob(
                     DataState.data(responseMessage = null, data = CocktailListViewState(
-                        response.body.drinks
+                        CocktailListViewState.CocktailFields(popularCocktails = response.body.drinks)
                     ))
                 )
             }

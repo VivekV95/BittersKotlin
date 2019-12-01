@@ -4,7 +4,7 @@ import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 
-class SpacingItemDecoration(
+class CocktailSpacingItemDecoration(
     private val space: Int,
     private val isPortrait: Boolean
 ) : RecyclerView.ItemDecoration() {
@@ -21,7 +21,7 @@ class SpacingItemDecoration(
 
         if (isPortrait) {
             if (parent.getChildLayoutPosition(view) < 2)
-                outRect.top = space * 4
+                outRect.top = space * 6
             else
                 outRect.top = 0
         } else {

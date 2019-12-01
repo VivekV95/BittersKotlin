@@ -10,4 +10,6 @@
     <color name="white">#ffffff</color>
     <color name="grey4">#7d7d7d</color>
     <color name="background">#7d7d7d</color>
+    <color name="cocktailCardTextColor">#fff</color>
+    <color name="viewCocktailTestColor">#000</color>
 </resources>

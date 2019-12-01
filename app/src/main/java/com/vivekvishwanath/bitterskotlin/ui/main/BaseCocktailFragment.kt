@@ -6,7 +6,7 @@ import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.bumptech.glide.RequestManager
+import com.squareup.picasso.Picasso
 import com.vivekvishwanath.bitterskotlin.ui.DataStateChangedListener
 import com.vivekvishwanath.bitterskotlin.ui.main.view.CocktailListViewModel
 import com.vivekvishwanath.bitterskotlin.util.LOG_TAG
@@ -21,7 +21,7 @@ abstract class BaseCocktailFragment: Fragment() {
     lateinit var viewModelProviderFactory: ViewModelProviderFactory
 
     @Inject
-    lateinit var requestManager: RequestManager
+    lateinit var picasso: Picasso
 
     lateinit var viewModel: CocktailListViewModel
 
