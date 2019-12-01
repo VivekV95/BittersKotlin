@@ -16,7 +16,7 @@ import kotlinx.coroutines.Dispatchers.Main
  * architecture-components-samples at
  * https://github.com/android/architecture-components-samples/tree/master/GithubBrowserSample
  */
-abstract class NetworkBoundResource<ResponseObject, ViewStateType>(
+abstract class NetworkBoundResource<ResponseObject, CacheObject, ViewStateType>(
     isNetworkAvailable: Boolean,
     isNetworkRequest: Boolean,
     shouldCancelIfNoInternet: Boolean,
@@ -30,7 +30,7 @@ abstract class NetworkBoundResource<ResponseObject, ViewStateType>(
 
     init {
         setJob(initNewJob())
-        setValue(DataState.loading(true))
+        setValue(DataState.loading(true, cachedData = null))
 
         if (shouldLoadFromCache) {
             //TODO: Load data from cache
@@ -46,6 +46,14 @@ abstract class NetworkBoundResource<ResponseObject, ViewStateType>(
             }
         } else
             doCacheRequest()
+    }
+
+    private fun doCacheRequest() {
+        coroutineScope.launch {
+            //delay
+
+            createCacheRequestAndReturn()
+        }
     }
 
     private fun doNetworkRequest() {
@@ -78,11 +86,7 @@ abstract class NetworkBoundResource<ResponseObject, ViewStateType>(
         }
     }
 
-    private fun doCacheRequest() {
-        //TODO: Perform cache request when network fails
-    }
-
-    private fun handleNetworkCall(response: GenericApiResponse<ResponseObject>?) {
+    private suspend fun handleNetworkCall(response: GenericApiResponse<ResponseObject>?) {
         when (response) {
             is ApiSuccessResponse -> {
                 handleApiSuccessResponse(response)
@@ -143,11 +147,17 @@ abstract class NetworkBoundResource<ResponseObject, ViewStateType>(
         return job
     }
 
-    abstract fun handleApiSuccessResponse(response: ApiSuccessResponse<ResponseObject>)
+    abstract suspend fun handleApiSuccessResponse(response: ApiSuccessResponse<ResponseObject>)
 
     abstract fun createCall(): LiveData<GenericApiResponse<ResponseObject>>?
 
     fun asLiveData() = result as LiveData<DataState<ViewStateType>>
+
+    abstract suspend fun createCacheRequestAndReturn()
+
+    abstract fun loadFromCache(): LiveData<ViewStateType>
+
+    abstract suspend fun updateLocalDb(cacheObject: CacheObject?)
 
     abstract fun setJob(job: Job)
 }
