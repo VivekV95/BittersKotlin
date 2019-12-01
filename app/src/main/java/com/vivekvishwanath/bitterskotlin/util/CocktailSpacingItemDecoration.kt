@@ -21,7 +21,7 @@ class CocktailSpacingItemDecoration(
 
         if (isPortrait) {
             if (parent.getChildLayoutPosition(view) < 2)
-                outRect.top = space * 4
+                outRect.top = space * 6
             else
                 outRect.top = 0
         } else {
