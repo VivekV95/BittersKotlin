@@ -4,7 +4,7 @@ import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 
-class SpacingItemDecoration(
+class CocktailSpacingItemDecoration(
     private val space: Int,
     private val isPortrait: Boolean
 ) : RecyclerView.ItemDecoration() {

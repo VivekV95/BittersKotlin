@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import androidx.core.view.ViewCompat
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
 import com.squareup.picasso.NetworkPolicy
@@ -18,6 +19,9 @@ import com.squareup.picasso.Picasso
 
 import com.vivekvishwanath.bitterskotlin.R
 import com.vivekvishwanath.bitterskotlin.model.Cocktail
+import com.vivekvishwanath.bitterskotlin.ui.adapter.IngredientListAdapter
+import com.vivekvishwanath.bitterskotlin.util.IngredientSpacingItemDecoration
+import com.vivekvishwanath.bitterskotlin.util.convertIngredientsToList
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_view_cocktail.*
 import kotlinx.coroutines.Dispatchers.Main
@@ -53,6 +57,8 @@ class ViewCocktailFragment : BaseCocktailFragment(), View.OnClickListener {
     }
 
     private lateinit var currentCocktail: Cocktail
+
+    private lateinit var ingredientListAdapter: IngredientListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         (activity as MainActivity).mainComponent.inject(this)
@@ -96,6 +102,7 @@ class ViewCocktailFragment : BaseCocktailFragment(), View.OnClickListener {
         viewModel.viewState.observe(viewLifecycleOwner, Observer { viewState ->
             viewState.viewCocktailField.currentCocktail?.let {
                 this.currentCocktail = it
+                initRecyclerView()
             }
         })
     }
@@ -112,6 +119,19 @@ class ViewCocktailFragment : BaseCocktailFragment(), View.OnClickListener {
 
         arguments?.getInt("position").let { position ->
             ViewCompat.setTransitionName(view_cocktail_card_image, "cocktail_image_$position")
+        }
+    }
+
+    private fun initRecyclerView() {
+        ingredient_recycler_view.apply {
+            setHasFixedSize(false)
+            layoutManager = LinearLayoutManager(activity)
+            ingredientListAdapter = IngredientListAdapter(picasso)
+            adapter = ingredientListAdapter
+            val list = currentCocktail.convertIngredientsToList()
+            ingredientListAdapter.submitList(list)
+            isNestedScrollingEnabled = false
+            addItemDecoration(IngredientSpacingItemDecoration(3))
         }
     }
 

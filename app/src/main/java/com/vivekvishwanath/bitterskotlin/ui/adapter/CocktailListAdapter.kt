@@ -8,11 +8,13 @@ import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.recyclerview.widget.*
 import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
+import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import com.vivekvishwanath.bitterskotlin.R
 import com.vivekvishwanath.bitterskotlin.model.Cocktail
 import kotlinx.android.synthetic.main.cocktail_list_item.view.*
 import kotlinx.android.synthetic.main.cocktail_list_item.view.cocktail_card_star
+import java.lang.Exception
 
 class CocktailListAdapter(
     private val picasso: Picasso,
@@ -23,7 +25,7 @@ class CocktailListAdapter(
     private var favoriteids = setOf<Int>()
     private var cocktails = listOf<Cocktail>()
 
-    private var lastPosition = -1
+    private var lastPosition = RecyclerView.NO_POSITION
 
     private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Cocktail>() {
 
@@ -52,7 +54,15 @@ class CocktailListAdapter(
         holder.itemView.shimmar_layout.showShimmer(true)
         picasso
             .load(cocktails[position].drinkImage)
-            .into(holder.itemView.cocktail_card_image)
+            .into(holder.itemView.cocktail_card_image, object : Callback {
+                override fun onSuccess() {
+                    holder.itemView.shimmar_layout.stopShimmer()
+                }
+
+                override fun onError(e: Exception?) {
+                    holder.itemView.shimmar_layout.stopShimmer()
+                }
+            })
 
         setEnterAnimation(holder.itemView, position)
     }
@@ -68,11 +78,20 @@ class CocktailListAdapter(
 
     fun submitCocktails(list: List<Cocktail>) {
         this.cocktails = list
+        list.forEach {
+            if (favoriteids.contains(it.drinkId.toInt()))
+                it.isFavorite = true
+        }
         submitList()
     }
 
     fun submitFavoriteIds(favoriteids: Set<Int>) {
         this.favoriteids = favoriteids
+        cocktails.forEach {
+            if (favoriteids.contains(it.drinkId.toInt()))
+                it.isFavorite = true
+        }
+        submitList()
     }
 
     private fun submitList() {
@@ -84,39 +103,39 @@ class CocktailListAdapter(
 
             val isFavorite = favoriteids.contains(item.drinkId.toInt())
 
-            itemView.cocktail_card_name.text = item.drinkName
+            this.cocktail_card_name.text = item.drinkName
 
             if (isFavorite)
-                itemView.cocktail_card_star.setImageResource(R.drawable.ic_filled_star_cocktail_card)
+                this.cocktail_card_star.setImageResource(R.drawable.ic_filled_star_cocktail_card)
             else
-                itemView.cocktail_card_star.setImageResource(R.drawable.ic_empty_star_cocktail_card)
+                this.cocktail_card_star.setImageResource(R.drawable.ic_empty_star_cocktail_card)
 
             ViewCompat.setTransitionName(
-                itemView.cocktail_card_image, "cocktail_image_$adapterPosition"
+                this.cocktail_card_image, "cocktail_image_$adapterPosition"
             )
 
-            itemView.setOnClickListener {
+            this.setOnClickListener {
                 val cocktail = item.copy()
-                cocktail.isFavorite = isFavorite
+                cocktail.isFavorite = favoriteids.contains(cocktail.drinkId.toInt())
                 val extras = FragmentNavigatorExtras(
-                    itemView.cocktail_card_image to ViewCompat.getTransitionName(itemView.cocktail_card_image)!!
+                    this.cocktail_card_image to ViewCompat.getTransitionName(itemView.cocktail_card_image)!!
                 )
                 cocktailInteractionListener?.onCocktailSelected(adapterPosition, cocktail, extras)
             }
 
-            itemView.setOnLongClickListener {
+            this.setOnLongClickListener {
                 cocktailInteractionListener?.onCocktailLongPressed(adapterPosition, item)
                 if (isFavorite) {
-                    itemView.cocktail_card_star.setImageResource(R.drawable.ic_empty_star_cocktail_card)
+                    this.cocktail_card_star.setImageResource(R.drawable.ic_empty_star_cocktail_card)
                     item.isFavorite = false
                 } else {
-                    itemView.cocktail_card_star.setImageResource(R.drawable.ic_filled_star_cocktail_card)
+                    this.cocktail_card_star.setImageResource(R.drawable.ic_filled_star_cocktail_card)
                     item.isFavorite = true
                 }
                 YoYo
-                    .with(Techniques.RubberBand)
+                    .with(Techniques.Pulse)
                     .duration(500)
-                    .playOn(itemView)
+                    .playOn(this)
                 true
             }
         }

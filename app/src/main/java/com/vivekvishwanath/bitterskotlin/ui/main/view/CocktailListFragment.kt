@@ -8,11 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
-import androidx.navigation.Navigation.findNavController
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.FragmentNavigator
-import androidx.navigation.fragment.FragmentNavigatorExtras
-import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 
@@ -20,13 +16,11 @@ import com.vivekvishwanath.bitterskotlin.R
 import com.vivekvishwanath.bitterskotlin.model.Cocktail
 import com.vivekvishwanath.bitterskotlin.ui.adapter.CocktailListAdapter
 import com.vivekvishwanath.bitterskotlin.ui.main.BaseCocktailFragment
-import com.vivekvishwanath.bitterskotlin.ui.main.DataState
 import com.vivekvishwanath.bitterskotlin.ui.main.MainActivity
-import com.vivekvishwanath.bitterskotlin.ui.main.view.state.CocktailListStateEvent
 import com.vivekvishwanath.bitterskotlin.util.COCKTAIL_RV_SPACING
 import com.vivekvishwanath.bitterskotlin.util.LANDSCAPE_RV_COLUMNS
 import com.vivekvishwanath.bitterskotlin.util.PORTRAIT_RV_COLUMNS
-import com.vivekvishwanath.bitterskotlin.util.SpacingItemDecoration
+import com.vivekvishwanath.bitterskotlin.util.CocktailSpacingItemDecoration
 import kotlinx.android.synthetic.main.fragment_cocktail_list.*
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.GlobalScope
@@ -51,6 +45,7 @@ class CocktailListFragment : BaseCocktailFragment(), CocktailListAdapter.Cocktai
                 viewModel.addFavoriteCocktail(item)
             else
                 viewModel.deleteFavoriteCocktail(item)
+            cocktailListAdapter.notifyItemChanged(position)
         }
     }
 
@@ -77,11 +72,11 @@ class CocktailListFragment : BaseCocktailFragment(), CocktailListAdapter.Cocktai
         popular_recycler_view.apply {
             if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
                 layoutManager = GridLayoutManager(activity, LANDSCAPE_RV_COLUMNS)
-                addItemDecoration(SpacingItemDecoration(COCKTAIL_RV_SPACING, false))
+                addItemDecoration(CocktailSpacingItemDecoration(COCKTAIL_RV_SPACING, false))
             }
              else {
                 layoutManager = GridLayoutManager(activity, PORTRAIT_RV_COLUMNS)
-                addItemDecoration(SpacingItemDecoration(COCKTAIL_RV_SPACING, true))
+                addItemDecoration(CocktailSpacingItemDecoration(COCKTAIL_RV_SPACING, true))
             }
             cocktailListAdapter = CocktailListAdapter(picasso, this@CocktailListFragment)
             adapter = cocktailListAdapter
