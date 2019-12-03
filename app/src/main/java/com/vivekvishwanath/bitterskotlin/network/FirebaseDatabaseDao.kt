@@ -9,6 +9,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import com.vivekvishwanath.bitterskotlin.di.scope.MainScope
 import com.vivekvishwanath.bitterskotlin.model.Cocktail
+import com.vivekvishwanath.bitterskotlin.model.CocktailCacheType
 import com.vivekvishwanath.bitterskotlin.persistence.CocktailDao
 import com.vivekvishwanath.bitterskotlin.repository.JobManager
 import com.vivekvishwanath.bitterskotlin.session.SessionManager
@@ -87,7 +88,7 @@ class FirebaseDatabaseDao @Inject constructor(
             }
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                // getFavoriteCocktails()
+                getFavoriteCocktails()
                 val cocktailIds = mutableSetOf<Int>()
                 dataSnapshot.children.forEach { id ->
                     id.key?.toInt()?.let {
@@ -102,19 +103,28 @@ class FirebaseDatabaseDao @Inject constructor(
         object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
                 favoriteCocktails.value = DataState.error(
-                    ResponseMessage("Something went wront when getting favorite cockatils", ResponseType.Dialog)
+                    ResponseMessage(
+                        "Something went wront when getting favorite cockatils",
+                        ResponseType.Dialog
+                    )
                 )
             }
 
             override fun onDataChange(snapshot: DataSnapshot) {
                 val cocktails = arrayListOf<Cocktail>()
                 GlobalScope.launch(IO) {
-                    cocktailDao.deleteCachedCocktailsByType()
+                    cocktailDao.deleteAllCocktailsByCacheType(CACHE_TYPE_FAVORITES)
                     snapshot.children.forEach { id ->
                         id.getValue(Cocktail::class.java)?.let {
                             launch {
                                 val cocktail = it.copy()
                                 cocktailDao.insertCocktail(cocktail)
+                                cocktailDao.insertCocktailCacheType(
+                                    CocktailCacheType(
+                                        drinkId = cocktail.drinkId,
+                                        cacheTypeId = CACHE_TYPE_FAVORITES
+                                    )
+                                )
                             }
                             cocktails.add(it)
                         }

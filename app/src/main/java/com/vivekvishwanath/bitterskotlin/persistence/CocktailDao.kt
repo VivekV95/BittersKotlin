@@ -22,9 +22,6 @@ interface CocktailDao {
     """)
     fun getCachedCocktailsByType(cacheTypeId: Int): LiveData<List<Cocktail>>
 
-    @Query("DELETE FROM cocktails")
-    suspend fun deleteCachedCocktailsByType()
-
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertCocktailCacheType(cocktailCacheType: CocktailCacheType)
 
