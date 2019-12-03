@@ -4,13 +4,11 @@ import android.app.Application
 import com.vivekvishwanath.bitterskotlin.R
 import com.vivekvishwanath.bitterskotlin.util.LiveDataCallAdapterFactory
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
-class CocktailDbServiceWrapper(application: Application) {
-
+class FirebaseDbServiceWrapper {
     private val BASE_URL =
-        "https://www.thecocktaildb.com/api/json/v2/${application.resources.getString(R.string.cocktailDbApiKey)}/"
+        "https://bitters-4943d.firebaseio.com/"
 
     private val retrofit = Retrofit
         .Builder()
@@ -19,5 +17,5 @@ class CocktailDbServiceWrapper(application: Application) {
         .addCallAdapterFactory(LiveDataCallAdapterFactory())
         .build()
 
-    val cocktailDbService = retrofit.create(CocktailDbService::class.java)
+    val firebaseService = retrofit.create(FirebaseDbService::class.java)
 }

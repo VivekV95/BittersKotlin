@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseUser
 import com.vivekvishwanath.bitterskotlin.repository.auth.AuthRepository
 import com.vivekvishwanath.bitterskotlin.di.scope.AuthScope
+import com.vivekvishwanath.bitterskotlin.session.SessionState
 import com.vivekvishwanath.bitterskotlin.ui.auth.state.AuthStateEvent
 import com.vivekvishwanath.bitterskotlin.ui.auth.state.AuthViewState
 import com.vivekvishwanath.bitterskotlin.ui.auth.state.LoginFields
@@ -26,7 +27,7 @@ class AuthViewModel @Inject constructor(
         get() = _viewState
 
 
-    val authState: LiveData<AuthState<FirebaseUser>> =
+    val authState: LiveData<AuthState<SessionState>> =
         Transformations
             .switchMap(_stateEvent) { stateEvent ->
                 stateEvent?.let {
@@ -38,7 +39,7 @@ class AuthViewModel @Inject constructor(
         _stateEvent.value = event
     }
 
-    private fun handleStateEvent(stateEvent: AuthStateEvent): LiveData<AuthState<FirebaseUser>> =
+    private fun handleStateEvent(stateEvent: AuthStateEvent): LiveData<AuthState<SessionState>> =
         when (stateEvent) {
             is AuthStateEvent.RegistrationEvent -> {
                 authRepository.registerAccount(stateEvent.email, stateEvent.password)

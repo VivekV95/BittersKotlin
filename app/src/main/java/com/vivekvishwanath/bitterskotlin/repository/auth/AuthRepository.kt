@@ -8,6 +8,7 @@ import com.vivekvishwanath.bitterskotlin.ui.auth.AuthState
 import com.vivekvishwanath.bitterskotlin.session.SessionManager
 import com.vivekvishwanath.bitterskotlin.di.scope.AuthScope
 import com.vivekvishwanath.bitterskotlin.repository.JobManager
+import com.vivekvishwanath.bitterskotlin.session.SessionState
 import com.vivekvishwanath.bitterskotlin.ui.ResponseMessage
 import com.vivekvishwanath.bitterskotlin.ui.ResponseType
 import com.vivekvishwanath.bitterskotlin.util.*
@@ -24,7 +25,7 @@ class AuthRepository @Inject constructor(
     private lateinit var coroutineScope: CoroutineScope
     private lateinit var job: CompletableJob
 
-    fun registerAccount(email: String, password: String): LiveData<AuthState<FirebaseUser>> {
+    fun registerAccount(email: String, password: String): LiveData<AuthState<SessionState>> {
         sessionManager.setCurrentUser(AuthState.Loading())
         if (isNetworkAvailable()) {
             addJob("registerAccount", initNewJob())
@@ -58,7 +59,7 @@ class AuthRepository @Inject constructor(
 
     fun signIn(
         email: String, password: String, isRegistration: Boolean
-    ): LiveData<AuthState<FirebaseUser>> {
+    ): LiveData<AuthState<SessionState>> {
         sessionManager.setCurrentUser(AuthState.Loading())
         if (isNetworkAvailable()) {
             if (!isRegistration) {
@@ -94,9 +95,46 @@ class AuthRepository @Inject constructor(
         return sessionManager.getCurrentUser()
     }
 
-    fun setSignedInUser(): LiveData<AuthState<FirebaseUser>> {
-        mAuth.currentUser?.let { firebaseUser ->
-            sessionManager.setCurrentUser(AuthState.Authenticated(firebaseUser))
+    fun setSignedInUser(): LiveData<AuthState<SessionState>> {
+        sessionManager.setCurrentUser(AuthState.Loading())
+        mAuth
+            .currentUser
+            ?.let { user ->
+                if (isNetworkAvailable()) {
+                    addJob("setSignedInUser", initNewJob())
+                    coroutineScope.launch {
+                                user
+                                    .getIdToken(true)
+                                    .addOnCompleteListener { task ->
+                                        if (task.isSuccessful) {
+                                            task.result?.token?.let { token ->
+                                                sessionManager.setCurrentUser(
+                                                    AuthState.Authenticated(
+                                                        SessionState(
+                                                            user,
+                                                            token
+                                                        )
+                                                    )
+                                                )
+                                            }
+                                        } else
+                                            sessionManager.setCurrentUser(
+                                                AuthState.Authenticated(
+                                                    SessionState(
+                                                        user,
+                                                        ""
+                                                    )
+                                                )
+                                            )
+                                    }
+                    }
+                } else sessionManager.setCurrentUser(
+                    AuthState.Authenticated(
+                        SessionState(
+                            user, ""
+                        )
+                    )
+                )
         }
         return sessionManager.getCurrentUser()
     }
