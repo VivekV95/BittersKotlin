@@ -25,9 +25,9 @@ class SessionManager @Inject constructor(
     private val mAuth: FirebaseAuth
 ){
 
-    private val currentUser = MutableLiveData<AuthState<FirebaseUser>>()
+    private val currentUser = MutableLiveData<AuthState<SessionState>>()
 
-    fun setCurrentUser(state: AuthState<FirebaseUser>) {
+    fun setCurrentUser(state: AuthState<SessionState>) {
         GlobalScope.launch(Main) {
             currentUser.value = state
         }
@@ -38,12 +38,12 @@ class SessionManager @Inject constructor(
         currentUser.value = AuthState.NotAuthenticated()
     }
 
-    fun getCurrentUser(): LiveData<AuthState<FirebaseUser>> {
+    fun getCurrentUser(): LiveData<AuthState<SessionState>> {
         return currentUser
     }
 
     fun deleteCurrentUser() {
-        currentUser.value?.data?.peekContent()?.delete()
+        currentUser.value?.data?.peekContent()?.firebaseUser?.delete()
     }
 
     fun isConnectedToTheInternet(): Boolean {

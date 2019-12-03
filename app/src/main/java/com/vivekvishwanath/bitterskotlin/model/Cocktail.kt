@@ -14,145 +14,141 @@ import org.jetbrains.annotations.NotNull
 data class Cocktail(
 
     @ColumnInfo(name = "is_favorite")
-    var isFavorite: Boolean,
-
-    @NotNull
-    @ColumnInfo(name = "cache_type")
-    var cacheType: Int? = CACHE_TYPE_OTHER,
+    var isFavorite: Boolean = false,
 
     @ColumnInfo(name = "drink_id")
     @SerializedName("idDrink")
     @PrimaryKey
-    val drinkId: String,
+    val drinkId: String = "-1",
 
     @ColumnInfo(name = "drink_name")
     @SerializedName("strDrink")
-    val drinkName: String,
+    val drinkName: String? = null,
 
     @ColumnInfo(name = "drink_tags")
     @SerializedName("strTags")
-    val drinkTags: String?,
+    val drinkTags: String? = null,
 
     @ColumnInfo(name = "drink_video")
     @SerializedName("strVideo")
-    val drinkVideo: String?,
+    val drinkVideo: String?= null,
 
     @ColumnInfo(name = "drink_category")
     @SerializedName("strCategory")
-    val drinkCategory: String?,
+    val drinkCategory: String? = null,
 
     @ColumnInfo(name = "drink_iba")
     @SerializedName("strIBA")
-    val drinkIBA: String?,
+    val drinkIBA: String? = null,
 
     @ColumnInfo(name = "alcoholic")
     @SerializedName("strAlcoholic")
-    val alcoholic: String?,
+    val alcoholic: String? = null,
 
     @ColumnInfo(name = "drink_glass")
     @SerializedName("strGlass")
-    val drinkGlass: String?,
+    val drinkGlass: String? = null,
 
     @ColumnInfo(name = "drink_instructions")
     @SerializedName("strInstructions")
-    val drinkInstructions: String?,
+    val drinkInstructions: String? = null,
 
     @ColumnInfo(name = "drink_image")
     @SerializedName("strDrinkThumb")
-    val drinkImage: String?,
+    val drinkImage: String? = null,
 
     @ColumnInfo(name = "str_ingredient_1")
-    val strIngredient1: String?,
+    val strIngredient1: String? = null,
 
     @ColumnInfo(name = "str_ingredient_2")
-    val strIngredient2: String?,
+    val strIngredient2: String? = null,
 
     @ColumnInfo(name = "str_ingredient_3")
-    val strIngredient3: String?,
+    val strIngredient3: String? = null,
 
     @ColumnInfo(name = "str_ingredient_4")
-    val strIngredient4: String?,
+    val strIngredient4: String? = null,
 
     @ColumnInfo(name = "str_ingredient_5")
-    val strIngredient5: String?,
+    val strIngredient5: String? = null,
 
     @ColumnInfo(name = "str_ingredient_6")
-    val strIngredient6: String?,
+    val strIngredient6: String? = null,
 
     @ColumnInfo(name = "str_ingredient_7")
-    val strIngredient7: String?,
+    val strIngredient7: String? = null,
 
     @ColumnInfo(name = "str_ingredient_8")
-    val strIngredient8: String?,
+    val strIngredient8: String? = null,
 
     @ColumnInfo(name = "str_ingredient_9")
-    val strIngredient9: String?,
+    val strIngredient9: String? = null,
 
     @ColumnInfo(name = "str_ingredient_10")
-    val strIngredient10: String?,
+    val strIngredient10: String? = null,
 
     @ColumnInfo(name = "str_ingredient_11")
-    val strIngredient11: String?,
+    val strIngredient11: String? = null,
 
     @ColumnInfo(name = "str_ingredient_12")
-    val strIngredient12: String?,
+    val strIngredient12: String? = null,
 
     @ColumnInfo(name = "str_ingredient_13")
-    val strIngredient13: String?,
+    val strIngredient13: String? = null,
 
     @ColumnInfo(name = "str_ingredient_14")
-    val strIngredient14: String?,
+    val strIngredient14: String? = null,
 
     @ColumnInfo(name = "str_ingredient_15")
-    val strIngredient15: String?,
+    val strIngredient15: String? = null,
 
     @ColumnInfo(name = "str_measure_1")
-    val strMeasure1: String?,
+    val strMeasure1: String? = null,
 
     @ColumnInfo(name = "str_measure_2")
-    val strMeasure2: String?,
+    val strMeasure2: String? = null,
 
     @ColumnInfo(name = "str_measure_3")
-    val strMeasure3: String?,
+    val strMeasure3: String? = null,
 
     @ColumnInfo(name = "str_measure_4")
-    val strMeasure4: String?,
+    val strMeasure4: String? = null,
 
     @ColumnInfo(name = "str_measure_5")
-    val strMeasure5: String?,
+    val strMeasure5: String? = null,
 
     @ColumnInfo(name = "str_measure_6")
-    val strMeasure6: String?,
+    val strMeasure6: String? = null,
 
     @ColumnInfo(name = "str_measure_7")
-    val strMeasure7: String?,
+    val strMeasure7: String? = null,
 
     @ColumnInfo(name = "str_measure_8")
-    val strMeasure8: String?,
+    val strMeasure8: String? = null,
 
     @ColumnInfo(name = "str_measure_9")
-    val strMeasure9: String?,
+    val strMeasure9: String? = null,
 
     @ColumnInfo(name = "str_measure_10")
-    val strMeasure10: String?,
+    val strMeasure10: String? = null,
 
     @ColumnInfo(name = "str_measure_11")
-    val strMeasure11: String?,
+    val strMeasure11: String? = null,
 
     @ColumnInfo(name = "str_measure_12")
-    val strMeasure12: String?,
+    val strMeasure12: String? = null,
 
     @ColumnInfo(name = "str_measure_13")
-    val strMeasure13: String?,
+    val strMeasure13: String? = null,
 
     @ColumnInfo(name = "str_measure_14")
-    val strMeasure14: String?,
+    val strMeasure14: String? = null,
 
     @ColumnInfo(name = "str_measure_15")
-    val strMeasure15: String?,
+    val strMeasure15: String? = null,
 
     @ColumnInfo(name = "date_modified")
-    val dateModified: String?
+    val dateModified: String? = null
 
 ): Parcelable
 

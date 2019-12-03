@@ -10,12 +10,15 @@ import com.vivekvishwanath.bitterskotlin.model.Cocktail
 @Dao
 interface CocktailDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAllCocktails(cocktails: List<Cocktail>)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertAllCocktails(cocktails: List<Cocktail>)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertCocktail(cocktail: Cocktail)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertCocktail(cocktail: Cocktail)
 
-    @Query("SELECT * FROM cocktails WHERE cache_type = :cacheType")
-    fun getCachedCocktailsByType(cacheType: Int): LiveData<List<Cocktail>>
+    @Query("SELECT * FROM cocktails")
+    fun getCachedCocktailsByType(): LiveData<List<Cocktail>>
+
+    @Query("DELETE FROM cocktails")
+    suspend fun deleteCachedCocktailsByType()
 }

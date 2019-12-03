@@ -10,10 +10,10 @@ const val ERROR_CHECK_NETWORK_CONNECTION = "Check network connection."
 const val ERROR_UNKNOWN = "Unknown error"
 const val ERROR_LOGIN_TIMEOUT = "It's taking longer than expected, thanks for your patience"
 
-fun addFavoriteError(name: String) =
+fun addFavoriteError(name: String?) =
     "Couldn't add $name to favorites"
 
-fun deleteFavoriteError(name: String) =
+fun deleteFavoriteError(name: String?) =
     "Couldn't delete $name from favorites"
 
 fun isNetworkError(msg: String) = when {

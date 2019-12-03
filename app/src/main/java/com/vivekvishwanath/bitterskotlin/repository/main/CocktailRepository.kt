@@ -53,7 +53,7 @@ class CocktailRepository @Inject constructor(
 
             override fun loadFromCache(): LiveData<CocktailListViewState> {
                 return cocktailDao
-                    .getCachedCocktailsByType(CACHE_TYPE_POPULAR)
+                    .getCachedCocktailsByType()
                     .switchMap {
                         object: LiveData<CocktailListViewState>() {
                             override fun onActive() {
@@ -91,20 +91,45 @@ class CocktailRepository @Inject constructor(
 
             override suspend fun handleApiSuccessResponse(response: ApiSuccessResponse<CocktailDbResponse>) {
                 Log.d(LOG_TAG, "${this.javaClass.simpleName}: ${Thread.currentThread()}")
-                response.body.drinks.forEach { cocktail ->
-                    cocktail.cacheType = CACHE_TYPE_POPULAR
-                }
                 updateLocalDb(response.body.drinks)
                 createCacheRequestAndReturn()
-//                onCompleteJob(
-//                    DataState.data(responseMessage = null, data = CocktailListViewState(
-//                        CocktailFields(popularCocktails = response.body.drinks)
-//                    ))
-//                )
             }
 
             override fun createCall(): LiveData<GenericApiResponse<CocktailDbResponse>> =
                 cocktailDbServiceWrapper.cocktailDbService.getPopularCocktails()
+
+        }.asLiveData()
+
+    fun getFavoriteCocktails(): LiveData<DataState<CocktailListViewState>> =
+        object: NetworkBoundResource<Void, List<Cocktail>, CocktailListViewState>(
+            sessionManager.isConnectedToTheInternet(),
+            true,
+            false,
+            true
+        ) {
+            override suspend fun handleApiSuccessResponse(response: ApiSuccessResponse<Void>) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun createCall(): LiveData<GenericApiResponse<Void>>? {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override suspend fun createCacheRequestAndReturn() {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun loadFromCache(): LiveData<CocktailListViewState> {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override suspend fun updateLocalDb(cacheObject: List<Cocktail>?) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun setJob(job: Job) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
 
         }.asLiveData()
 
