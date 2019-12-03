@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.switchMap
 import com.vivekvishwanath.bitterskotlin.di.scope.MainScope
 import com.vivekvishwanath.bitterskotlin.model.Cocktail
+import com.vivekvishwanath.bitterskotlin.model.CocktailCacheType
 import com.vivekvishwanath.bitterskotlin.model.CocktailDbResponse
 import com.vivekvishwanath.bitterskotlin.network.CocktailDbServiceWrapper
 import com.vivekvishwanath.bitterskotlin.network.FirebaseDatabaseDao
@@ -32,7 +33,8 @@ class CocktailRepository @Inject constructor(
     private val cocktailDbServiceWrapper: CocktailDbServiceWrapper,
     private val sessionManager: SessionManager,
     private val firebaseDatabaseDao: FirebaseDatabaseDao,
-    private val cocktailDao: CocktailDao): JobManager("CocktailRepository") {
+    private val cocktailDao: CocktailDao
+) : JobManager("CocktailRepository") {
 
     fun getPopularCocktails(): LiveData<DataState<CocktailListViewState>> =
 
@@ -53,9 +55,9 @@ class CocktailRepository @Inject constructor(
 
             override fun loadFromCache(): LiveData<CocktailListViewState> {
                 return cocktailDao
-                    .getCachedCocktailsByType()
+                    .getCachedCocktailsByType(CACHE_TYPE_POPULAR)
                     .switchMap {
-                        object: LiveData<CocktailListViewState>() {
+                        object : LiveData<CocktailListViewState>() {
                             override fun onActive() {
                                 super.onActive()
                                 value = CocktailListViewState(
@@ -71,14 +73,22 @@ class CocktailRepository @Inject constructor(
             override suspend fun updateLocalDb(cacheObject: List<Cocktail>?) {
                 cacheObject?.let { cocktails ->
                     withContext(IO) {
-                        cocktails.forEach {
+                        cocktails.forEach { cocktail ->
                             try {
                                 launch {
-                                    cocktailDao.insertCocktail(it)
+                                    cocktailDao.insertCocktail(cocktail)
+                                    cocktailDao.insertCocktailCacheType(
+                                        CocktailCacheType(
+                                            drinkId = cocktail.drinkId,
+                                            cacheTypeId = CACHE_TYPE_POPULAR
+                                        )
+                                    )
                                 }
                             } catch (e: Exception) {
-                                Log.d(LOG_TAG, "${this.javaClass.simpleName}:" +
-                                        " Error updating cache data for cockatil ${it.drinkName} ")
+                                Log.d(
+                                    LOG_TAG, "${this.javaClass.simpleName}:" +
+                                            " Error updating cache data for cockatil ${cocktail.drinkName} "
+                                )
                             }
                         }
                     }
@@ -101,7 +111,7 @@ class CocktailRepository @Inject constructor(
         }.asLiveData()
 
     fun getFavoriteCocktails(): LiveData<DataState<CocktailListViewState>> =
-        object: NetworkBoundResource<Void, List<Cocktail>, CocktailListViewState>(
+        object : NetworkBoundResource<Void, List<Cocktail>, CocktailListViewState>(
             sessionManager.isConnectedToTheInternet(),
             true,
             false,
@@ -139,9 +149,11 @@ class CocktailRepository @Inject constructor(
         firebaseDatabaseDao.refreshFavorites()
     }
 
-    suspend fun addToFavorites(cocktail: Cocktail) = firebaseDatabaseDao.addFavoriteCocktail(cocktail)
+    suspend fun addToFavorites(cocktail: Cocktail) =
+        firebaseDatabaseDao.addFavoriteCocktail(cocktail)
 
-    suspend fun deleteFromFavorites(cocktail: Cocktail) = firebaseDatabaseDao.deleteFavoriteCocktail(cocktail)
+    suspend fun deleteFromFavorites(cocktail: Cocktail) =
+        firebaseDatabaseDao.deleteFavoriteCocktail(cocktail)
 
     fun logOut() {
         sessionManager.logOut()

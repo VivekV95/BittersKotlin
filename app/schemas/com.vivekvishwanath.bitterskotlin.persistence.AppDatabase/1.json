@@ -1,0 +1,286 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "eb6e5c21a629fa52163968e530c11987",
+    "entities": [
+      {
+        "tableName": "cocktails",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`is_favorite` INTEGER NOT NULL, `cache_type` INTEGER, `drink_id` TEXT NOT NULL, `drink_name` TEXT, `drink_tags` TEXT, `drink_video` TEXT, `drink_category` TEXT, `drink_iba` TEXT, `alcoholic` TEXT, `drink_glass` TEXT, `drink_instructions` TEXT, `drink_image` TEXT, `str_ingredient_1` TEXT, `str_ingredient_2` TEXT, `str_ingredient_3` TEXT, `str_ingredient_4` TEXT, `str_ingredient_5` TEXT, `str_ingredient_6` TEXT, `str_ingredient_7` TEXT, `str_ingredient_8` TEXT, `str_ingredient_9` TEXT, `str_ingredient_10` TEXT, `str_ingredient_11` TEXT, `str_ingredient_12` TEXT, `str_ingredient_13` TEXT, `str_ingredient_14` TEXT, `str_ingredient_15` TEXT, `str_measure_1` TEXT, `str_measure_2` TEXT, `str_measure_3` TEXT, `str_measure_4` TEXT, `str_measure_5` TEXT, `str_measure_6` TEXT, `str_measure_7` TEXT, `str_measure_8` TEXT, `str_measure_9` TEXT, `str_measure_10` TEXT, `str_measure_11` TEXT, `str_measure_12` TEXT, `str_measure_13` TEXT, `str_measure_14` TEXT, `str_measure_15` TEXT, `date_modified` TEXT, PRIMARY KEY(`drink_id`))",
+        "fields": [
+          {
+            "fieldPath": "isFavorite",
+            "columnName": "is_favorite",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cacheType",
+            "columnName": "cache_type",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "drinkId",
+            "columnName": "drink_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "drinkName",
+            "columnName": "drink_name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "drinkTags",
+            "columnName": "drink_tags",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "drinkVideo",
+            "columnName": "drink_video",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "drinkCategory",
+            "columnName": "drink_category",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "drinkIBA",
+            "columnName": "drink_iba",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "alcoholic",
+            "columnName": "alcoholic",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "drinkGlass",
+            "columnName": "drink_glass",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "drinkInstructions",
+            "columnName": "drink_instructions",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "drinkImage",
+            "columnName": "drink_image",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "strIngredient1",
+            "columnName": "str_ingredient_1",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "strIngredient2",
+            "columnName": "str_ingredient_2",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "strIngredient3",
+            "columnName": "str_ingredient_3",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "strIngredient4",
+            "columnName": "str_ingredient_4",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "strIngredient5",
+            "columnName": "str_ingredient_5",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "strIngredient6",
+            "columnName": "str_ingredient_6",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "strIngredient7",
+            "columnName": "str_ingredient_7",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "strIngredient8",
+            "columnName": "str_ingredient_8",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "strIngredient9",
+            "columnName": "str_ingredient_9",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "strIngredient10",
+            "columnName": "str_ingredient_10",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "strIngredient11",
+            "columnName": "str_ingredient_11",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "strIngredient12",
+            "columnName": "str_ingredient_12",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "strIngredient13",
+            "columnName": "str_ingredient_13",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "strIngredient14",
+            "columnName": "str_ingredient_14",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "strIngredient15",
+            "columnName": "str_ingredient_15",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "strMeasure1",
+            "columnName": "str_measure_1",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "strMeasure2",
+            "columnName": "str_measure_2",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "strMeasure3",
+            "columnName": "str_measure_3",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "strMeasure4",
+            "columnName": "str_measure_4",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "strMeasure5",
+            "columnName": "str_measure_5",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "strMeasure6",
+            "columnName": "str_measure_6",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "strMeasure7",
+            "columnName": "str_measure_7",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "strMeasure8",
+            "columnName": "str_measure_8",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "strMeasure9",
+            "columnName": "str_measure_9",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "strMeasure10",
+            "columnName": "str_measure_10",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "strMeasure11",
+            "columnName": "str_measure_11",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "strMeasure12",
+            "columnName": "str_measure_12",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "strMeasure13",
+            "columnName": "str_measure_13",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "strMeasure14",
+            "columnName": "str_measure_14",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "strMeasure15",
+            "columnName": "str_measure_15",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "dateModified",
+            "columnName": "date_modified",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "drink_id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'eb6e5c21a629fa52163968e530c11987')"
+    ]
+  }
+}
