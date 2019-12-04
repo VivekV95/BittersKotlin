@@ -133,7 +133,8 @@ class CocktailRepository @Inject constructor(
                             .firebaseService
                             .getFavoriteCocktails(
                                 sessionState.authToken,
-                                sessionState.firebaseUser.uid)
+                                sessionState.firebaseUser.uid
+                            )
                     }
 
 
@@ -142,7 +143,8 @@ class CocktailRepository @Inject constructor(
                     result.addSource(loadFromCache()) { viewState ->
                         onCompleteJob(DataState.data(viewState, null))
                     }
-                }            }
+                }
+            }
 
             override fun loadFromCache(): LiveData<CocktailListViewState> =
                 cocktailDao

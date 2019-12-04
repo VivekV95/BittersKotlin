@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.squareup.picasso.Picasso
 import com.vivekvishwanath.bitterskotlin.ui.DataStateChangedListener
-import com.vivekvishwanath.bitterskotlin.ui.main.view.CocktailListViewModel
+import com.vivekvishwanath.bitterskotlin.ui.main.view.viewmodel.CocktailListViewModel
 import com.vivekvishwanath.bitterskotlin.util.LOG_TAG
 import com.vivekvishwanath.bitterskotlin.viewmodel.ViewModelProviderFactory
 import java.lang.ClassCastException

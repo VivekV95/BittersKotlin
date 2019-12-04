@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.vivekvishwanath.bitterskotlin.di.ViewModelKey
 import com.vivekvishwanath.bitterskotlin.di.scope.MainScope
-import com.vivekvishwanath.bitterskotlin.ui.main.view.CocktailListViewModel
+import com.vivekvishwanath.bitterskotlin.ui.main.view.viewmodel.CocktailListViewModel
 import com.vivekvishwanath.bitterskotlin.viewmodel.ViewModelProviderFactory
 import dagger.Binds
 import dagger.Module

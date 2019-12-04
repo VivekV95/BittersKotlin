@@ -17,6 +17,8 @@ import com.vivekvishwanath.bitterskotlin.ui.Data
 import com.vivekvishwanath.bitterskotlin.ui.ResponseMessage
 import com.vivekvishwanath.bitterskotlin.ui.ResponseType
 import com.vivekvishwanath.bitterskotlin.ui.main.DataState
+import com.vivekvishwanath.bitterskotlin.ui.main.view.state.CocktailListViewState
+import com.vivekvishwanath.bitterskotlin.ui.main.view.state.CocktailListViewState.*
 import com.vivekvishwanath.bitterskotlin.util.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
@@ -39,7 +41,7 @@ class FirebaseDatabaseDao @Inject constructor(
     lateinit var idsListener: ValueEventListener
 
     private val _favoriteCocktailIds = MediatorLiveData<DataState<Set<Int>>>()
-    private val favoriteCocktails = MutableLiveData<DataState<List<Cocktail>>>()
+    private val favoriteCocktails = MutableLiveData<DataState<CocktailListViewState>>()
 
     val favoriteCocktailIds: LiveData<DataState<Set<Int>>>
         get() = _favoriteCocktailIds
@@ -61,6 +63,26 @@ class FirebaseDatabaseDao @Inject constructor(
         return AbsentLiveData.create()
     }
 
+    /* fun getFavoriteCocktails(): LiveData<DataState<CocktailListViewState>> {
+        if (sessionManager.isConnectedToTheInternet()) {
+            addJob("addFavoriteCocktail", initNewJob())
+            coroutineScope.launch {
+                //delay(TESTING_NETWORK_DELAY)
+                firebaseUser?.let {
+                    firebaseDatabase
+                        .child(FIREBASE_USERS_KEY)
+                        .child(firebaseUser.uid)
+                        .child(FIREBASE_FAVORITE_COCKTAILS_KEY)
+                        .addListenerForSingleValueEvent(getFavoriteCocktailsEventListener())
+                }
+            }
+        } else
+            favoriteCocktails.value = DataState.error(
+                ResponseMessage(UNABLE_TODO_OPERATION_WO_INTERNET, ResponseType.Dialog)
+            )
+        return favoriteCocktails
+    }*/
+
     private fun getIdsEventListener() =
         object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
@@ -68,6 +90,7 @@ class FirebaseDatabaseDao @Inject constructor(
             }
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
+                //getFavoriteCocktails()
                 val cocktailIds = mutableSetOf<Int>()
                 dataSnapshot.children.forEach { id ->
                     id.key?.toInt()?.let {
@@ -78,7 +101,7 @@ class FirebaseDatabaseDao @Inject constructor(
             }
         }
 
-    private fun getFavoriteCocktailsEventListener() =
+    /* private fun getFavoriteCocktailsEventListener() =
         object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
                 favoriteCocktails.value = DataState.error(
@@ -110,11 +133,15 @@ class FirebaseDatabaseDao @Inject constructor(
                     }
                 }
                 GlobalScope.launch(Main) {
-                    favoriteCocktails.value = DataState.data(cocktails)
+                    favoriteCocktails.value = DataState.data(
+                        CocktailListViewState(
+                            CocktailFields(favoriteCocktails = cocktails)
+                        )
+                    )
                 }
             }
 
-        }
+        }*/
 
     suspend fun addFavoriteCocktail(
         cocktail: Cocktail

@@ -19,3 +19,7 @@ const val CACHE_TYPE_POPULAR = 2
 const val CACHE_TYPE_LATEST = 3
 const val CACHE_TYPE_CUSTOM = 4
 const val CACHE_TYPE_OTHER = 5
+
+const val TYPE_POPULAR = "Popular"
+const val TYPE_FAVORITES = "Favorites"
+const val TYPE_CUSTOM = "Custom"

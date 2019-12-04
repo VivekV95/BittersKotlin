@@ -23,4 +23,5 @@
     <string name="filter_by_cocktail_type">Cocktail Type</string>
     <string name="favorites">Favorites</string>
     <string name="popular">Popular</string>
+    <string name="custom">Custom</string>
 </resources>

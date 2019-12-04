@@ -2,31 +2,18 @@ package com.vivekvishwanath.bitterskotlin.ui.main
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.view.MenuItem
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
-import androidx.navigation.ui.NavigationUI.setupActionBarWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.vivekvishwanath.bitterskotlin.BaseApplication
 import com.vivekvishwanath.bitterskotlin.R
-import com.vivekvishwanath.bitterskotlin.network.CocktailDbServiceWrapper
-import com.vivekvishwanath.bitterskotlin.network.FirebaseDatabaseDao
 import com.vivekvishwanath.bitterskotlin.ui.BaseActivity
-import com.vivekvishwanath.bitterskotlin.ui.auth.AuthState
-import com.vivekvishwanath.bitterskotlin.ui.main.create.state.SelectIngredientsFragment
-import com.vivekvishwanath.bitterskotlin.ui.main.view.CocktailListFragment
-import com.vivekvishwanath.bitterskotlin.ui.main.view.CocktailListViewModel
 import com.vivekvishwanath.bitterskotlin.ui.main.view.state.CocktailListStateEvent
-import com.vivekvishwanath.bitterskotlin.ui.navToAuth
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.vivekvishwanath.bitterskotlin.util.setupWithNavController
-import com.vivekvishwanath.bitterskotlin.viewmodel.ViewModelProviderFactory
 import kotlinx.android.synthetic.main.activity_main.*
-import javax.inject.Inject
 
 class MainActivity : BaseActivity() {
 
@@ -98,5 +85,4 @@ class MainActivity : BaseActivity() {
         super.onStop()
         viewModel.cancelActiveJobs()
     }
-
 }
