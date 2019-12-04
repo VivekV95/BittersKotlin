@@ -103,39 +103,40 @@ class AuthRepository @Inject constructor(
                 if (isNetworkAvailable()) {
                     addJob("setSignedInUser", initNewJob())
                     coroutineScope.launch {
-                                user
-                                    .getIdToken(true)
-                                    .addOnCompleteListener { task ->
-                                        if (task.isSuccessful) {
-                                            task.result?.token?.let { token ->
-                                                sessionManager.setCurrentUser(
-                                                    AuthState.Authenticated(
-                                                        SessionState(
-                                                            user,
-                                                            token
-                                                        )
-                                                    )
-                                                )
-                                            }
-                                        } else
-                                            sessionManager.setCurrentUser(
-                                                AuthState.Authenticated(
-                                                    SessionState(
-                                                        user,
-                                                        ""
-                                                    )
+                        user
+                            .getIdToken(true)
+                            .addOnCompleteListener { task ->
+                                if (task.isSuccessful) {
+                                    task.result?.token?.let { token ->
+                                        sessionManager.setCurrentUser(
+                                            AuthState.Authenticated(
+                                                SessionState(
+                                                    user,
+                                                    token
                                                 )
                                             )
+                                        )
                                     }
+                                } else
+                                    sessionManager.setCurrentUser(
+                                        AuthState.Authenticated(
+                                            SessionState(
+                                                user,
+                                                ""
+                                            )
+                                        )
+                                    )
+                            }
                     }
-                } else sessionManager.setCurrentUser(
-                    AuthState.Authenticated(
-                        SessionState(
-                            user, ""
+                } else
+                    sessionManager.setCurrentUser(
+                        AuthState.Authenticated(
+                            SessionState(
+                                user, ""
+                            )
                         )
                     )
-                )
-        }
+            }
         return sessionManager.getCurrentUser()
     }
 
@@ -144,10 +145,13 @@ class AuthRepository @Inject constructor(
             delay(AUTH_TIMEOUT)
 
             if (!job.isCompleted) {
-                sessionManager.setCurrentUser(AuthState.Loading(
-                    ResponseMessage(
-                        ERROR_LOGIN_TIMEOUT, ResponseType.Toast)
-                ))
+                sessionManager.setCurrentUser(
+                    AuthState.Loading(
+                        ResponseMessage(
+                            ERROR_LOGIN_TIMEOUT, ResponseType.Toast
+                        )
+                    )
+                )
             }
         }
     }

@@ -20,27 +20,35 @@ import com.vivekvishwanath.bitterskotlin.util.COCKTAIL_RV_SPACING
 import com.vivekvishwanath.bitterskotlin.util.LANDSCAPE_RV_COLUMNS
 import com.vivekvishwanath.bitterskotlin.util.PORTRAIT_RV_COLUMNS
 import com.vivekvishwanath.bitterskotlin.util.CocktailSpacingItemDecoration
-import kotlinx.android.synthetic.main.fragment_cocktail_list.*
+import kotlinx.android.synthetic.main.fragment_popular.*
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class CocktailListFragment : BaseCocktailFragment(), CocktailListAdapter.CocktailInteractionListener {
+class PopularFragment : BaseCocktailFragment(),
+    CocktailListAdapter.CocktailInteractionListener {
 
     private lateinit var cocktailListAdapter: CocktailListAdapter
 
-    override fun onCocktailSelected(position: Int, item: Cocktail, extras: FragmentNavigator.Extras) {
-        val bundle = bundleOf("cocktail" to item,
-            "position" to position)
+    override fun onCocktailSelected(
+        position: Int,
+        item: Cocktail,
+        extras: FragmentNavigator.Extras
+    ) {
+        val bundle = bundleOf(
+            "cocktail" to item,
+            "position" to position
+        )
 
         findNavController().navigate(
-            R.id.action_cocktailListFragment_to_viewCocktailFragment,
-            bundle, null, extras)
+            R.id.action_popularFragment_to_viewCocktailFragment,
+            bundle, null, extras
+        )
     }
 
     override fun onCocktailLongPressed(position: Int, item: Cocktail) {
         GlobalScope.launch(Main) {
-            if(item.isFavorite)
+            if (item.isFavorite)
                 viewModel.addFavoriteCocktail(item)
             else
                 viewModel.deleteFavoriteCocktail(item)
@@ -57,7 +65,7 @@ class CocktailListFragment : BaseCocktailFragment(), CocktailListAdapter.Cocktai
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_cocktail_list, container, false)
+        return inflater.inflate(R.layout.fragment_popular, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -74,12 +82,11 @@ class CocktailListFragment : BaseCocktailFragment(), CocktailListAdapter.Cocktai
             if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
                 layoutManager = GridLayoutManager(activity, LANDSCAPE_RV_COLUMNS)
                 addItemDecoration(CocktailSpacingItemDecoration(COCKTAIL_RV_SPACING, false))
-            }
-             else {
+            } else {
                 layoutManager = GridLayoutManager(activity, PORTRAIT_RV_COLUMNS)
                 addItemDecoration(CocktailSpacingItemDecoration(COCKTAIL_RV_SPACING, true))
             }
-            cocktailListAdapter = CocktailListAdapter(picasso, this@CocktailListFragment)
+            cocktailListAdapter = CocktailListAdapter(picasso, this@PopularFragment)
             adapter = cocktailListAdapter
             postponeEnterTransition()
             viewTreeObserver
@@ -87,17 +94,32 @@ class CocktailListFragment : BaseCocktailFragment(), CocktailListAdapter.Cocktai
                     startPostponedEnterTransition()
                     true
                 }
+
+//            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+//                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+//                    super.onScrollStateChanged(recyclerView, newState)
+//                    val layoutManager = recyclerView.layoutManager as GridLayoutManager
+//                    val lastPosition = layoutManager.findLastVisibleItemPosition()
+//                    //viewModel.setRecyclerViewPosition(tabs.selectedTabPosition, lastPosition)
+//                }
+//            })
         }
     }
 
     private fun subscribeObservers() {
         viewModel.dataState.observe(viewLifecycleOwner, Observer { dataState ->
             stateChangeListener.onDataStateChanged(dataState)
-            dataState.data?.data?.let { event ->
+            dataState?.data?.data?.let { event ->
                 event.getContentIfNotHandled()?.let { mainViewState ->
                     mainViewState.cocktailFields.popularCocktails.let { cocktails ->
-                        viewModel.setPopularCocktailsData(cocktails)
+                        if (cocktails.isNotEmpty())
+                            viewModel.setPopularCocktailsData(cocktails)
                     }
+                    mainViewState.cocktailFields.favoriteCocktails.let { cocktails ->
+                        if (cocktails.isNotEmpty())
+                            viewModel.setFavoriteCocktailsData(cocktails)
+                    }
+
                 }
             }
         })
@@ -126,4 +148,14 @@ class CocktailListFragment : BaseCocktailFragment(), CocktailListAdapter.Cocktai
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.cocktail_list_menu, menu)
     }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_cocktail_type -> {
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
 }

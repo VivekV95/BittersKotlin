@@ -116,5 +116,6 @@ fun Activity.navToAuth() {
 fun Activity.navToMain() {
     Intent(this, MainActivity::class.java)
         .apply { startActivity(this)
-        finish()}
+        finish()
+        }
 }
