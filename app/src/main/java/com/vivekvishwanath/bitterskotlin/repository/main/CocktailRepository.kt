@@ -132,8 +132,8 @@ class CocktailRepository @Inject constructor(
                         firebaseDbServiceWrapper
                             .firebaseService
                             .getFavoriteCocktails(
-                                sessionState.authToken,
-                                sessionState.firebaseUser.uid
+                                sessionState.firebaseUser.uid,
+                                sessionState.authToken
                             )
                     }
 
