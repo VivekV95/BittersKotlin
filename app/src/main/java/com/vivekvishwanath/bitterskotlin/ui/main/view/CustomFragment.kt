@@ -12,7 +12,7 @@ import com.vivekvishwanath.bitterskotlin.R
 /**
  * A simple [Fragment] subclass.
  */
-class FragmentCustom : Fragment() {
+class CustomFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

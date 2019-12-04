@@ -25,36 +25,7 @@ import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class PopularFragment : BaseCocktailFragment(),
-    CocktailListAdapter.CocktailInteractionListener {
-
-    private lateinit var cocktailListAdapter: CocktailListAdapter
-
-    override fun onCocktailSelected(
-        position: Int,
-        item: Cocktail,
-        extras: FragmentNavigator.Extras
-    ) {
-        val bundle = bundleOf(
-            "cocktail" to item,
-            "position" to position
-        )
-
-        findNavController().navigate(
-            R.id.action_popularFragment_to_viewCocktailFragment,
-            bundle, null, extras
-        )
-    }
-
-    override fun onCocktailLongPressed(position: Int, item: Cocktail) {
-        GlobalScope.launch(Main) {
-            if (item.isFavorite)
-                viewModel.addFavoriteCocktail(item)
-            else
-                viewModel.deleteFavoriteCocktail(item)
-            cocktailListAdapter.notifyItemChanged(position)
-        }
-    }
+class PopularFragment : BaseCocktailFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         (activity as MainActivity).mainComponent.inject(this)
@@ -94,15 +65,6 @@ class PopularFragment : BaseCocktailFragment(),
                     startPostponedEnterTransition()
                     true
                 }
-
-//            addOnScrollListener(object : RecyclerView.OnScrollListener() {
-//                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-//                    super.onScrollStateChanged(recyclerView, newState)
-//                    val layoutManager = recyclerView.layoutManager as GridLayoutManager
-//                    val lastPosition = layoutManager.findLastVisibleItemPosition()
-//                    //viewModel.setRecyclerViewPosition(tabs.selectedTabPosition, lastPosition)
-//                }
-//            })
         }
     }
 
@@ -135,27 +97,12 @@ class PopularFragment : BaseCocktailFragment(),
 
         viewModel.viewState.observe(viewLifecycleOwner, Observer { viewState ->
             viewState.cocktailFields.popularCocktails.let { cocktails ->
-                cocktailListAdapter.submitCocktails(cocktails)
+                submitCocktails(cocktails)
             }
 
             viewState.favoriteIds.let { ids ->
-                cocktailListAdapter.submitFavoriteIds(ids)
+                submitFavoriteIds(ids)
             }
         })
     }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.cocktail_list_menu, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.action_cocktail_type -> {
-                return true
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
 }
