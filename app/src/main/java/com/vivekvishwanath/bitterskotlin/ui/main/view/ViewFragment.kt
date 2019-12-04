@@ -11,9 +11,10 @@ import com.google.android.material.tabs.TabLayout.*
 
 import com.vivekvishwanath.bitterskotlin.R
 import com.vivekvishwanath.bitterskotlin.ui.adapter.PageAdapter
+import com.vivekvishwanath.bitterskotlin.ui.main.BaseCocktailFragment
 import kotlinx.android.synthetic.main.fragment_view.*
 
-class FragmentView : Fragment() {
+class ViewFragment : Fragment() {
 
     private lateinit var pageAdapter: PageAdapter
 

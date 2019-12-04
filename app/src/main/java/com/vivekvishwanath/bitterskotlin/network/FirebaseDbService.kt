@@ -12,6 +12,6 @@ interface FirebaseDbService {
 
     @GET("users/{uid}")
     fun getFavoriteCocktails(
-        @Query("auth")authToken: String,
-        @Path("uid")uid: String): LiveData<GenericApiResponse<List<Cocktail>>>
+        @Path("uid")uid: String,
+        @Query("auth")authToken: String): LiveData<GenericApiResponse<List<Cocktail>>>
 }

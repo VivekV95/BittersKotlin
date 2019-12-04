@@ -23,7 +23,7 @@
 
     <fragment
         android:id="@+id/viewFragment"
-        android:name="com.vivekvishwanath.bitterskotlin.ui.main.view.FragmentView"
+        android:name="com.vivekvishwanath.bitterskotlin.ui.main.view.ViewFragment"
         android:label="fragment_view"
         tools:layout="@layout/fragment_view" >
         <action
