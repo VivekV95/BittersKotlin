@@ -14,6 +14,9 @@ interface CocktailDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertCocktail(cocktail: Cocktail)
 
+    @Delete
+    suspend fun deleteCocktail(cocktail: Cocktail)
+
     @Query("""
         SELECT * FROM cocktails
         INNER JOIN cocktail_cache_type

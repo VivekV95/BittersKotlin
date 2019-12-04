@@ -17,4 +17,10 @@
     <string name="text_error">Error</string>
     <string name="text_success">Success</string>
     <string name="text_ok">OK</string>
+    <string name="cocktail_type">Cocktail Type</string>
+    <string name="search">Search</string>
+    <string name="filter_options">Select Cocktails by Type</string>
+    <string name="filter_by_cocktail_type">Cocktail Type</string>
+    <string name="favorites">Favorites</string>
+    <string name="popular">Popular</string>
 </resources>
