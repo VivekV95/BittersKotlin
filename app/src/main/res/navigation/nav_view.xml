@@ -6,52 +6,19 @@
     app:startDestination="@id/viewFragment">
 
     <fragment
-        android:id="@+id/popularFragment"
-        android:name="com.vivekvishwanath.bitterskotlin.ui.main.view.PopularFragment"
-        android:label="Cocktail Home"
-        tools:layout="@layout/fragment_popular" >
-        <action
-            android:id="@+id/action_popularFragment_to_viewCocktailFragment"
-            app:destination="@id/viewCocktailFragment"
-            app:popEnterAnim="@anim/fade_in"
-            app:exitAnim="@anim/fade_out"
-            app:enterAnim="@anim/fade_in"
-            app:popExitAnim="@anim/fade_out"/>
-    </fragment>
-
-    <fragment
         android:id="@+id/viewCocktailFragment"
         android:name="com.vivekvishwanath.bitterskotlin.ui.main.ViewCocktailFragment"
         android:label="View Cocktail"
         tools:layout="@layout/fragment_view_cocktail" >
         <action
-            android:id="@+id/action_viewCocktailFragment_to_popularFragment"
-            app:destination="@id/popularFragment"
+            android:id="@+id/action_viewCocktailFragment_to_viewFragment"
+            app:destination="@id/viewFragment"
             app:popEnterAnim="@anim/fade_in"
             app:exitAnim="@anim/fade_out"
             app:enterAnim="@anim/fade_in"
             app:popExitAnim="@anim/fade_out"
-            app:popUpTo="@id/nav_view"
+            app:popUpTo="@id/viewFragment"
             app:popUpToInclusive="true"/>
-        <action
-            android:id="@+id/action_viewCocktailFragment_to_favoritesFragment"
-            app:destination="@id/favoritesFragment"
-            app:popEnterAnim="@anim/fade_in"
-            app:exitAnim="@anim/fade_out"
-            app:enterAnim="@anim/fade_in"
-            app:popExitAnim="@anim/fade_out"
-            app:popUpTo="@id/nav_view"
-            app:popUpToInclusive="true"/>
-        <action
-            android:id="@+id/action_viewCocktailFragment_to_fragmentCustom"
-            app:destination="@id/fragmentCustom"
-            app:popEnterAnim="@anim/fade_in"
-            app:exitAnim="@anim/fade_out"
-            app:enterAnim="@anim/fade_in"
-            app:popExitAnim="@anim/fade_out"
-            app:popUpTo="@id/nav_view"
-            app:popUpToInclusive="true"/>
-
     </fragment>
 
     <fragment
@@ -80,34 +47,31 @@
             app:exitAnim="@anim/fade_out"
             app:enterAnim="@anim/fade_in"
             app:popExitAnim="@anim/fade_out"/>
+        <action
+            android:id="@+id/action_viewFragment_to_viewCocktailFragment"
+            app:destination="@id/viewCocktailFragment"
+            app:popEnterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:enterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"/>
     </fragment>
 
     <fragment
         android:id="@+id/favoritesFragment"
         android:name="com.vivekvishwanath.bitterskotlin.ui.main.view.FavoritesFragment"
         android:label="fragment_favorites"
-        tools:layout="@layout/fragment_favorites" >
-        <action
-            android:id="@+id/action_favoritesFragment_to_viewCocktailFragment"
-            app:destination="@id/viewCocktailFragment"
-            app:popEnterAnim="@anim/fade_in"
-            app:exitAnim="@anim/fade_out"
-            app:enterAnim="@anim/fade_in"
-            app:popExitAnim="@anim/fade_out"/>
-    </fragment>
+        tools:layout="@layout/fragment_favorites" />
 
     <fragment
         android:id="@+id/fragmentCustom"
-        android:name="com.vivekvishwanath.bitterskotlin.ui.main.view.FragmentCustom"
+        android:name="com.vivekvishwanath.bitterskotlin.ui.main.view.CustomFragment"
         android:label="fragment_fragment_custom"
-        tools:layout="@layout/fragment_fragment_custom" >
-        <action
-            android:id="@+id/action_fragmentCustom_to_viewCocktailFragment"
-            app:destination="@id/viewCocktailFragment"
-            app:popEnterAnim="@anim/fade_in"
-            app:exitAnim="@anim/fade_out"
-            app:enterAnim="@anim/fade_in"
-            app:popExitAnim="@anim/fade_out"/>
-    </fragment>
+        tools:layout="@layout/fragment_fragment_custom" />
+
+    <fragment
+        android:id="@+id/popularFragment"
+        android:name="com.vivekvishwanath.bitterskotlin.ui.main.view.PopularFragment"
+        android:label="Cocktail Home"
+        tools:layout="@layout/fragment_popular" />
 
 </navigation>
