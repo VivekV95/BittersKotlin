@@ -9,17 +9,15 @@ import com.vivekvishwanath.bitterskotlin.model.CocktailCacheType
 import com.vivekvishwanath.bitterskotlin.model.CocktailDbResponse
 import com.vivekvishwanath.bitterskotlin.network.CocktailDbServiceWrapper
 import com.vivekvishwanath.bitterskotlin.network.FirebaseDatabaseDao
+import com.vivekvishwanath.bitterskotlin.network.FirebaseDbServiceWrapper
 import com.vivekvishwanath.bitterskotlin.repository.JobManager
 import com.vivekvishwanath.bitterskotlin.network.NetworkBoundResource
 import com.vivekvishwanath.bitterskotlin.persistence.CocktailDao
 import com.vivekvishwanath.bitterskotlin.session.SessionManager
 import com.vivekvishwanath.bitterskotlin.ui.main.view.state.CocktailListViewState
-import com.vivekvishwanath.bitterskotlin.util.ApiSuccessResponse
 import com.vivekvishwanath.bitterskotlin.ui.main.DataState
 import com.vivekvishwanath.bitterskotlin.ui.main.view.state.CocktailListViewState.*
-import com.vivekvishwanath.bitterskotlin.util.CACHE_TYPE_POPULAR
-import com.vivekvishwanath.bitterskotlin.util.GenericApiResponse
-import com.vivekvishwanath.bitterskotlin.util.LOG_TAG
+import com.vivekvishwanath.bitterskotlin.util.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.Job
@@ -33,7 +31,8 @@ class CocktailRepository @Inject constructor(
     private val cocktailDbServiceWrapper: CocktailDbServiceWrapper,
     private val sessionManager: SessionManager,
     private val firebaseDatabaseDao: FirebaseDatabaseDao,
-    private val cocktailDao: CocktailDao
+    private val cocktailDao: CocktailDao,
+    private val firebaseDbServiceWrapper: FirebaseDbServiceWrapper
 ) : JobManager("CocktailRepository") {
 
     fun getPopularCocktails(): LiveData<DataState<CocktailListViewState>> =
@@ -111,34 +110,87 @@ class CocktailRepository @Inject constructor(
         }.asLiveData()
 
     fun getFavoriteCocktails(): LiveData<DataState<CocktailListViewState>> =
-        object : NetworkBoundResource<Void, List<Cocktail>, CocktailListViewState>(
+
+        object : NetworkBoundResource<List<Cocktail>, List<Cocktail>, CocktailListViewState>(
             sessionManager.isConnectedToTheInternet(),
             true,
             false,
             true
         ) {
-            override suspend fun handleApiSuccessResponse(response: ApiSuccessResponse<Void>) {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            override suspend fun handleApiSuccessResponse(response: ApiSuccessResponse<List<Cocktail>>) {
+                updateLocalDb(response.body)
+                createCacheRequestAndReturn()
             }
 
-            override fun createCall(): LiveData<GenericApiResponse<Void>>? {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-            }
+            override fun createCall(): LiveData<GenericApiResponse<List<Cocktail>>>? =
+                sessionManager
+                    .getCurrentUser()
+                    .value
+                    ?.data
+                    ?.peekContent()
+                    ?.let { sessionState ->
+                        firebaseDbServiceWrapper
+                            .firebaseService
+                            .getFavoriteCocktails(
+                                sessionState.authToken,
+                                sessionState.firebaseUser.uid)
+                    }
+
 
             override suspend fun createCacheRequestAndReturn() {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-            }
+                withContext(Main) {
+                    result.addSource(loadFromCache()) { viewState ->
+                        onCompleteJob(DataState.data(viewState, null))
+                    }
+                }            }
 
-            override fun loadFromCache(): LiveData<CocktailListViewState> {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-            }
+            override fun loadFromCache(): LiveData<CocktailListViewState> =
+                cocktailDao
+                    .getCachedCocktailsByType(CACHE_TYPE_FAVORITES)
+                    .switchMap {
+                        object : LiveData<CocktailListViewState>() {
+                            override fun onActive() {
+                                super.onActive()
+                                value = CocktailListViewState(
+                                    CocktailFields(
+                                        favoriteCocktails = it
+                                    )
+                                )
+                            }
+                        }
+                    }
 
             override suspend fun updateLocalDb(cacheObject: List<Cocktail>?) {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                cacheObject?.let { cocktails ->
+                    withContext(IO) {
+                        cocktailDao.deleteAllCocktailsByCacheType(CACHE_TYPE_POPULAR)
+                        cocktails.forEach { cocktail ->
+                            try {
+                                if (cocktailDao.getCountTypesOfCacheForCocktail(cocktail.drinkId) == 0) {
+                                    cocktailDao.deleteCocktail(cocktail)
+                                }
+                                launch {
+                                    cocktailDao.insertCocktail(cocktail)
+                                    cocktailDao.insertCocktailCacheType(
+                                        CocktailCacheType(
+                                            drinkId = cocktail.drinkId,
+                                            cacheTypeId = CACHE_TYPE_FAVORITES
+                                        )
+                                    )
+                                }
+                            } catch (e: Exception) {
+                                Log.d(
+                                    LOG_TAG, "${this.javaClass.simpleName}:" +
+                                            " Error updating cache data for cockatil ${cocktail.drinkName} "
+                                )
+                            }
+                        }
+                    }
+                }
             }
 
             override fun setJob(job: Job) {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                addJob("getFavoriteCocktails", job)
             }
 
         }.asLiveData()

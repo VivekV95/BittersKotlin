@@ -61,26 +61,6 @@ class FirebaseDatabaseDao @Inject constructor(
         return AbsentLiveData.create()
     }
 
-    private fun getFavoriteCocktails(): LiveData<DataState<List<Cocktail>>> {
-        if (sessionManager.isConnectedToTheInternet()) {
-            addJob("addFavoriteCocktail", initNewJob())
-            coroutineScope.launch {
-                //delay(TESTING_NETWORK_DELAY)
-                firebaseUser?.let {
-                    firebaseDatabase
-                        .child(FIREBASE_USERS_KEY)
-                        .child(firebaseUser.uid)
-                        .child(FIREBASE_FAVORITE_COCKTAILS_KEY)
-                        .addListenerForSingleValueEvent(getFavoriteCocktailsEventListener())
-                }
-            }
-        } else
-            favoriteCocktails.value = DataState.error(
-                ResponseMessage(UNABLE_TODO_OPERATION_WO_INTERNET, ResponseType.Dialog)
-            )
-        return favoriteCocktails
-    }
-
     private fun getIdsEventListener() =
         object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
@@ -88,7 +68,6 @@ class FirebaseDatabaseDao @Inject constructor(
             }
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                getFavoriteCocktails()
                 val cocktailIds = mutableSetOf<Int>()
                 dataSnapshot.children.forEach { id ->
                     id.key?.toInt()?.let {

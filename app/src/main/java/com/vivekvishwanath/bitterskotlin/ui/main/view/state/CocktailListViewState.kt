@@ -10,7 +10,8 @@ data class CocktailListViewState(
 
     data class CocktailFields(
         var popularCocktails: List<Cocktail> = arrayListOf(),
-        var customCocktails: List<Cocktail> = arrayListOf()
+        var customCocktails: List<Cocktail> = arrayListOf(),
+        var favoriteCocktails: List<Cocktail> = arrayListOf()
     )
 
     data class ViewCocktailFields(
