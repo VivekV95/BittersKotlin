@@ -17,44 +17,44 @@ data class Cocktail(
     var isFavorite: Boolean = false,
 
     @ColumnInfo(name = "drink_id")
-    @SerializedName("idDrink")
+    @SerializedName("idDrink", alternate = ["drinkId"])
     @PrimaryKey
     val drinkId: String = "-1",
 
     @ColumnInfo(name = "drink_name")
-    @SerializedName("strDrink")
+    @SerializedName("strDrink", alternate = ["drinkName"])
     val drinkName: String? = null,
 
     @ColumnInfo(name = "drink_tags")
-    @SerializedName("strTags")
+    @SerializedName("strTags", alternate = ["drinkTags"])
     val drinkTags: String? = null,
 
     @ColumnInfo(name = "drink_video")
-    @SerializedName("strVideo")
+    @SerializedName("strVideo", alternate = ["drinkVideo"])
     val drinkVideo: String?= null,
 
     @ColumnInfo(name = "drink_category")
-    @SerializedName("strCategory")
+    @SerializedName("strCategory", alternate = ["drinkCategory"])
     val drinkCategory: String? = null,
 
     @ColumnInfo(name = "drink_iba")
-    @SerializedName("strIBA")
+    @SerializedName("strIBA", alternate = ["drinkIBA"])
     val drinkIBA: String? = null,
 
     @ColumnInfo(name = "alcoholic")
-    @SerializedName("strAlcoholic")
+    @SerializedName("strAlcoholic", alternate = ["alcoholic"])
     val alcoholic: String? = null,
 
     @ColumnInfo(name = "drink_glass")
-    @SerializedName("strGlass")
+    @SerializedName("strGlass", alternate = ["drinkGlass"])
     val drinkGlass: String? = null,
 
     @ColumnInfo(name = "drink_instructions")
-    @SerializedName("strInstructions")
+    @SerializedName("strInstructions", alternate = ["drinkInstructions"])
     val drinkInstructions: String? = null,
 
     @ColumnInfo(name = "drink_image")
-    @SerializedName("strDrinkThumb")
+    @SerializedName("strDrinkThumb", alternate = ["drinkImage"])
     val drinkImage: String? = null,
 
     @ColumnInfo(name = "str_ingredient_1")

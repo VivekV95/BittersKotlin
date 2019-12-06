@@ -51,7 +51,7 @@ class AuthViewModel @Inject constructor(
                 AbsentLiveData.create()
             }
             is AuthStateEvent.LoginOnReturnEvent -> {
-                authRepository.setSignedInUser()
+                authRepository.setSignedInUser(false)
             }
         }
 

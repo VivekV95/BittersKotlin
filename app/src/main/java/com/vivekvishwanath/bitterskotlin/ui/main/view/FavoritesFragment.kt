@@ -15,6 +15,7 @@ import com.vivekvishwanath.bitterskotlin.R
 import com.vivekvishwanath.bitterskotlin.ui.adapter.CocktailListAdapter
 import com.vivekvishwanath.bitterskotlin.ui.main.BaseCocktailFragment
 import com.vivekvishwanath.bitterskotlin.ui.main.MainActivity
+import com.vivekvishwanath.bitterskotlin.ui.main.view.state.CocktailListStateEvent
 import com.vivekvishwanath.bitterskotlin.util.COCKTAIL_RV_SPACING
 import com.vivekvishwanath.bitterskotlin.util.CocktailSpacingItemDecoration
 import com.vivekvishwanath.bitterskotlin.util.LANDSCAPE_RV_COLUMNS
@@ -45,6 +46,7 @@ class FavoritesFragment : BaseCocktailFragment() {
 
         initRecyclerView()
         subscribeObservers()
+        viewModel.setStateEvent(CocktailListStateEvent.GetFavoriteCocktailsEvent)
     }
 
     private fun initRecyclerView() {

@@ -96,4 +96,8 @@ dependencies {
 
     implementation 'com.daimajia.easing:library:2.0@aar'
     implementation 'com.daimajia.androidanimations:library:2.3@aar'
+
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.2.1'
+
+    implementation 'com.google.code.gson:gson:2.8.6'
 }

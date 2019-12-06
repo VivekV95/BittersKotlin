@@ -6,6 +6,8 @@ import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.squareup.picasso.Picasso
 import com.vivekvishwanath.bitterskotlin.di.scope.MainScope
 import com.vivekvishwanath.bitterskotlin.network.CocktailDbService
@@ -77,5 +79,15 @@ class MainModule {
         @JvmStatic
         fun provideCocktailDao(database: AppDatabase) =
             database.getCocktailDao()
+
+        @MainScope
+        @Provides
+        @JvmStatic
+        fun provideGson(): Gson {
+            return Gson()
+                .newBuilder()
+                .setLenient()
+                .create()
+        }
     }
 }

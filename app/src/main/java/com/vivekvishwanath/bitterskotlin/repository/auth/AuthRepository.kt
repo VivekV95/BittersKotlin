@@ -71,7 +71,7 @@ class AuthRepository @Inject constructor(
                     .signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
-                            setSignedInUser()
+                            setSignedInUser(true)
                         } else
                             task.exception?.message?.let { message ->
                                 sessionManager.setCurrentUser(
@@ -95,7 +95,8 @@ class AuthRepository @Inject constructor(
         return sessionManager.getCurrentUser()
     }
 
-    fun setSignedInUser(): LiveData<AuthState<SessionState>> {
+    fun setSignedInUser(isSignIn: Boolean): LiveData<AuthState<SessionState>> {
+        var count = 0
         sessionManager.setCurrentUser(AuthState.Loading())
         mAuth
             .currentUser
@@ -108,6 +109,7 @@ class AuthRepository @Inject constructor(
                             .addOnCompleteListener { task ->
                                 if (task.isSuccessful) {
                                     task.result?.token?.let { token ->
+                                        if (count++ < 2)
                                         sessionManager.setCurrentUser(
                                             AuthState.Authenticated(
                                                 SessionState(
@@ -136,7 +138,7 @@ class AuthRepository @Inject constructor(
                             )
                         )
                     )
-            }
+            }?: sessionManager.setCurrentUser(AuthState.NotAuthenticated())
         return sessionManager.getCurrentUser()
     }
 

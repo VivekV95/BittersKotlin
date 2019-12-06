@@ -74,9 +74,9 @@ abstract class BaseCocktailFragment: Fragment(), CocktailListAdapter.CocktailInt
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
 
-        viewModel = activity?.run {
-            ViewModelProvider(this, viewModelProviderFactory)[CocktailListViewModel::class.java]
-        }?: throw Exception("Invalid Activity")
+        activity?.run {
+            viewModel = ViewModelProvider(this, viewModelProviderFactory)[CocktailListViewModel::class.java]
+        }
 
         cancelActiveJobs()
     }

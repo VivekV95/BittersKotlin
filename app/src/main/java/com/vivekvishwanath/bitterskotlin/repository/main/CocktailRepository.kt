@@ -3,6 +3,8 @@ package com.vivekvishwanath.bitterskotlin.repository.main
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.switchMap
+import com.google.gson.Gson
+import com.google.gson.JsonElement
 import com.vivekvishwanath.bitterskotlin.di.scope.MainScope
 import com.vivekvishwanath.bitterskotlin.model.Cocktail
 import com.vivekvishwanath.bitterskotlin.model.CocktailCacheType
@@ -32,7 +34,8 @@ class CocktailRepository @Inject constructor(
     private val sessionManager: SessionManager,
     private val firebaseDatabaseDao: FirebaseDatabaseDao,
     private val cocktailDao: CocktailDao,
-    private val firebaseDbServiceWrapper: FirebaseDbServiceWrapper
+    private val firebaseDbServiceWrapper: FirebaseDbServiceWrapper,
+    private val gson: Gson
 ) : JobManager("CocktailRepository") {
 
     fun getPopularCocktails(): LiveData<DataState<CocktailListViewState>> =
@@ -111,18 +114,28 @@ class CocktailRepository @Inject constructor(
 
     fun getFavoriteCocktails(): LiveData<DataState<CocktailListViewState>> =
 
-        object : NetworkBoundResource<List<Cocktail>, List<Cocktail>, CocktailListViewState>(
+        object : NetworkBoundResource<JsonElement, List<Cocktail>, CocktailListViewState>(
             sessionManager.isConnectedToTheInternet(),
             true,
             false,
             true
         ) {
-            override suspend fun handleApiSuccessResponse(response: ApiSuccessResponse<List<Cocktail>>) {
-                updateLocalDb(response.body)
+            override suspend fun handleApiSuccessResponse(response: ApiSuccessResponse<JsonElement>) {
+                val cocktails = arrayListOf<Cocktail>()
+                response
+                    .body
+                    .asJsonObject
+                    .get("favoriteCocktails")
+                    .asJsonObject
+                    .entrySet()
+                    .forEach { cocktailJson ->
+                        cocktails.add(gson.fromJson(cocktailJson.value, Cocktail::class.java))
+                    }
+                updateLocalDb(cocktails)
                 createCacheRequestAndReturn()
             }
 
-            override fun createCall(): LiveData<GenericApiResponse<List<Cocktail>>>? =
+            override fun createCall(): LiveData<GenericApiResponse<JsonElement>>? =
                 sessionManager
                     .getCurrentUser()
                     .value
