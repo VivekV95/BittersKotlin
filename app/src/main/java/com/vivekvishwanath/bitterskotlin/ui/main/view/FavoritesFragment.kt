@@ -46,7 +46,6 @@ class FavoritesFragment : BaseCocktailFragment() {
 
         initRecyclerView()
         subscribeObservers()
-        viewModel.setStateEvent(CocktailListStateEvent.GetFavoriteCocktailsEvent)
     }
 
     private fun initRecyclerView() {

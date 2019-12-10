@@ -14,6 +14,9 @@ import com.vivekvishwanath.bitterskotlin.ui.main.view.state.CocktailListStateEve
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.vivekvishwanath.bitterskotlin.util.setupWithNavController
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class MainActivity : BaseActivity() {
 

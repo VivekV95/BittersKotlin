@@ -2,21 +2,26 @@ package com.vivekvishwanath.bitterskotlin.ui.main.view
 
 
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.*
 
 import com.vivekvishwanath.bitterskotlin.R
 import com.vivekvishwanath.bitterskotlin.ui.adapter.PageAdapter
 import com.vivekvishwanath.bitterskotlin.ui.main.BaseCocktailFragment
+import com.vivekvishwanath.bitterskotlin.ui.main.MainActivity
+import com.vivekvishwanath.bitterskotlin.ui.main.view.state.CocktailListStateEvent
 import kotlinx.android.synthetic.main.fragment_view.*
 
-class ViewFragment : Fragment() {
+class ViewFragment : BaseCocktailFragment() {
 
     private lateinit var pageAdapter: PageAdapter
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        (activity as MainActivity).mainComponent.inject(this)
+        super.onCreate(savedInstanceState)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,15 +37,29 @@ class ViewFragment : Fragment() {
         pageAdapter = PageAdapter(childFragmentManager, tabs.tabCount)
         view_pager.adapter = pageAdapter
 
-        tabs.addOnTabSelectedListener(object: OnTabSelectedListener {
+        tabs.addOnTabSelectedListener(object : OnTabSelectedListener {
             override fun onTabReselected(p0: Tab?) {
+
             }
 
             override fun onTabUnselected(p0: Tab?) {
             }
 
             override fun onTabSelected(tab: Tab?) {
-                view_pager.currentItem  = tab!!.position
+                tab?.position?.let { position ->
+                    when (position) {
+                        0 -> {
+                            viewModel.setStateEvent(CocktailListStateEvent.GetPopularCocktailsEvent)
+                        }
+                        1 -> {
+                            viewModel.setStateEvent(CocktailListStateEvent.GetFavoriteCocktailsEvent)
+                        }
+                        2 -> {
+
+                        }
+                    }
+                    view_pager.currentItem = position
+                }
             }
 
         })

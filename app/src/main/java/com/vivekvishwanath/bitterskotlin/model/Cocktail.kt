@@ -54,7 +54,8 @@ data class Cocktail(
     val drinkInstructions: String? = null,
 
     @ColumnInfo(name = "drink_image")
-    @SerializedName("strDrinkThumb", alternate = ["drinkImage"])
+    @SerializedName("strDrinkThumb", alternate = ["drinkImage" +
+            ""])
     val drinkImage: String? = null,
 
     @ColumnInfo(name = "str_ingredient_1")

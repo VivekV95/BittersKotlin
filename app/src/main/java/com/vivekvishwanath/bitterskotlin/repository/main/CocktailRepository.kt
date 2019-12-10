@@ -74,7 +74,7 @@ class CocktailRepository @Inject constructor(
 
             override suspend fun updateLocalDb(cacheObject: List<Cocktail>?) {
                 cacheObject?.let { cocktails ->
-                    withContext(IO) {
+                    withContext(IO + job) {
                         cocktails.forEach { cocktail ->
                             try {
                                 launch {
@@ -177,7 +177,7 @@ class CocktailRepository @Inject constructor(
 
             override suspend fun updateLocalDb(cacheObject: List<Cocktail>?) {
                 cacheObject?.let { cocktails ->
-                    withContext(IO) {
+                    withContext(IO + job) {
                         cocktailDao.deleteAllCocktailsByCacheType(CACHE_TYPE_POPULAR)
                         cocktails.forEach { cocktail ->
                             try {

@@ -60,7 +60,7 @@ abstract class NetworkBoundResource<ResponseObject, CacheObject, ViewStateType>(
         coroutineScope.launch {
             //delay(TESTING_NETWORK_DELAY)
 
-            withContext(Main) {
+            GlobalScope.launch (Main) {
                 Log.d(LOG_TAG, "${this.javaClass.simpleName}: ${Thread.currentThread()}")
                 val apiResponse = createCall()
                 apiResponse?.let {

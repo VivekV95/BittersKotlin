@@ -72,12 +72,11 @@ abstract class BaseCocktailFragment: Fragment(), CocktailListAdapter.CocktailInt
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setHasOptionsMenu(true)
+        setHasOptionsMenu(false)
 
         activity?.run {
             viewModel = ViewModelProvider(this, viewModelProviderFactory)[CocktailListViewModel::class.java]
         }
-
         cancelActiveJobs()
     }
 

@@ -43,11 +43,13 @@ class PopularFragment : BaseCocktailFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (activity as AppCompatActivity).supportActionBar?.setDisplayShowTitleEnabled(false)
-        setHasOptionsMenu(true)
 
         initRecyclerView()
         subscribeObservers()
-        viewModel.setStateEvent(CocktailListStateEvent.GetPopularCocktailsEvent)
+        popular_refresh.setOnRefreshListener {
+            viewModel.setStateEvent(CocktailListStateEvent.GetPopularCocktailsEvent)
+            popular_refresh.isRefreshing = false
+        }
     }
 
     private fun initRecyclerView() {
