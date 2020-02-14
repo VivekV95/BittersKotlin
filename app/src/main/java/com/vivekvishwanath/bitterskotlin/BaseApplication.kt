@@ -9,6 +9,8 @@ class BaseApplication: Application() {
         DaggerAppComponent
             .builder()
             .application(this)
+            .popularCall(false)
             .build()
     }
+
 }

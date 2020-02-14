@@ -6,6 +6,7 @@ import com.vivekvishwanath.bitterskotlin.di.auth.AuthComponent
 import com.vivekvishwanath.bitterskotlin.di.main.MainComponent
 import dagger.BindsInstance
 import dagger.Component
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Singleton
@@ -20,6 +21,9 @@ interface AppComponent {
 
         @BindsInstance
         fun application(application: Application): Builder
+
+        @BindsInstance
+        fun popularCall(@Named("popularCall") callCompleted: Boolean): Builder
 
         fun build(): AppComponent
     }

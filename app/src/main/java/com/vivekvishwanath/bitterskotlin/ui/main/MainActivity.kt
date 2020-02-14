@@ -41,10 +41,6 @@ class MainActivity : BaseActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(tool_bar)
 
-        tool_bar.setOnClickListener {
-            viewModel.setStateEvent(CocktailListStateEvent.GetPopularCocktailsEvent)
-        }
-
         setupBottomNavigationBar()
     }
 

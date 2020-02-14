@@ -12,10 +12,21 @@ import com.vivekvishwanath.bitterskotlin.ui.main.view.state.CocktailListStateEve
 import com.vivekvishwanath.bitterskotlin.ui.main.view.state.CocktailListViewState
 import com.vivekvishwanath.bitterskotlin.util.AbsentLiveData
 import javax.inject.Inject
+import javax.inject.Named
 
 @MainScope
 class CocktailListViewModel @Inject constructor
-    (private val repository: CocktailRepository) : BaseViewModel<CocktailListStateEvent, CocktailListViewState>() {
+    (
+    private val repository: CocktailRepository,
+    @Named("popularCall") var shouldCall: Boolean
+) : BaseViewModel<CocktailListStateEvent, CocktailListViewState>() {
+
+    init {
+        if (!shouldCall) {
+            setStateEvent(GetPopularCocktailsEvent)
+            shouldCall = false
+        }
+    }
 
     override fun initNewViewState(): CocktailListViewState {
         return CocktailListViewState()
@@ -60,7 +71,8 @@ class CocktailListViewModel @Inject constructor
 
     suspend fun addFavoriteCocktail(cocktail: Cocktail) = repository.addToFavorites(cocktail)
 
-    suspend fun deleteFavoriteCocktail(cocktail: Cocktail) = repository.deleteFromFavorites(cocktail)
+    suspend fun deleteFavoriteCocktail(cocktail: Cocktail) =
+        repository.deleteFromFavorites(cocktail)
 
     fun refreshFavorites() {
         repository.refreshFavorites()
