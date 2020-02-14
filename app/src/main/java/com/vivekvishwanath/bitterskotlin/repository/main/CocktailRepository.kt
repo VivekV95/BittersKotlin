@@ -64,7 +64,8 @@ class CocktailRepository @Inject constructor(
                                 super.onActive()
                                 value = CocktailListViewState(
                                     CocktailFields(
-                                        popularCocktails = it
+                                        popularCocktails = it.sortedBy { cocktail ->
+                                            cocktail.drinkName }
                                     )
                                 )
                             }

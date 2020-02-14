@@ -48,16 +48,6 @@ abstract class BaseCocktailFragment: Fragment(), CocktailListAdapter.CocktailInt
         )
     }
 
-    override fun onCocktailLongPressed(position: Int, item: Cocktail) {
-        GlobalScope.launch(Dispatchers.Main) {
-            if (item.isFavorite)
-                viewModel.addFavoriteCocktail(item)
-            else
-                viewModel.deleteFavoriteCocktail(item)
-            cocktailListAdapter.notifyItemChanged(position)
-        }
-    }
-
     @Inject
     lateinit var viewModelProviderFactory: ViewModelProviderFactory
 

@@ -9,9 +9,9 @@ import androidx.navigation.NavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.vivekvishwanath.bitterskotlin.BaseApplication
 import com.vivekvishwanath.bitterskotlin.R
-import com.vivekvishwanath.bitterskotlin.ui.BaseActivity
 import com.vivekvishwanath.bitterskotlin.ui.main.view.state.CocktailListStateEvent
 import androidx.navigation.ui.setupActionBarWithNavController
+import com.vivekvishwanath.bitterskotlin.ui.BaseActivity
 import com.vivekvishwanath.bitterskotlin.util.setupWithNavController
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.Dispatchers.IO

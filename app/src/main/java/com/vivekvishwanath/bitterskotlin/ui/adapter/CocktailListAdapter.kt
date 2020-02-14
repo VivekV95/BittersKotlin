@@ -48,7 +48,6 @@ class CocktailListAdapter(
 
     override fun getItemCount() = differ.currentList.size
 
-
     override fun onBindViewHolder(holder: CocktailViewHolder, position: Int) {
         holder.bind(differ.currentList[position])
         holder.itemView.shimmar_layout.showShimmer(true)
@@ -122,28 +121,10 @@ class CocktailListAdapter(
                 )
                 cocktailInteractionListener?.onCocktailSelected(adapterPosition, cocktail, extras)
             }
-
-            this.setOnLongClickListener {
-                cocktailInteractionListener?.onCocktailLongPressed(adapterPosition, item)
-                if (isFavorite) {
-                    this.cocktail_card_star.setImageResource(R.drawable.ic_empty_star_cocktail_card)
-                    item.isFavorite = false
-                } else {
-                    this.cocktail_card_star.setImageResource(R.drawable.ic_filled_star_cocktail_card)
-                    item.isFavorite = true
-                }
-                YoYo
-                    .with(Techniques.Pulse)
-                    .duration(500)
-                    .playOn(this)
-                true
-            }
         }
     }
 
     interface CocktailInteractionListener {
         fun onCocktailSelected(position: Int, item: Cocktail, extras: FragmentNavigator.Extras)
-
-        fun onCocktailLongPressed(position: Int, item: Cocktail)
     }
 }

@@ -20,6 +20,7 @@ import com.vivekvishwanath.bitterskotlin.util.LOG_TAG
 import com.vivekvishwanath.bitterskotlin.viewmodel.ViewModelProviderFactory
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
+class Haha() {}
 
 class AuthActivity : AppCompatActivity(),
     AuthStateChangedListener,
