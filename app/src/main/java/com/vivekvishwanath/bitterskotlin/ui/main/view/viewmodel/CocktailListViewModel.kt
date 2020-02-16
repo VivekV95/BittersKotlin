@@ -11,6 +11,7 @@ import com.vivekvishwanath.bitterskotlin.ui.main.view.state.CocktailListStateEve
 import com.vivekvishwanath.bitterskotlin.ui.main.view.state.CocktailListStateEvent.*
 import com.vivekvishwanath.bitterskotlin.ui.main.view.state.CocktailListViewState
 import com.vivekvishwanath.bitterskotlin.util.AbsentLiveData
+import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -18,13 +19,12 @@ import javax.inject.Named
 class CocktailListViewModel @Inject constructor
     (
     private val repository: CocktailRepository,
-    @Named("popularCall") var shouldCall: Boolean
+    @Named("popularCall") var shouldCall: AtomicBoolean
 ) : BaseViewModel<CocktailListStateEvent, CocktailListViewState>() {
 
     init {
-        if (!shouldCall) {
+        if (!shouldCall.get()) {
             setStateEvent(GetPopularCocktailsEvent)
-            shouldCall = false
         }
     }
 

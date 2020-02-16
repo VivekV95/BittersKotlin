@@ -4,7 +4,7 @@ const val LOG_TAG = "debug"
 const val CROSS_FADE_DURATION = 200L
 const val CANCELLATION_DELAY = 1000L
 const val TESTING_NETWORK_DELAY = 6000L
-const val NETWORK_TIMEOUT = 10000L
+const val NETWORK_TIMEOUT = 30000L
 const val AUTH_TIMEOUT = 4000L
 
 const val COCKTAIL_RV_SPACING = 6

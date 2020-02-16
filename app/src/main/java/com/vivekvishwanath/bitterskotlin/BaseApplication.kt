@@ -2,6 +2,7 @@ package com.vivekvishwanath.bitterskotlin
 
 import android.app.Application
 import com.vivekvishwanath.bitterskotlin.di.DaggerAppComponent
+import java.util.concurrent.atomic.AtomicBoolean
 
 class BaseApplication: Application() {
 
@@ -9,7 +10,7 @@ class BaseApplication: Application() {
         DaggerAppComponent
             .builder()
             .application(this)
-            .popularCall(false)
+            .popularCall(AtomicBoolean(false))
             .build()
     }
 

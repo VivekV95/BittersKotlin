@@ -48,14 +48,8 @@ class ViewFragment : BaseCocktailFragment() {
             override fun onTabSelected(tab: Tab?) {
                 tab?.position?.let { position ->
                     when (position) {
-                        0 -> {
-                            viewModel.setStateEvent(CocktailListStateEvent.GetPopularCocktailsEvent)
-                        }
                         1 -> {
                             viewModel.setStateEvent(CocktailListStateEvent.GetFavoriteCocktailsEvent)
-                        }
-                        2 -> {
-
                         }
                     }
                     view_pager.currentItem = position

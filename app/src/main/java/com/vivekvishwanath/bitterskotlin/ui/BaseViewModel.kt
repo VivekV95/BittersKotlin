@@ -13,6 +13,7 @@ import com.vivekvishwanath.bitterskotlin.ui.main.DataState
 abstract class BaseViewModel<StateEvent, ViewState> : ViewModel() {
 
     private val _stateEvent: MutableLiveData<StateEvent> = MutableLiveData()
+
     protected val _viewState: MutableLiveData<ViewState> = MutableLiveData()
 
     val viewState: LiveData<ViewState>
