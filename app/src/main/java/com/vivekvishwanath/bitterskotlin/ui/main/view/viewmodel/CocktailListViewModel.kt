@@ -40,15 +40,22 @@ class CocktailListViewModel @Inject constructor
             is GetFavoriteCocktailsEvent -> {
                 repository.getFavoriteCocktails()
             }
-            is None -> {
+            is AddFavoriteCocktailEvent -> {
                 AbsentLiveData.create()
             }
+            is DeleteFavoriteCocktailEvent -> {
+                AbsentLiveData.create()
+            }
+            is None -> {
+                AbsentLiveData.create()
+        }
         }
 
     fun setPopularCocktailsData(cocktails: List<Cocktail>) {
         val update = getCurrentViewStateOrNew().copy()
         update.cocktailFields.popularCocktails = cocktails
         _viewState.value = update
+        shouldCall.set(true)
     }
 
     fun setFavoriteCocktailsData(cocktails: List<Cocktail>) {

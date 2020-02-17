@@ -65,7 +65,8 @@ class CocktailRepository @Inject constructor(
                                 value = CocktailListViewState(
                                     CocktailFields(
                                         popularCocktails = it.sortedBy { cocktail ->
-                                            cocktail.drinkName }
+                                            cocktail.drinkName
+                                        }
                                     )
                                 )
                             }
@@ -179,7 +180,7 @@ class CocktailRepository @Inject constructor(
             override suspend fun updateLocalDb(cacheObject: List<Cocktail>?) {
                 cacheObject?.let { cocktails ->
                     withContext(IO + job) {
-                        cocktailDao.deleteAllCocktailsByCacheType(CACHE_TYPE_POPULAR)
+                        cocktailDao.deleteAllCocktailsByCacheType(CACHE_TYPE_FAVORITES)
                         cocktails.forEach { cocktail ->
                             try {
                                 if (cocktailDao.getCountTypesOfCacheForCocktail(cocktail.drinkId) == 0) {
@@ -220,8 +221,11 @@ class CocktailRepository @Inject constructor(
     suspend fun addToFavorites(cocktail: Cocktail) =
         firebaseDatabaseDao.addFavoriteCocktail(cocktail)
 
-    suspend fun deleteFromFavorites(cocktail: Cocktail) =
-        firebaseDatabaseDao.deleteFavoriteCocktail(cocktail)
+    suspend fun deleteFromFavorites(cocktail: Cocktail): LiveData<DataState<CocktailListViewState>> {
+        if (sessionManager.isConnectedToTheInternet())
+            firebaseDatabaseDao.deleteFavoriteCocktail(cocktail)
+        return getFavoriteCocktails()
+    }
 
     fun logOut() {
         sessionManager.logOut()
