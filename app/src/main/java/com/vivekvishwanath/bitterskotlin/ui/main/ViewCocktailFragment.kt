@@ -24,6 +24,7 @@ import com.vivekvishwanath.bitterskotlin.util.IngredientSpacingItemDecoration
 import com.vivekvishwanath.bitterskotlin.util.convertIngredientsToList
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_view_cocktail.*
+import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -39,14 +40,10 @@ class ViewCocktailFragment : BaseCocktailFragment(), View.OnClickListener {
             view_cocktail_star_layout -> {
                 if (currentCocktail.isFavorite) {
                     setStarSelected(false)
-                    GlobalScope.launch(Main) {
-                        viewModel.deleteFavoriteCocktail(currentCocktail)
-                    }
+                    viewModel.deleteFavoriteCocktail(currentCocktail)
                 } else {
                     setStarSelected(true)
-                    GlobalScope.launch(Main) {
-                        viewModel.addFavoriteCocktail(currentCocktail)
-                    }
+                    viewModel.addFavoriteCocktail(currentCocktail)
                 }
                 YoYo
                     .with(Techniques.RubberBand)

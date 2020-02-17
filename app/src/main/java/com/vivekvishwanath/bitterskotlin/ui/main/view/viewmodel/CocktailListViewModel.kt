@@ -11,6 +11,10 @@ import com.vivekvishwanath.bitterskotlin.ui.main.view.state.CocktailListStateEve
 import com.vivekvishwanath.bitterskotlin.ui.main.view.state.CocktailListStateEvent.*
 import com.vivekvishwanath.bitterskotlin.ui.main.view.state.CocktailListViewState
 import com.vivekvishwanath.bitterskotlin.util.AbsentLiveData
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
 import javax.inject.Named
@@ -25,6 +29,8 @@ class CocktailListViewModel @Inject constructor
     init {
         if (!shouldCall.get()) {
             setStateEvent(GetPopularCocktailsEvent)
+            setStateEvent(GetFavoriteCocktailsEvent)
+            shouldCall.set(true)
         }
     }
 
@@ -55,7 +61,6 @@ class CocktailListViewModel @Inject constructor
         val update = getCurrentViewStateOrNew().copy()
         update.cocktailFields.popularCocktails = cocktails
         _viewState.value = update
-        shouldCall.set(true)
     }
 
     fun setFavoriteCocktailsData(cocktails: List<Cocktail>) {
@@ -76,10 +81,29 @@ class CocktailListViewModel @Inject constructor
         _viewState.value?.viewCocktailField?.currentCocktail = cocktail
     }
 
-    suspend fun addFavoriteCocktail(cocktail: Cocktail) = repository.addToFavorites(cocktail)
+    fun addFavoriteCocktail(cocktail: Cocktail) {
+        GlobalScope.launch(IO) {
+            val result = repository.addToFavorites(cocktail)
+            result.data?.data?.getContentIfNotHandled().let {
+                if (it == "Success")
+                    GlobalScope.launch(Main) {
+                        setStateEvent(GetFavoriteCocktailsEvent)
+                    }
+            }
+        }
+    }
 
-    suspend fun deleteFavoriteCocktail(cocktail: Cocktail) =
-        repository.deleteFromFavorites(cocktail)
+    fun deleteFavoriteCocktail(cocktail: Cocktail) {
+        GlobalScope.launch(IO) {
+            val result = repository.deleteFromFavorites(cocktail)
+            result.data?.data?.getContentIfNotHandled().let {
+                if (it == "Success")
+                    GlobalScope.launch(Main) {
+                        setStateEvent(GetFavoriteCocktailsEvent)
+                    }
+            }
+        }
+    }
 
     fun refreshFavorites() {
         repository.refreshFavorites()

@@ -109,13 +109,18 @@ fun Activity.displaySuccessDialog(successMessage: String) {
 
 fun Activity.navToAuth() {
     Intent(this, AuthActivity::class.java)
-        .apply { startActivity(this)
-        finish()}
+        .apply {
+            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(this)
+            finish()
+        }
 }
 
 fun Activity.navToMain() {
     Intent(this, MainActivity::class.java)
-        .apply { startActivity(this)
-        finish()
+        .apply {
+            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(this)
+            finish()
         }
 }

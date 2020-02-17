@@ -59,6 +59,4 @@ class ViewFragment : BaseCocktailFragment() {
         })
         view_pager.addOnPageChangeListener(TabLayoutOnPageChangeListener(tabs))
     }
-
-
 }
