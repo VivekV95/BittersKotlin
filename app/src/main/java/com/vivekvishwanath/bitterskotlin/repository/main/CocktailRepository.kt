@@ -16,6 +16,8 @@ import com.vivekvishwanath.bitterskotlin.repository.JobManager
 import com.vivekvishwanath.bitterskotlin.network.NetworkBoundResource
 import com.vivekvishwanath.bitterskotlin.persistence.CocktailDao
 import com.vivekvishwanath.bitterskotlin.session.SessionManager
+import com.vivekvishwanath.bitterskotlin.ui.ResponseMessage
+import com.vivekvishwanath.bitterskotlin.ui.ResponseType
 import com.vivekvishwanath.bitterskotlin.ui.main.view.state.CocktailListViewState
 import com.vivekvishwanath.bitterskotlin.ui.main.DataState
 import com.vivekvishwanath.bitterskotlin.ui.main.view.state.CocktailListViewState.*
@@ -218,11 +220,29 @@ class CocktailRepository @Inject constructor(
         firebaseDatabaseDao.refreshFavorites()
     }
 
-    suspend fun addToFavorites(cocktail: Cocktail) =
-        firebaseDatabaseDao.addFavoriteCocktail(cocktail)
+    suspend fun addToFavorites(cocktail: Cocktail): DataState<String> {
+        return if (sessionManager.isConnectedToTheInternet())
+            firebaseDatabaseDao.addFavoriteCocktail(cocktail)
+        else
+            DataState.error(
+                ResponseMessage(
+                    message = UNABLE_TODO_OPERATION_WO_INTERNET,
+                    responseType = ResponseType.Toast
+                )
+            )
+    }
 
-    suspend fun deleteFromFavorites(cocktail: Cocktail) =
-        firebaseDatabaseDao.deleteFavoriteCocktail(cocktail)
+    suspend fun deleteFromFavorites(cocktail: Cocktail): DataState<String> {
+        return if (sessionManager.isConnectedToTheInternet())
+            firebaseDatabaseDao.deleteFavoriteCocktail(cocktail)
+        else
+            DataState.error(
+                ResponseMessage(
+                    message = UNABLE_TODO_OPERATION_WO_INTERNET,
+                    responseType = ResponseType.Toast
+                )
+            )   
+    }
 
     fun logOut() {
         sessionManager.logOut()

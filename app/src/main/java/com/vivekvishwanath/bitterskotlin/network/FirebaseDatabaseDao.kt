@@ -31,9 +31,7 @@ import kotlin.coroutines.suspendCoroutine
 @MainScope
 class FirebaseDatabaseDao @Inject constructor(
     private val firebaseUser: FirebaseUser?,
-    private val firebaseDatabase: DatabaseReference,
-    private val sessionManager: SessionManager,
-    private val cocktailDao: CocktailDao
+    private val firebaseDatabase: DatabaseReference
 ) : JobManager("FirebaseDatabaseDao") {
 
     lateinit var job: CompletableJob
@@ -81,87 +79,34 @@ class FirebaseDatabaseDao @Inject constructor(
             }
         }
 
-    /* private fun getFavoriteCocktailsEventListener() =
-        object : ValueEventListener {
-            override fun onCancelled(error: DatabaseError) {
-                favoriteCocktails.value = DataState.error(
-                    ResponseMessage(
-                        "Something went wront when getting favorite cockatils",
-                        ResponseType.Dialog
-                    )
-                )
-            }
-
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val cocktails = arrayListOf<Cocktail>()
-                GlobalScope.launch(IO) {
-                    cocktailDao.deleteAllCocktailsByCacheType(CACHE_TYPE_FAVORITES)
-                    snapshot.children.forEach { id ->
-                        id.getValue(Cocktail::class.java)?.let {
-                            launch {
-                                val cocktail = it.copy()
-                                cocktailDao.insertCocktail(cocktail)
-                                cocktailDao.insertCocktailCacheType(
-                                    CocktailCacheType(
-                                        drinkId = cocktail.drinkId,
-                                        cacheTypeId = CACHE_TYPE_FAVORITES
-                                    )
-                                )
-                            }
-                            cocktails.add(it)
-                        }
-                    }
-                }
-                GlobalScope.launch(Main) {
-                    favoriteCocktails.value = DataState.data(
-                        CocktailListViewState(
-                            CocktailFields(favoriteCocktails = cocktails)
-                        )
-                    )
-                }
-            }
-
-        }*/
-
     suspend fun addFavoriteCocktail(
         cocktail: Cocktail
     ): DataState<String> {
         return suspendCoroutine { cont ->
-            if (sessionManager.isConnectedToTheInternet()) {
-                addJob("addFavoriteCocktail", initNewJob())
-                coroutineScope.launch {
-                    //delay(TESTING_NETWORK_DELAY)
-                    firebaseUser?.let {
-                        firebaseDatabase
-                            .child(FIREBASE_USERS_KEY)
-                            .child(firebaseUser.uid)
-                            .child(FIREBASE_FAVORITE_COCKTAILS_KEY)
-                            .child(cocktail.drinkId)
-                            .setValue(
-                                cocktail
-                            ) { error, reference ->
-                                error?.let {
-                                    cont.resume(
-                                        DataState.error(
-                                            ResponseMessage(
-                                                addFavoriteError(cocktail.drinkName),
-                                                ResponseType.Toast
-                                            )
+            addJob("addFavoriteCocktail", initNewJob())
+            coroutineScope.launch {
+                firebaseUser?.let {
+                    firebaseDatabase
+                        .child(FIREBASE_USERS_KEY)
+                        .child(firebaseUser.uid)
+                        .child(FIREBASE_FAVORITE_COCKTAILS_KEY)
+                        .child(cocktail.drinkId)
+                        .setValue(
+                            cocktail
+                        ) { error, reference ->
+                            error?.let {
+                                cont.resume(
+                                    DataState.error(
+                                        ResponseMessage(
+                                            addFavoriteError(cocktail.drinkName),
+                                            ResponseType.Toast
                                         )
                                     )
-                                } ?: cont.resume(DataState.data("Success"))
-                            }
-                    }
+                                )
+                            } ?: cont.resume(DataState.data("Success"))
+                        }
                 }
-            } else
-                cont.resume(
-                    DataState.error(
-                        ResponseMessage(
-                            UNABLE_TODO_OPERATION_WO_INTERNET,
-                            ResponseType.Dialog
-                        )
-                    )
-                )
+            }
         }
     }
 
@@ -169,39 +114,28 @@ class FirebaseDatabaseDao @Inject constructor(
         cocktail: Cocktail
     ): DataState<String> {
         return suspendCoroutine { cont ->
-            if (sessionManager.isConnectedToTheInternet()) {
-                addJob("deleteFavoriteCocktail", initNewJob())
-                coroutineScope.launch {
-                    //delay(TESTING_NETWORK_DELAY)
-                    firebaseUser?.let {
-                        firebaseDatabase
-                            .child(FIREBASE_USERS_KEY)
-                            .child(firebaseUser.uid)
-                            .child(FIREBASE_FAVORITE_COCKTAILS_KEY)
-                            .child(cocktail.drinkId)
-                            .removeValue { error, reference ->
-                                error?.let {
-                                    cont.resume(
-                                        DataState.error(
-                                            ResponseMessage(
-                                                deleteFavoriteError(cocktail.drinkName),
-                                                ResponseType.Toast
-                                            )
+            addJob("deleteFavoriteCocktail", initNewJob())
+            coroutineScope.launch {
+                firebaseUser?.let {
+                    firebaseDatabase
+                        .child(FIREBASE_USERS_KEY)
+                        .child(firebaseUser.uid)
+                        .child(FIREBASE_FAVORITE_COCKTAILS_KEY)
+                        .child(cocktail.drinkId)
+                        .removeValue { error, reference ->
+                            error?.let {
+                                cont.resume(
+                                    DataState.error(
+                                        ResponseMessage(
+                                            deleteFavoriteError(cocktail.drinkName),
+                                            ResponseType.Toast
                                         )
                                     )
-                                } ?: cont.resume(DataState.data("Success"))
-                            }
-                    }
+                                )
+                            } ?: cont.resume(DataState.data("Success"))
+                        }
                 }
-            } else
-                cont.resume(
-                    DataState.error(
-                        ResponseMessage(
-                            UNABLE_TODO_OPERATION_WO_INTERNET,
-                            ResponseType.Dialog
-                        )
-                    )
-                )
+            }
         }
     }
 
